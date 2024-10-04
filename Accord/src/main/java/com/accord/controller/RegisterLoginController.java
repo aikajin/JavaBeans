@@ -85,4 +85,9 @@ public class RegisterLoginController {
 		model.addAttribute("result", users);
 		return "viewusers_page";
 	}
+	@GetMapping("/forgotPassword_page")
+    	public String showForgotPasswordPage() {
+        return "forgotPassword_page"; // This must match the actual template name (without .html)
+    	}
+
 }
