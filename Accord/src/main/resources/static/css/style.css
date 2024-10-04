@@ -8,6 +8,10 @@ body {
   overflow: hidden;
 }
 
+body.register-page {
+  overflow-y: auto; /* Allows vertical scrolling for the register page */
+}
+
 .container-fluid {
             height: 100vh; /* Full viewport height */
         }
@@ -16,6 +20,8 @@ body {
     background-color: transparent; 
     margin-top: -150px; 
     margin-right: -10px;
+    position: sticky;
+    top:0;
 }
 
 .login-image {
@@ -24,12 +30,43 @@ body {
     object-fit: cover; 
     max-width: none; 
     margin-left: 50px; 
+    backface-visibility: hidden;
 }
+
+.upload-click {
+  opacity: 0.50; 
+  color: #222222; 
+  font-size: 12px; /* Smaller font size for "Click to upload" */
+  font-family: Lexend; 
+  font-weight: 500; 
+  word-wrap: break-word;
+}
+
+.upload-title {
+  color: #838383; 
+  font-size: 14px; /* Adjusted font size for upload titles */
+}
+
+.hover-shadow {
+  transition: text-shadow 0.3s ease; 
+}
+
+.hover-shadow:hover {
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  color: black;
+}
+
         
 .header {
             position: relative; 
             
 }
+.centered {
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+}
+
 .btn-login {
     margin-top: 10px;
     margin-right: 10px;
@@ -55,16 +92,37 @@ input::placeholder {
 }
 
 
-/*body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 25%;
-  height: 100%;
-  background-color: #03a9f4;
-  opacity: 0.8;
-}*/
+.passImg:hover {
+	cursor: pointer;
+	border-radius: 50%;
+	box-shadow: 0 4px 15px #FF5916;
+}
+
+.requirements {
+  display: none; 
+  position: absolute; 
+  background-color: #FFDDD0;
+  border-radius: 5px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+  z-index: 10; 
+  font-size: 0.75rem; 
+  line-height: 1.5; 
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.passImg-container:hover .requirements {
+  display: block; 
+  opacity: 1;
+  visibility: visible;
+}
+
+input::placeholder {
+  font-weight: 200;
+  color: #aaaeb3;
+}
+
+
+
 
 /*.form {
   position: absolute;
