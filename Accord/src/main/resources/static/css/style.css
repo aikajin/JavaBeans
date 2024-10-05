@@ -10,6 +10,10 @@ body.register-page {
   overflow-y: auto; /* Allows vertical scrolling for the register page */
 }
 
+body.manage-profile {
+  overflow-y: auto; /* Allows vertical scrolling for the manage profile page */
+}
+
 .container-fluid {
   height: 100vh; /* Full viewport height */
 }
