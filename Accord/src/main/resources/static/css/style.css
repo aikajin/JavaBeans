@@ -221,7 +221,8 @@ input::placeholder {
 .profile-pic {
   width: 44px;
   height: 44px;
-  background: #FFCFBB;
+  background: #FF5916;
+  color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -332,4 +333,79 @@ h1 {
   font-size: 36px;
   font-weight: 600;
   margin-bottom: 5px;
+}
+
+.breadcrumb {
+  color: #888;
+  margin-bottom: 20px;
+}
+.user-details {
+  background-color: white;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.user-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.user-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+.user-name {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+.user-email {
+  color: #888;
+}
+.info-section {
+  margin-bottom: 3px;
+}
+.info-section h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.document-list {
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  padding: 15px;
+}
+.document-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+.document-item:last-child {
+  border-bottom: none;
+}
+.delete-btn {
+  background-color: #FF5916;
+  color: white;
+  border: none;
+  padding: 7px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Lexend', sans-serif;
+  margin-top:15px;
+  margin-left: 860px;
+}
+
+.divider {
+  height: 1px;
+  background-color: #E5E5E5;
+  margin: 20px 0;
 }
