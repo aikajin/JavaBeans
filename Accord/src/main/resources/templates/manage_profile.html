@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Profile</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        #profilePicture {
+            width: 100px;
+            height: 100px;
+            background-color: #ccc;
+            border-radius: 50%;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div id="successPopup" class="alert alert-success" style="display:none;">Your profile has been successfully updated!</div>
+        <div id="errorPopup" class="alert alert-danger" style="display:none;"></div>
+        <div class="row">
+            <div class="col-md-3">
+                <nav>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="#" style="color: #FF5916;">Profile</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="#">Notifications</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="col-md-9">
+                <div>
+                    <div class="d-flex align-items-center">
+                        <div id="profilePicture" style="background-image: url('');">JD</div>
+                        <div class="ml-3">
+                            <label for="profilePictureInput" style="color: #FF5916; cursor: pointer; text-decoration: underline;">Change Profile Picture</label>
+                            <input type="file" id="profilePictureInput" style="display: none;" accept="image/jpeg, image/png">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Start of the form -->
+                <form id="profileForm" action="/manage_profile" method="POST" enctype="multipart/form-data">
+                    <div style="margin-top: 30px;">
+                        <label for="firstName" style="display: block; color: black; font-size: 18px; font-weight: 500; margin-bottom: 10px;">First Name</label>
+                        <input id="firstName" name="firstName" class="form-control" type="text" value="John" required>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <label for="lastName" style="display: block; color: black; font-size: 18px; font-weight: 500; margin-bottom: 10px;">Last Name</label>
+                        <input id="lastName" name="lastName" class="form-control" type="text" value="Doe" required>
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        <button id="saveChangesButton" class="btn btn-primary" type="submit" style="background: #FF5916; border-color: #FF5916;">Save Changes</button>
+                    </div>
+                </form>
+                <!-- End of the form -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const profilePictureInput = document.getElementById('profilePictureInput');
+        const profilePictureDisplay = document.getElementById('profilePicture');
+        const successPopup = document.getElementById('successPopup');
+        const errorPopup = document.getElementById('errorPopup');
+
+        profilePictureInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+
+            // Check if the file is an image and less than 5MB
+            if (file && file.size <= 5 * 1024 * 1024 && (file.type === 'image/jpeg' || file.type === 'image/png')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profilePictureDisplay.style.backgroundImage = `url('${e.target.result}')`;
+                    profilePictureDisplay.textContent = ''; // Clear initials
+                };
+                reader.readAsDataURL(file);
+            } else {
+                errorPopup.textContent = "Invalid file format or file is too large. Please choose a JPG or PNG file under 5MB.";
+                errorPopup.style.display = 'block';
+                setTimeout(() => {
+                    errorPopup.style.display = 'none';
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
