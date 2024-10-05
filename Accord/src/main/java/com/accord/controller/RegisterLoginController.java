@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -85,9 +83,27 @@ public class RegisterLoginController {
 		model.addAttribute("result", users);
 		return "viewusers_page";
 	}
+<<<<<<< HEAD
+
+	@GetMapping("/forgotPassword_page")
+    public String showForgotPasswordPage() {
+        return "forgotPassword_page";
+    }
+	
+	@GetMapping("/manage-profile")
+	public String manageProfile(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "manage_profile";
+	}
+=======
 	@GetMapping("/forgotPassword_page")
     	public String showForgotPasswordPage() {
         return "forgotPassword_page"; // This must match the actual template name (without .html)
     	}
-
+		
+	@PostMapping("/forgotPassword_email")
+    	public String showForgotPasswordEmailPage() {
+        return "forgotPassword_email"; 
+    	}	
+>>>>>>> 9a090cd6f141c891034ebaeb6923df5f9ffdea35
 }
