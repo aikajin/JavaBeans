@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Account Management</title>
+    <link rel="icon" href="images/logoHead.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
+            
+            <div class="nav-items">
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <div>Dashboard</div>
+                </a>
+                
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <div>Areas Management</div>
+                </a>
+                
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <div>Manage Bookings</div>
+                </a>
+                
+                <a href="#" class="nav-item active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.44" height="17.04" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <div>User Accounts</div>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <div>Analytics</div>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <div>Feedback</div>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="/login" class="logout"></a>
+                <div class="logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <div>Log out</div>
+                </div>
+            </div>
+            
+            <div class="profile">
+                <div class="profile-pic">JD</div>
+                <div class="profile-info">
+                    <div class="profile-name">John Doe</div>
+                    <div class="profile-role">Super Admin</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <h1>Hello, Super admin!</h1>
+            <p class="subtitle">Manage and configure the subdivision's recreational areas.</p>
+
+            <div class="table-container">
+                <h2>Pending Applications</h2>
+
+                <div class="controls">
+                    <input type="text" id="searchInputPending" placeholder="Search applications...">
+                    <select id="filterSelectPending">
+                        <option value="">Status</option>
+                        <option value="Renter">Renter</option>
+                        <option value="Homeowner">Homeowner</option>
+                        <option value="Homeowner - Assumed">Homeowner - Assumed</option>
+                    </select>
+                </div>
+
+                <table id="pendingTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Property Status</th>
+                            <th>Block No.</th>
+                            <th>Lot No.</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Pending applications data will be populated here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-container">
+                <h2>Users List</h2>
+
+                <div class="controls">
+                    <input type="text" id="searchInputUsers" placeholder="Search users...">
+                    <select id="filterSelectUsers">
+                        <option value="">Filter</option>
+                        <option value="Renter">Renter</option>
+                        <option value="Homeowner">Homeowner</option>
+                        <option value="Homeowner - Assumed">Homeowner - Assumed</option>
+                    </select>
+                </div>
+
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Property Status</th>
+                            <th>Block No.</th>
+                            <th>Lot No.</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Users list data will be populated here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const users = [
+            { id: '1', name: 'Vince Pateres', email: 'vince@example.com', propertyStatus: 'Renter', blockNo: '1', lotNo: '1', avatar: '/images/tooltip.png' },
+            { id: '2', name: 'Cristal Quiamco', email: 'cristal@example.com', propertyStatus: 'Homeowner - Assumed', blockNo: '2', lotNo: '2', avatar: '/placeholder.svg?height=32&width=32' },
+            { id: '3', name: 'Raya Lazo', email: 'raya@example.com', propertyStatus: 'Homeowner', blockNo: '3', lotNo: '3', avatar: '/placeholder.svg?height=32&width=32' },
+            { id: '4', name: 'Kurt Layam', email: 'kurt@example.com', propertyStatus: 'Homeowner', blockNo: '4', lotNo: '4', avatar: '/placeholder.svg?height=32&width=32' },
+            { id: '5', name: 'Andrew Sibal', email: 'andrew@example.com', propertyStatus: 'Renter', blockNo: '5', lotNo: '5', avatar: '/placeholder.svg?height=32&width=32' },
+        ];
+
+        function renderUsers(filteredUsers, tableId) {
+            const tableBody = document.querySelector(`#${tableId} tbody`);
+            tableBody.innerHTML = '';
+            filteredUsers.forEach(user => {
+                const row = `
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center;">
+                <img src="${user.avatar}" alt="${user.name}" class="avatar">
+                <div style="margin-left: 10px;">
+                    <div>${user.name}</div>
+                    <small>${user.email}</small>
+                </div>
+            </div>
+                        </td>
+                        <td>${user.propertyStatus}</td>
+                        <td>${user.blockNo}</td>
+                        <td>${user.lotNo}</td>
+                        <td>
+                            <button class="view-button" onclick="viewUser('${user.id}')">view</button></td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        function applyFilters(inputId, selectId, tableId) {
+            const searchTerm = document.getElementById(inputId).value.toLowerCase();
+            const filterValue = document.getElementById(selectId).value;
+            
+            const filteredUsers = users.filter(user => 
+                (user.name.toLowerCase().includes(searchTerm) || user.email.toLowerCase().includes(searchTerm)) &&
+                (filterValue === '' || user.propertyStatus === filterValue)
+            );
+            
+            renderUsers(filteredUsers, tableId);
+        }
+
+        function viewUser(userId) {
+            // Implement view user functionality
+            alert('Viewing user with ID: ' + userId);
+        }
+
+        // Initial render
+        renderUsers(users, 'pendingTable');
+        renderUsers(users, 'usersTable');
+
+        // Add event listeners for real-time filtering
+        document.getElementById('searchInputPending').addEventListener('input', () => applyFilters('searchInputPending', 'filterSelectPending', 'pendingTable'));
+        document.getElementById('filterSelectPending').addEventListener('change', () => applyFilters('searchInputPending', 'filterSelectPending', 'pendingTable'));
+        document.getElementById('searchInputUsers').addEventListener('input', () => applyFilters('searchInputUsers', 'filterSelectUsers', 'usersTable'));
+        document.getElementById('filterSelectUsers').addEventListener('change', () => applyFilters('searchInputUsers', 'filterSelectUsers', 'usersTable'));
+
+        // Add event listeners for sidebar navigation
+        document.querySelectorAll('.nav-item, .logout').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector('.nav-item.active')?.classList.remove('active');
+                if (!this.classList.contains('logout')) {
+                    this.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

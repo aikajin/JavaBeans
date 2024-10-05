@@ -6,6 +6,14 @@ body {
   overflow: hidden;
 }
 
+body. {
+  margin: 0;
+  padding: 0;
+  font-family: 'Lexend', sans-serif;
+  height: 100%;
+  overflow: hidden;
+}
+
 body.register-page {
   overflow-y: auto; /* Allows vertical scrolling for the register page */
 }
@@ -127,4 +135,197 @@ input::placeholder {
   .col-lg-6 {
     width: 100%; /* Makes the form full width on smaller screens */
   }
+}
+.container {
+  display: flex;
+  height: 100vh;
+}
+.sidebar {
+  width: 322px;
+  height: 100vh;
+  background: white;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  margin: 36px 0 30px 18px;
+}
+.nav-items {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+    
+.nav-items {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 20px;
+  margin: 5px 32px;
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.nav-item:hover, .nav-item.active {
+  background: rgba(255, 89, 22, 0.15);
+  color: #FF5916;
+  outline: 2px solid #FF5916;
+}
+.nav-item:hover svg, .nav-item.active svg {
+  stroke: #FF5916;
+}
+.logout {
+  padding: 10px 20px;
+  margin: 5px 32px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  color: black;
+  transition: all 0.3s ease;
+  border-radius: 10px;
+}
+.logout:hover {
+  background-color: #f0f0f0;
+  color: #8A8888;
+}
+.nav-divider {
+  height: 1px;
+  background-color: rgba(138, 136, 136, 0.41);
+  margin: 10px 32px;
+}
+.profile {
+  padding: 22px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  
+}
+.profile-pic {
+  width: 44px;
+  height: 44px;
+  background: #FFCFBB;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  margin-right: 19px;
+  margin-left: -25px;
+}
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+.profile-name {
+  color: black;
+  font-size: 12px;
+  font-weight: 400;
+}
+.profile-role {
+  color: #8A8888;
+  font-size: 10px;
+  font-weight: 400;
+}
+.main-content {
+  flex-grow: 1;
+  margin-left: 322px;
+  padding: 37px 40px;
+  background-color: #FFF5F4;
+  overflow-y: auto;
+}
+
+.subtitle {
+  color: #646464;
+  font-size: 16px;
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+.controls {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+ 
+}
+input[type="text"], select {
+  padding: 8px;
+  border: 1px solid #dce0e5;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: 'Lexend', sans-serif;
+}
+select {
+  background-color: white;
+  color: #646464;
+  font-family: 'Lexend', sans-serif;
+}
+.table-container {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+th {
+  background-color: #f2f2f2;
+}
+td.avatar-container {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 10px; /* Space between avatar and name */
+  object-fit: cover;
+}
+
+.view-button {
+padding: 5px 24px; /* Adjusted padding to match the size */
+background-color: #FF5916; /* Orange background */
+color: white; /* White text color */
+border: none; 
+border-radius: 25px; /* Rounded corners similar to the image */
+font-size: 16px; /* Adjust font size to match the image */
+font-weight: bold; /* Thicker font */
+text-align: center; /* Center the text */
+cursor: pointer;
+outline: none;
+}
+
+.view-button:hover {
+  background-color: #e85a2d;
+}
+.view-button:active {
+  outline: 2px solid #FF5916;
+}
+
+h1 {
+  color: black;
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 5px;
 }
