@@ -14,6 +14,10 @@ body.manage-profile {
   overflow-y: auto; /* Allows vertical scrolling for the manage profile page */
 }
 
+body.recreational-areas-list {
+  overflow-y: auto; /* Allows vertical scrolling for the manage profile page */
+}
+
 .container-fluid {
   height: 100vh; /* Full viewport height */
 }
