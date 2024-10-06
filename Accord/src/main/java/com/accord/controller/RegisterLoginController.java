@@ -84,7 +84,6 @@ public class RegisterLoginController {
 		return "viewusers_page";
 	}
 
-
 	@GetMapping("/forgotPassword_page")
     public String showForgotPasswordPage() {
         return "forgotPassword_page";
@@ -102,8 +101,8 @@ public class RegisterLoginController {
 		return "am_recreationalAreasList";
 	}
 
-	@PostMapping("/forgotPassword-email")
-    	public String showForgotPasswordEmailPage() {
+	@PostMapping("/forgotPassword_email")
+	public String showForgotPasswordEmailPage() {
         return "forgotPassword_email"; 
     }
 }
