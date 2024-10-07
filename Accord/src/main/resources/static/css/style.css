@@ -6,7 +6,7 @@ body {
   overflow: hidden;
 }
 
-body. {
+body {
   margin: 0;
   padding: 0;
   font-family: 'Lexend', sans-serif;
@@ -19,6 +19,10 @@ body.register-page {
 }
 
 body.manage-profile {
+  overflow-y: auto; /* Allows vertical scrolling for the manage profile page */
+}
+
+body.recreational-areas-list {
   overflow-y: auto; /* Allows vertical scrolling for the manage profile page */
 }
 

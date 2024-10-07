@@ -94,13 +94,15 @@ public class RegisterLoginController {
 		// Add attributes to the model if needed for profile management
 		return "manage_profile";
 	}
-	@GetMapping("/forgotPassword_page")
-    	public String showForgotPasswordPage() {
-        return "forgotPassword_page"; // This must match the actual template name (without .html)
-    	}
-		
+
+	@GetMapping("/recreational-areas-list")
+	public String recreationalAreasList(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "am_recreationalAreasList";
+	}
+
 	@PostMapping("/forgotPassword_email")
-    	public String showForgotPasswordEmailPage() {
+	public String showForgotPasswordEmailPage() {
         return "forgotPassword_email"; 
-    	}	
+    }
 }
