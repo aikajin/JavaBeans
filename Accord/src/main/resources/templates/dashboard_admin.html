@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<h1>Dashboard admin</h1>
+    <form method="get" action="/dashboard_admin" class="register" th:object="${adminLogin}">
+        <h1>Dashboard admin</h1>
+        <a href="/userlist">User Accounts</a>
+        <a href="/login">Logout</a>
+        </form>
 </body>
 </html>

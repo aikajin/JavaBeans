@@ -3,6 +3,7 @@ package com.accord.Entity;
 import java.util.Arrays;
 import java.util.Objects;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,15 +41,21 @@ public class User {
 	@Column(nullable = false)
 	private String tenancy_type;
 	@Lob
-	@Column(nullable = false, length = 1999999999)
+	@Column(nullable = false, length = 2147483647)
 	private byte[] tenancy_document;
 	@Column(nullable = false)
 	private String id_name;
 	@Column(nullable = false)
 	private String id_type;
 	@Lob
-	@Column(nullable = false, length = 1999999999)
+	@Column(nullable = false, length = 2147483647)
 	private byte[] id_document;
+	public String generateBase64Tenancy() {
+		return Base64.encodeBase64String(this.tenancy_document);
+	}
+	public String generateBase64ValidId() {
+		return Base64.encodeBase64String(this.id_document);
+	}
 	public Long getId() {
 		return id;
 	}
