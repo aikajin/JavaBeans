@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>User List</title>
+</head>
+<body>
+<form action="/userlist" method="get">
+  <h1>All Users</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Contact Number</th>
+            <th>Block#</th>
+            <th>Lot#</th>
+            <th>Tenancy Document</th>
+            <th>Valid ID</th>
+            <th>Email Confirmation</th>
+            <th>Tenancy Confirmation</th>
+        </tr>
+        <tr th:each="user : ${userlist}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.contactnumber}"></td>
+            <td th:text="${user.block_num}"></td>
+            <td th:text="${user.lot_num}"></td>
+            <td>
+            	<img th:src="@{'data:image/*;base64,'+${user.generateBase64Tenancy()}}" alt="user" width="300" height="300">
+            </td>
+            <td>
+            	<img th:src="@{'data:image/*;base64,'+${user.generateBase64ValidId()}}" alt="user" width="300" height="300">
+            </td>
+            <td th:text="${user.confirmation_email} ? '✔' : '✘'"></td>
+            <td th:text="${user.confirmation_account} ? '✔' : '✘'"></td>
+            <td>
+                <a th:href="@{/userlist/edit/{id}(id=${user.id})}">Edit</a>
+                <a th:href="@{/userlist/delete/{id}(id=${user.id})}">Delete</a>
+            </td>
+        </tr>
+    </table>
+</form>
+<a href="/dashboard_admin">Back to Home</a>
+</body>
+</html>
