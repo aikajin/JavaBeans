@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,15 +69,14 @@
                 
                 <div class="nav-divider"></div>
                 
-                <a href="/login" class="logout"></a>
-                <div class="logout">
+                <a href="/login" class="logout">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
                         <line x1="21" y1="12" x2="9" y2="12"></line>
                     </svg>
                     <div>Log out</div>
-                </div>
+                </a> 
             </div>
             
             <div class="profile">
@@ -215,16 +214,21 @@
         document.getElementById('searchInputUsers').addEventListener('input', () => applyFilters('searchInputUsers', 'filterSelectUsers', 'usersTable'));
         document.getElementById('filterSelectUsers').addEventListener('change', () => applyFilters('searchInputUsers', 'filterSelectUsers', 'usersTable'));
 
-        // Add event listeners for sidebar navigation
-        document.querySelectorAll('.nav-item, .logout').forEach(item => {
+       // Add event listeners for sidebar navigation
+       document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector('.nav-item.active')?.classList.remove('active');
-                if (!this.classList.contains('logout')) {
-                    this.classList.add('active');
-                }
-            });
+            document.querySelector('.nav-item.active')?.classList.remove('active');
+            if (!this.classList.contains('logout')) {
+                this.classList.add('active');
+            }
         });
+    });
+
+            // Separate event listener for the logout button
+            document.querySelector('.logout').addEventListener('click', function(e) {
+                // Redirect to login page
+            window.location.href = this.getAttribute('href');
+    });
     </script>
 </body>
 </html>

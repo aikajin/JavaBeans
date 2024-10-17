@@ -3,375 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recreational Areas Dashboard</title>
+    <title>Recreational Areas</title>
+    <link rel="icon" href="images/logoHead.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <style>
-        :root {
-            --primary-color: #FF5916;
-            --secondary-color: #323AA1;
-            --background-color: #FFF5F4;
-            --text-color: #000000;
-            --text-muted: #646464;
-            --border-color: #DDDCDD;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Lexend', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-        }
-
-        .container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 322px;
-            background-color: white;
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-        }
-
-        .logo {
-            width: 262px;
-            height: 56px;
-            margin-bottom: 2rem;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding: 0.5rem;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .nav-item.active {
-            background-color: rgba(255, 89, 22, 0.15);
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-        }
-
-        .nav-item-icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 1rem;
-        }
-
-        .sidebar-divider {
-            width: 100%;
-            height: 1px;
-            background-color: rgba(138, 136, 136, 0.41);
-            margin: 1rem 0;
-        }
-
-        .logout {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .user-profile {
-            margin-top: auto;
-            display: flex;
-            align-items: center;
-        }
-
-        .user-avatar {
-            width: 44px;
-            height: 44px;
-            background-color: #FFCFBB;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-        }
-
-        .main-content {
-            flex-grow: 1;
-            padding: 2rem;
-            margin-left: 322px;
-            background-color: var(--background-color);
-        }
-
-        .header {
-            margin-bottom: 2rem;
-        }
-
-        .header h1 {
-            font-size: 36px;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .header p {
-            color: var(--text-muted);
-            font-size: 16px;
-            font-weight: 300;
-        }
-
-        .search-bar {
-            width: 100%;
-            max-width: 442px;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            margin-bottom: 2rem;
-        }
-
-        .view-options {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 1rem;
-            position: relative;
-            height: 24px;
-        }
-
-        .view-option {
-            width: 49px;
-            height: 24px;
-            position: relative;
-        }
-
-        .view-option-list {
-            width: 24px;
-            height: 24px;
-            position: absolute;
-            left: 25px;
-            top: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .view-option-list-inner {
-            width: 18px;
-            height: 18px;
-            border: 2px black solid;
-        }
-
-        .view-option-grid {
-            width: 24px;
-            height: 24px;
-            position: absolute;
-            left: 0;
-            top: 1px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .view-option-grid-inner {
-            width: 16px;
-            height: 16px;
-            position: relative;
-        }
-
-        .view-option-grid-square {
-            width: 7px;
-            height: 7px;
-            position: absolute;
-            background: var(--primary-color);
-        }
-
-        .areas-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 2rem;
-        }
-
-        .area-card {
-            background-color: white;
-            border: 2px solid var(--primary-color);
-            border-radius: 5px;
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
-        }
-
-        .area-image {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-
-        .area-details {
-            padding: 1rem;
-        }
-
-        .area-name {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .area-guidelines {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-        }
-
-        .area-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .edit-btn {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 5px 10px;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        .view-details {
-            color: var(--primary-color);
-            font-size: 12px;
-            font-weight: 500;
-            text-decoration: none;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    
 </head>
-<body class="recreational-areas-list">
+<body>
     <div class="container">
-        <aside class="sidebar">
-            <img src="images/logo.png" alt="Logo" class="logo">
-            <nav>
-                <div class="nav-item">
-                    <div class="nav-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="14" width="7" height="7"></rect>
-                            <rect x="3" y="14" width="7" height="7"></rect>
-                        </svg>
-                    </div>
-                    Dashboard
-                </div>
+        <div class="sidebar">
+            <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
             
-                <div class="nav-item active">
-                    <div class="nav-item-icon">
-                        <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1.43273 20.6501C0.98968 20.6501 0.640127 20.493 0.384069 20.1788C0.147719 19.8888 0.0204534 19.5081 0.0022726 19.0369L0 18.9172V2.08304C0 1.54983 0.128023 1.1277 0.384069 0.81666C0.62043 0.529545 0.936456 0.374944 1.33215 0.352858L1.43273 0.350098H12.3164C12.7537 0.350098 13.1004 0.505618 13.3564 0.81666C13.5928 1.10378 13.72 1.48554 13.7382 1.96197L13.7405 2.08304L13.7403 5.03464L18.8759 5.03474C19.2795 5.03474 19.606 5.1686 19.8552 5.43633L19.9159 5.50606C20.1523 5.7961 20.2796 6.17674 20.2978 6.64797L20.3 6.76766V18.9172C20.3 19.4441 20.172 19.8646 19.9159 20.1788C19.6796 20.4689 19.366 20.625 18.9752 20.6474L18.8759 20.6501H1.43273ZM13.7405 18.9172C13.7405 18.9858 13.7383 19.0525 13.734 19.1174L18.4184 19.1172C18.5853 19.1172 18.709 19.0727 18.7896 18.9839C18.8587 18.9077 18.8982 18.7942 18.9081 18.6434L18.9105 18.5649V7.11995C18.9105 6.92953 18.8702 6.78988 18.7896 6.70101C18.7205 6.62484 18.6198 6.58131 18.4873 6.57043L18.4184 6.56771L13.7403 6.56734L13.7405 18.9172ZM11.8589 1.88309H1.89017C1.71756 1.88309 1.59097 1.92752 1.51042 2.01639C1.44137 2.09257 1.40191 2.20605 1.39205 2.35683L1.38958 2.43533V18.5649C1.38958 18.7554 1.42986 18.895 1.51042 18.9839C1.57946 19.06 1.68233 19.1036 1.81901 19.1145L1.89017 19.1172L3.86635 19.1169L3.86667 16.3083C3.86667 15.9332 3.93681 15.6486 4.07709 15.4545L4.12128 15.399C4.27559 15.223 4.5048 15.127 4.8089 15.111L4.90238 15.1086H8.83811C9.19485 15.1086 9.45666 15.2054 9.62352 15.399C9.77521 15.575 9.85796 15.8415 9.87175 16.1985L9.87382 16.3083L9.87354 19.1169L11.8589 19.1172C12.0258 19.1172 12.1495 19.0727 12.2301 18.9839C12.2991 18.9077 12.3386 18.7942 12.3484 18.6434L12.3509 18.5649V2.43533C12.3509 2.24491 12.3106 2.10526 12.2301 2.01639C12.1495 1.92752 12.0258 1.88309 11.8589 1.88309ZM8.46698 16.3559H5.27353C5.10614 16.3559 5.01483 16.4398 4.99962 16.6077L4.99733 16.6606L4.99706 19.1169H8.74283L8.74317 16.6606C8.74317 16.4759 8.66709 16.3752 8.51492 16.3584L8.46698 16.3559ZM17.0202 15.4133C17.1995 15.4133 17.2967 15.5039 17.3116 15.6853L17.3137 15.737V17.2224C17.3137 17.4202 17.2315 17.5274 17.0671 17.5439L17.0202 17.5461H15.6307C15.4566 17.5461 15.3623 17.4554 15.3478 17.2741L15.3459 17.2224V15.737C15.3459 15.5392 15.4256 15.432 15.5852 15.4155L15.6307 15.4133H17.0202ZM17.0202 11.776C17.1995 11.776 17.2967 11.8667 17.3116 12.048L17.3137 12.0997V13.5851C17.3137 13.783 17.2315 13.8901 17.0671 13.9066L17.0202 13.9089H15.6307C15.4566 13.9089 15.3623 13.8182 15.3478 13.6368L15.3459 13.5851V12.0997C15.3459 11.9019 15.4256 11.7948 15.5852 11.7783L15.6307 11.776H17.0202ZM5.6878 11.0048C5.90557 11.0048 6.02283 11.1157 6.03959 11.3374L6.04168 11.3952V13.1947C6.04168 13.435 5.94117 13.5643 5.74015 13.5828L5.6878 13.5851H4.00476C3.79762 13.5851 3.68608 13.4742 3.67014 13.2525L3.66815 13.1947V11.3952C3.66815 11.1549 3.76376 11.0256 3.95497 11.0071L4.00476 11.0048H5.6878ZM9.7271 11.0048C9.94486 11.0048 10.0621 11.1157 10.0789 11.3374L10.081 11.3952V13.1947C10.081 13.435 9.98046 13.5643 9.77945 13.5828L9.7271 13.5851H8.05269C7.84024 13.5851 7.72584 13.4742 7.7095 13.2525L7.70745 13.1947V11.3952C7.70745 11.1549 7.80551 11.0256 8.00162 11.0071L8.05269 11.0048H9.7271ZM17.0202 8.13876C17.1995 8.13876 17.2967 8.22944 17.3116 8.4108L17.3137 8.4625V9.94788C17.3137 10.1457 17.2315 10.2529 17.0671 10.2694L17.0202 10.2716H15.6307C15.4566 10.2716 15.3623 10.1809 15.3478 9.99958L15.3459 9.94788V8.4625C15.3459 8.26466 15.4256 8.1575 15.5852 8.14101L15.6307 8.13876H17.0202ZM5.6878 7.23422C5.90557 7.23422 6.02283 7.3451 6.03959 7.56685L6.04168 7.6246V9.42418C6.04168 9.66442 5.94117 9.79378 5.74015 9.81226L5.6878 9.81457H4.00476C3.79762 9.81457 3.68608 9.70369 3.67014 9.48193L3.66815 9.42418V7.6246C3.66815 7.38437 3.76376 7.25501 3.95497 7.23653L4.00476 7.23422H5.6878ZM9.7271 7.23422C9.94486 7.23422 10.0621 7.3451 10.0789 7.56685L10.081 7.6246V9.42418C10.081 9.66442 9.98046 9.79378 9.77945 9.81226L9.7271 9.81457H8.05269C7.84024 9.81457 7.72584 9.70369 7.7095 9.48193L7.70745 9.42418V7.6246C7.70745 7.38437 7.80551 7.25501 8.00162 7.23653L8.05269 7.23422H9.7271ZM5.6878 3.46366C5.90557 3.46366 6.02283 3.57454 6.03959 3.7963L6.04168 3.85405V5.65363C6.04168 5.89388 5.94117 6.02324 5.74015 6.04172L5.6878 6.04403H4.00476C3.79762 6.04403 3.68608 5.93315 3.67014 5.71138L3.66815 5.65363V3.85405C3.66815 3.61381 3.76376 3.48445 3.95497 3.46597L4.00476 3.46366H5.6878ZM9.7271 3.46366C9.94486 3.46366 10.0621 3.57454 10.0789 3.7963L10.081 3.85405V5.65363C10.081 5.89388 9.98046 6.02324 9.77945 6.04172L9.7271 6.04403H8.05269C7.84024 6.04403 7.72584 5.93315 7.7095 5.71138L7.70745 5.65363V3.85405C7.70745 3.61381 7.80551 3.48445 8.00162 3.46597L8.05269 3.46366H9.7271Z" fill="#FF5916"/>
-                        </svg>                            
-                    </div>
-                    Areas Management
-                </div>
-            
-                <div class="nav-item">
-                    <div class="nav-item-icon">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7.62861 19.0225H4.03022C2.96955 19.0225 2.4392 19.0225 2.03408 18.8161C1.67772 18.6346 1.38799 18.3448 1.20642 17.9885C1 17.5834 1 17.053 1 15.9923V6.90165C1 5.84098 1 5.31063 1.20642 4.90551C1.38799 4.54915 1.67772 4.25942 2.03408 4.07785C2.4392 3.87143 2.96955 3.87143 4.03022 3.87143H15.0148C16.0754 3.87143 16.6058 3.87143 17.0109 4.07785C17.3673 4.25942 17.657 4.54915 17.8386 4.90551C18.045 5.31063 18.045 5.84098 18.045 6.90165V8.60615M4.78778 1.97754V3.87143M14.2572 1.97754V3.87143M1 7.6592H18.045M10.9429 11.4471L4.78778 11.447M7.62861 15.2348L4.78778 15.2348M11.4164 19.0225L13.3339 18.639C13.5011 18.6056 13.5847 18.5888 13.6626 18.5582C13.7319 18.5312 13.7977 18.4959 13.8586 18.4534C13.9273 18.4055 13.9875 18.3453 14.1082 18.2246L18.045 14.2878C18.568 13.7648 18.568 12.9169 18.045 12.3939C17.522 11.8709 16.6741 11.8709 16.1511 12.3939L12.2143 16.3307C12.0936 16.4514 12.0334 16.5116 11.9855 16.5804C11.943 16.6412 11.9078 16.7071 11.8807 16.7763C11.8501 16.8542 11.8333 16.9378 11.7999 17.105L11.4164 19.0225Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>                            
-                    </div>
-                    Manage Bookings
-                </div>
-            
-                <div class="nav-item">
-                    <div class="nav-item-icon">
-                        <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12.6666 5.54167C12.6666 7.29057 11.2489 8.70833 9.49998 8.70833C7.75108 8.70833 6.33331 7.29057 6.33331 5.54167C6.33331 3.79276 7.75108 2.375 9.49998 2.375C11.2489 2.375 12.6666 3.79276 12.6666 5.54167Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M9.49998 11.0835C6.4394 11.0835 3.95831 13.5646 3.95831 16.6252H15.0416C15.0416 13.5646 12.5606 11.0835 9.49998 11.0835Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>                            
-                    </div>
-                    User Accounts
-                </div>
+            <div class="nav-items">
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <div>Dashboard</div>
+                </a>
+                
+                <a href="#" class="nav-item active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <div>Areas Management</div>
+                </a>
+                
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <div>Manage Bookings</div>
+                </a>
+                
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.44" height="17.04" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <div>User Accounts</div>
+                </a>
 
-                <div class="nav-item">
-                    <div class="nav-item-icon">
-                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M2.125 2.125V14.875" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M14.875 14.875H2.125" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M4.95831 11.3333L8.67706 7.61458L11.1562 10.0938L14.875 6.375" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>                                                        
-                    </div>
-                    Analytics
-                </div>
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <div>Analytics</div>
+                </a>
 
-                <div class="nav-item">
-                    <div class="nav-item-icon">
-                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_715_340)">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M5.34375 6.89062H1.09688C0.309375 6.89062 0.28125 7.48125 0.28125 8.24062V15.075C0.28125 15.8063 0.309375 16.425 1.09688 16.425H5.34375C6.13125 16.425 6.15937 15.8344 6.15937 15.075V8.24062C6.15937 7.50937 6.13125 6.89062 5.34375 6.89062Z" stroke="black" stroke-width="2"/>
-                            <path d="M6.10315 15.4125H6.4969C7.56565 15.3844 8.26877 17.0157 9.0844 17.0157H15.4407C16.2282 17.0157 16.3969 15.8344 16.3688 15.3282C16.3688 15.3282 17.3531 14.8782 16.9031 13.0782C16.9594 13.05 17.4656 12.5719 17.4656 11.6438C17.4656 10.7157 16.9313 10.2657 16.9313 10.2657C16.9313 10.2657 17.4656 9.67504 17.4656 8.80317C17.4656 7.93129 16.7063 7.45317 15.9188 7.45317H13.5844C11.5594 7.45317 11.7282 6.3563 11.7282 6.3563C11.7282 6.3563 11.5031 3.51567 10.7719 2.1938C9.8719 0.562545 8.0719 1.09692 8.7469 3.23442C9.25315 4.80942 6.97502 7.17192 6.13127 7.95942" stroke="black" stroke-width="2"/>
-                            </g>
-                            <defs>
-                            <clipPath id="clip0_715_340">
-                            <rect width="18" height="18" fill="white"/>
-                            </clipPath>
-                            </defs>
-                        </svg>                                                                                    
-                    </div>
-                    Feedback
-                </div>
-            </nav>
-            
-            <div class="sidebar-divider"></div>
-            
-            <div class="logout">
-                <div class="nav-item-icon">
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6.60144 4.99996C6.61113 3.25995 6.68829 2.31763 7.30299 1.70294C8.00595 1 9.1373 1 11.4 1H12.2C14.4627 1 15.5941 1 16.297 1.70294C16.9999 2.40587 16.9999 3.53723 16.9999 5.79995V12.1999C16.9999 14.4626 16.9999 15.5939 16.297 16.2969C15.5941 16.9998 14.4627 16.9998 12.2 16.9998H11.4C9.1373 16.9998 8.00595 16.9998 7.30299 16.2969C6.68829 15.6822 6.61113 14.7399 6.60144 12.9999" stroke="#FF5916" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M11.3999 8.99959H1M1 8.99959L3.79997 6.59961M1 8.99959L3.79997 11.3996" stroke="#FF5916" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>                        
-                </div>
-                Log out
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <div>Feedback</div>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="/login" class="logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <div>Log out</div>
+                </a> 
             </div>
             
-            <div class="user-profile">
-                <div class="user-avatar">SA</div>
-                <div>
-                    <div>Superadmin</div>
-                    <div style="color: #8A8888; font-size: 10px;">Super admin</div>
+            <div class="profile">
+                <div class="profile-pic">JD</div>
+                <div class="profile-info">
+                    <div class="profile-name">John Doe</div>
+                    <div class="profile-role">Superadmin</div>
                 </div>
             </div>
-        </aside>
+        </div>
+        
         <main class="main-content">
             <header class="header">
                 <p>Areas Management / List of Recreational Areas</p>
             </header>
-            <h2 style="font-size: 40px; font-weight: 1000; margin-bottom: 1rem;">Recreational Areas</h2>
-            <input type="text" placeholder="Search Area..." class="search-bar">
+            <h1 style="margin-bottom: 2rem;">Recreational Areas</h1>
+            <div class="search-and-view">
+            <input type="text" placeholder="Search Area..." class="controls">
+
             <div class="view-options">
-                <div class="view-option">
-                    <div class="view-option-list">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g id="Frame">
-                            <g id="SVGRepo_iconCarrier">
-                            <path id="Vector" d="M3 9H21M17 13.0014L7 13M10.3333 17.0005L7 17M7 3V5M17 3V5M6.2 21H17.8C18.9201 21 19.4802 21 19.908 20.782C20.2843 20.5903 20.5903 20.2843 20.782 19.908C21 19.4802 21 18.9201 21 17.8V8.2C21 7.07989 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V17.8C3 18.9201 3 19.4802 3.21799 19.908C3.40973 20.2843 3.71569 20.5903 4.09202 20.782C4.51984 21 5.07989 21 6.2 21Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </g>
-                            </g>
-                            </svg>                            
-                    </div>
-                    <div class="view-option-grid">
-                        <div class="view-option-grid-inner">
-                            <div class="view-option-grid-square" style="left: 0; top: 0;"></div>
-                            <div class="view-option-grid-square" style="left: 0; top: 9px;"></div>
-                            <div class="view-option-grid-square" style="left: 9px; top: 0;"></div>
-                            <div class="view-option-grid-square" style="left: 9px; top: 9px;"></div>
-                        </div>
-                    </div>
-                </div>
+                <button class="view-option active"data-view="grid">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                </button>
+                <button class="view-option" data-view="calendar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </button>
             </div>
-            <div class="areas-grid">
+        </div>
+     
+        <div id="view-content"></div>
+        <div class="areas-grid">
+            <div class="area-column">
                 <div class="area-card">
                     <img src="images/pool 1.png" alt="Swimming Pool Area" class="area-image">
                     <div class="area-details">
@@ -379,67 +126,41 @@
                         <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
                         <div class="area-actions">
                             <button class="edit-btn">Edit</button>
-                            <a href="#" class="view-details">View details -></a>
+                            <a href="#" class="view-details">View details →</a>
                         </div>
                     </div>
                 </div>
+                </div>
+                
                 <div class="area-card">
-                    <img src="images/basketballcourt.png" alt="Outdoor Basketball Court" class="area-image">
+                    <img src="images/basketballcourt.png" alt="Basketball Court" class="area-image">
                     <div class="area-details">
-                        <h3 class="area-name">Outdoor Basketball Court</h3>
+                        <h3 class="area-name">Basketball Court</h3>
                         <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
                         <div class="area-actions">
                             <button class="edit-btn">Edit</button>
-                            <a href="#" class="view-details">View details -></a>
+                            <a href="#" class="view-details">View details →</a>
                         </div>
                     </div>
                 </div>
-                <div class="area-card">
-                    <img src="images/clubhouse.png" alt="Clubhouse" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Clubhouse</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <button class="edit-btn">Edit</button>
-                            <a href="#" class="view-details">View details -></a>
-                        </div>
-                    </div>
                 </div>
-                <div class="area-card">
-                    <img src="images/tenniscourt.jpg" alt="Tennis Court" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Tennis Court</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <button class="edit-btn">Edit</button>
-                            <a href="#" class="view-details">View details -></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="area-card">
-                    <img src="images/hall.png" alt="Multipurpose Hall" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Multipurpose Hall</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <button class="edit-btn">Edit</button>
-                            <a href="#" class="view-details">View details -></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="area-card">
-                    <img src="images/coveredcourt.png" alt="Covered Basketball Court" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Covered Basketball Court</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <button class="edit-btn">Edit</button>
-                            <a href="#" class="view-details">View details -></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+
+   <script>
+        document.querySelectorAll('.view-option').forEach((button) => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.view-option').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            
+                const viewContent = document.getElementById('view-content');
+                if (this.dataset.view === 'grid') {
+                    
+                    document.querySelector('.areas-grid').style.display = 'grid';
+                } else {
+                    
+                    document.querySelector('.areas-grid').style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
