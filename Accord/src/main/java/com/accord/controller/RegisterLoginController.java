@@ -76,6 +76,13 @@ public class RegisterLoginController {
 			return "error_page";
 		}
 	}
+	
+	@GetMapping("/dashboard_admin")
+	public String allUsers(@ModelAttribute("form") User form, Model model) {
+		List<User> users = userService.getAllUser();
+		model.addAttribute("result", users);
+		return "viewusers_page";
+	}
 
 	@GetMapping("/forgotPassword_page")
     public String showForgotPasswordPage() {
