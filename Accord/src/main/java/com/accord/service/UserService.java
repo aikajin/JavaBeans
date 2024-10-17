@@ -1,17 +1,16 @@
 package com.accord.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.accord.Entity.User;
+import com.accord.notification.EmailNotification;
 import com.accord.repository.EmailNotificationRepository;
 import com.accord.repository.UserRepository;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -84,42 +83,23 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    // Send an email notification to the admin to approve the registration
     private void sendApprovalRequestToAdmin(User user) {
-        MimeMessage message = mailSender.createMimeMessage();
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("extrahamham@gmail.com");  // Your app's email
+        message.setTo("admin-email@example.com");  // Admin's email
+        message.setSubject("Approval Request for New User Registration");
 
-        try {
-            // Use MimeMessageHelper to handle multipart emails (attachments)
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);  // true indicates multipart
+        // Email content with user details
+        message.setText("A new user has registered with the following details:\n\n" +
+                "Name: " + user.getName() + "\n" +
+                "Email: " + user.getEmail() + "\n" +
+                "Contact: " + user.getContactnumber() + "\n" +
+                "Block Number: " + user.getBlock_num() + "\n" +
+                "Lot Number: " + user.getLot_num() + "\n" +
+                "Property Status: " + user.getProperty_status() + "\n\n" +
+                "Please approve or reject this registration in the admin panel.");
 
-            helper.setFrom("extrahamham@gmail.com");  // Your app's email
-            helper.setTo("kyledowiromero@gmail.com");  // Admin's email
-            helper.setSubject("Approval Request for New User Registration");
-
-            // Email content with user details
-            helper.setText("A new user has registered with the following details:\n\n" +
-                    "Name: " + user.getName() + "\n" +
-                    "Email: " + user.getEmail() + "\n" +
-                    "Contact: " + user.getContactnumber() + "\n" +
-                    "Block Number: " + user.getBlock_num() + "\n" +
-                    "Lot Number: " + user.getLot_num() + "\n" +
-                    "Property Status: " + user.getProperty_status() + "\n\n" +
-                    "Please approve or reject this registration in the admin panel.");
-
-            // Add the tenancy agreement as an attachment
-            if (user.getTenancy_name() != null) {
-                helper.addAttachment(user.getTenancy_name(), new ByteArrayResource(user.getTenancy_document()));
-            }
-
-            // Add the valid ID as an attachment
-            if (user.getId_name() != null) {
-                helper.addAttachment(user.getId_name(), new ByteArrayResource(user.getId_document()));
-            }
-
-            // Send the email
-            mailSender.send(message);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            // Handle exception if sending fails
-        }
+        mailSender.send(message);
     }
 }
