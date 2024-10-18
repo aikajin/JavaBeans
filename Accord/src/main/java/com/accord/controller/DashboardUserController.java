@@ -1,23 +1,38 @@
 package com.accord.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.accord.Entity.User;
 import com.accord.repository.UserRepository;
 import com.accord.service.UserService;
 
 @Controller
-@RequestMapping("/Dashboard")
+//@RequestMapping("/Dashboard")
 public class DashboardUserController {
 	@Autowired
-	private UserService userSerivce;
+	private UserService userService;
 	@Autowired
 	private UserRepository userRepository;
 	
-	@GetMapping("/Dashboard")
-	public String dashboardHome() {
-		return "dashboard_user";
-	}
+    @GetMapping("/dashboard_user")
+    public String showDashboard(Principal principal, Model model) {
+        String username = principal.getName();
+        User user = userService.findByEmail(username).orElseThrow();
+        model.addAttribute("user", user);
+        return "dashboard_user";
+    }
+    
+    @PostMapping("/update")
+    public String updateUser(@ModelAttribute User user) {
+        userService.updateUser(user);
+        return "redirect:/dashboard";
+    }
 }
