@@ -17,7 +17,7 @@
     <div class="row w-100 flex-grow-1"> 
 
         <div class="col-lg-6 d-flex flex-column justify-content-start align-items-center p-3">
-            <form method="post" th:action="@{/login}" class="login" th:object="${loginRequest}">
+            <form method="post" action="/login" class="login" th:object="${loginRequest}">
                 <p class="text-black fs-2 fw-semibold m-0 px-1 py-2">Log In</p>
                 <p class="text-center text-secondary fs-6 fw-light m-0 px-1 py-3 mb-2" style="padding-bottom: 50px;">Enter your email and password to access your account.</p>
                 <p class="text-dark fs-6 fw-normal m-0 px-1 py-2 mt-3">Email</p>

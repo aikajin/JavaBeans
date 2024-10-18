@@ -27,7 +27,7 @@ public class RegisterLoginController {
 	@Autowired
 	private AdminService adminService;
 	
-	@GetMapping("/")
+	@GetMapping("/login")
 	public String index() {
 		return "login_page";
 	}
