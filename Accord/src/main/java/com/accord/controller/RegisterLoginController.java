@@ -36,32 +36,33 @@ public class RegisterLoginController {
 	public String getRegisterPage(Model model) {
 		model.addAttribute("registerRequest", new User());
 		model.addAttribute("registerRequest", new Admin());
-		return "UserAccounts_viewDetails";
+		return "register_page";
 	}
 	
-	@GetMapping("/login")
+	/*@GetMapping("/login")
 	public String getLoginPage(Model model) {
 		model.addAttribute("loginRequest", new User());
 		model.addAttribute("loginRequest", new Admin());
 		return "login_page";
-	}
+	}*/
 	
 	@PostMapping("/register")
 	public String register(@ModelAttribute User user, @RequestParam("file") MultipartFile tenancy, MultipartFile valid, Admin admin, Model model) throws IOException {
 		Boolean checkAdmin = adminService.checkEmail(admin.getEmail(), admin.getPassword());
 		if(checkAdmin == null) {
-			return "duplicate_page";
+			model.addAttribute("error", "Duplicate email");
+			return "register_page";
 		}
 		else {
 			User registeredUser = userService.registerUser(user.getName(), user.getPassword(), user.getEmail(), user.getContactnumber(),
 					user.getBlock_num(), user.getLot_num(), user.getProperty_status(), tenancy, valid);
-			return registeredUser == null ? "error_page" : "redirect:/login";
+			model.addAttribute("error", "Duplicate email/phone number");
+			return registeredUser == null ? "register_page" : "redirect:/";
 		}
 	}
 	
 	@PostMapping("/login")
 	public String login(@ModelAttribute User user, Admin admin, Model model) {
-		System.out.println("login request" + user);
 		User authenticatedUser = userService.authenticate(user.getEmail(), user.getPassword());
 		Admin authenticatedAdmin = adminService.authenticate(admin.getEmail(), admin.getPassword());
 		if(authenticatedUser != null) {
@@ -73,7 +74,8 @@ public class RegisterLoginController {
 			return "dashboard_admin";
 		}
 		else {
-			return "error_page";
+			model.addAttribute("error", "na error");
+			return "login_page";
 		}
 	}
 	

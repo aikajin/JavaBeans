@@ -1,5 +1,7 @@
 package com.accord.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,7 @@ import com.accord.Entity.User;
 import com.accord.repository.EmailNotificationRepository;
 import com.accord.repository.UserRepository;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.mail.javamail.JavaMailSender;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -22,6 +25,8 @@ public class UserService {
 
     @Autowired
     private EmailNotificationRepository emailNotificationRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private JavaMailSender mailSender;  // Injecting JavaMailSender for sending email
@@ -45,7 +50,7 @@ public class UserService {
         
         User user = new User();
         user.setName(name);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         user.setEmail(email);
         user.setContactnumber(contactnumber);
         user.setBlock_num(block_num);
@@ -78,6 +83,14 @@ public class UserService {
         return userRepository.findByEmailAndPassword(email, password)
                 .filter(User::getConfirmation_account)  // Check if account is approved
                 .orElse(null);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+    
+    public User updateUser(User user) {
+        return userRepository.save(user);
     }
 
     public List<User> getAllUser() {
