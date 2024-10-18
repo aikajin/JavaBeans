@@ -36,7 +36,7 @@ public class RegisterLoginController {
 	public String getRegisterPage(Model model) {
 		model.addAttribute("registerRequest", new User());
 		model.addAttribute("registerRequest", new Admin());
-		return "UserAccounts_viewDetails";
+		return "register_page";
 	}
 	
 	@GetMapping("/login")
