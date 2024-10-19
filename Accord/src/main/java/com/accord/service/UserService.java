@@ -39,11 +39,9 @@ public class UserService {
              MultipartFile tenancy, MultipartFile valid) {
         if (email != null && password != null) {
             if (userRepository.findFirstByEmail(email).isPresent()) {
-                System.out.println("Duplicate email");
                 return null;
             }
             if (userRepository.findByContactnumber(contactnumber).isPresent()) {
-                System.out.println("Duplicate phone number");
                 return null;
             }
         }
@@ -93,6 +91,15 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public Boolean checkEmail(String email) {
+        if(email != null) {
+            if(userRepository.findFirstByEmail(email).isPresent()){
+                return null;
+            }
+            return true;
+        }
+        return true;
+    }
     public List<User> getAllUser() {
         return userRepository.findAll();
     }

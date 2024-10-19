@@ -31,14 +31,21 @@ public class RegisterLoginController {
 	public String index() {
 		return "login_page";
 	}
-	
+	@GetMapping("/login")
+	public String login() {
+		return "login_page";
+	}
 	@GetMapping("/register")
 	public String getRegisterPage(Model model) {
 		model.addAttribute("registerRequest", new User());
 		model.addAttribute("registerRequest", new Admin());
 		return "register_page";
 	}
-	
+	@GetMapping("/register_page_admin")
+	public String getRegisterPageAdmin(Model model) {
+		model.addAttribute("registerRequest", new Admin());
+		return "register_page_admin";
+	}
 	/*@GetMapping("/login")
 	public String getLoginPage(Model model) {
 		model.addAttribute("loginRequest", new User());
@@ -48,7 +55,7 @@ public class RegisterLoginController {
 	
 	@PostMapping("/register")
 	public String register(@ModelAttribute User user, @RequestParam("file") MultipartFile tenancy, MultipartFile valid, Admin admin, Model model) throws IOException {
-		Boolean checkAdmin = adminService.checkEmail(admin.getEmail(), admin.getPassword());
+		Boolean checkAdmin = adminService.checkEmail(admin.getEmail());
 		if(checkAdmin == null) {
 			model.addAttribute("error", "Duplicate email");
 			return "register_page";
@@ -60,7 +67,22 @@ public class RegisterLoginController {
 			return registeredUser == null ? "register_page" : "redirect:/";
 		}
 	}
-	
+	@PostMapping("/register_page_admin")
+	public String registerAdmin(@ModelAttribute Admin admin, User user, Model model) throws IOException {
+		Boolean checkAdmin = adminService.checkEmail(admin.getEmail());
+		Boolean checkUser = userService.checkEmail(user.getEmail());
+		if(checkAdmin == null || checkUser == null) {
+			model.addAttribute("error", "Duplicate email");
+			return "register_page";
+		}
+		else {
+			Admin adminRegister = adminService.registerAdmin(admin.getEmail(), admin.getPassword());
+			//model.addAttribute("AdminRegister", new Admin());
+			model.addAttribute("error", "Duplicate email");
+			return adminRegister == null ? "redirect:/register_page_admin" : "redirect:/";
+		}
+	}
+
 	@PostMapping("/login")
 	public String login(@ModelAttribute User user, Admin admin, Model model) {
 		User authenticatedUser = userService.authenticate(user.getEmail(), user.getPassword());
