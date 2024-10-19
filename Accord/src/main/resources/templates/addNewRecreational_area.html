@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Recreational Area</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FF5916;
+            --secondary-color: #323AA1;
+            --background-color: #FFF5F4;
+            --text-color: #000000;
+            --text-muted: #646464;
+            --border-color: #DDDCDD;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 322px;
+            background-color: white;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .logo {
+            width: 262px;
+            height: 56px;
+            margin-bottom: 2rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            background-color: rgba(255, 89, 22, 0.15);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .nav-item-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-item-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .sidebar-divider {
+            width: 100%;
+            height: 1px;
+            background-color: rgba(138, 136, 136, 0.41);
+            margin: 1rem 0;
+        }
+
+        .logout {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .user-profile {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            background-color: #FFCFBB;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+            margin-left: 322px;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 16px;
+            font-weight: 300;
+        }
+
+        .form-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            max-width: 800px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-family: 'Lexend', sans-serif;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .form-group input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .file-name {
+            margin-left: 1rem;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 0.5rem;
+        }
+
+        .success-message {
+            color: green;
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <img src="images/logo.png" alt="Logo" class="logo">
+            <nav>
+                <div class="nav-item">
+                    <div class="nav-item-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                    </div>
+                    Dashboard
+                </div>
+                <div class="nav-item active">
+                    <div class="nav-item-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+                    Areas Management
+                </div>
+                <div class="nav-item">
+                    <div class="nav-item-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    Manage Bookings
+                </div>
+                <div class="nav-item">
+                    <div class="nav-item-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    User Accounts
+                </div>
+                <div class="nav-item">
+                    <div class="nav-item-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                    </div>
+                    Analytics
+                </div>
+                <div class="nav-item">
+                    <div class="nav-item-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    Feedback
+                </div>
+            </nav>
+            <div class="sidebar-divider"></div>
+            <div class="logout">
+                <div class="nav-item-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF5916" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                </div>
+                Log out
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">SA</div>
+                <div>
+                    <div>Superadmin</div>
+                    <div style="color: #8A8888; font-size: 10px;">Super admin</div>
+                </div>
+            </div>
+        </aside>
+        <main class="main-content">
+            <header class="header">
+                <p>Areas Management / Add New Recreational Area</p>
+                <h1>Add New Recreational Area</h1>
+            </header>
+            <div class="form-container">
+                <form id="add-area-form">
+                    <div class="form-group">
+                        <label for="area-name">Name of Recreational Area</label>
+                        <input type="text" id="area-name" name="area-name" required>
+                        <div class="error-message" id="area-name-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="guidelines">Guidelines</label>
+                        <textarea id="guidelines" name="guidelines" required></textarea>
+                        <div class="error-message" id="guidelines-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cover-photo">Cover Photo</label>
+                        <input type="file" id="cover-photo" name="cover-photo" accept=".png,.jpg,.jpeg" required>
+                        <label for="cover-photo" class="file-upload-label">Choose Cover Photo</label>
+                        <span class="file-name" id="cover-photo-name"></span>
+                        <div class="error-message" id="cover-photo-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="additional-photos">Additional Photos (optional)</label>
+                        <input type="file" id="additional-photos" name="additional-photos" accept=".png,.jpg,.jpeg" multiple>
+                        <label for="additional-photos" class="file-upload-label">Choose Additional Photos</label>
+                        <span class="file-name" id="additional-photos-name"></span>
+                        <div class="error-message" id="additional-photos-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="schedule">Schedule</label>
+                        <textarea id="schedule" name="schedule" placeholder="Enter schedule details here"></textarea>
+                        <div class="error-message" id="schedule-error"></div>
+                    </div>
+                    <button type="submit" class="submit-btn">Add Recreational Area</button>
+                </form>
+                <div class="success-message" id="success-message"></div>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.getElementById('cover-photo').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || 'No file chosen';
+            document.getElementById('cover-photo-name').textContent = fileName;
+        });
+
+        document.getElementById('additional-photos').addEventListener('change', function(e) {
+            const fileCount = e.target.files.length;
+            const message = fileCount > 0 ? `${fileCount} file(s) selected` : 'No files chosen';
+            document.getElementById('additional-photos-name').textContent = message;
+        });
+
+        document.getElementById('add-area-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            
+            
+            let hasError = false;
+
+            // Validate area name
+            const areaName = document.getElementById('area-name').value.trim();
+            if (!areaName) {
+                document.getElementById('area-name-error').textContent = 'Area name is required';
+                hasError = true;
+            }
+
+            // Validate guidelines
+            const guidelines = document.getElementById('guidelines').value.trim();
+            if (!guidelines) {
+                document.getElementById('guidelines-error').textContent = 'Guidelines are required';
+                hasError = true;
+            }
+
+            // Validate cover photo
+            const coverPhoto = document.getElementById('cover-photo').files[0];
+            if (!coverPhoto) {
+                document.getElementById('cover-photo-error').textContent = 'Cover photo is required';
+                hasError = true;
+            } else if (coverPhoto.size > 2 * 1024 * 1024) {
+                document.getElementById('cover-photo-error').textContent = 'Cover photo must be less than 2MB';
+                hasError = true;
+            }
+
+            // Validate additional photos
+            const additionalPhotos = document.getElementById('additional-photos').files;
+            for (let i = 0; i < additionalPhotos.length; i++) {
+                if (additionalPhotos[i].size > 2 * 1024 * 1024) {
+                    document.getElementById('additional-photos-error').textContent = 'Each additional photo must be less than 2MB';
+                    hasError = true;
+                    break;
+                }
+            }
+
+            if (hasError) {
+                return;
+            }
+
+            // If all validations pass, you would typically send this data to a server
+            // For this example, we'll just show a success message
+            document.getElementById('success-message').textContent = 'Recreational area added successfully!';
+
+            // Reset the form
+            e.target.reset();
+            document.getElementById('cover-photo-name').textContent = '';
+            document.getElementById('additional-photos-name').textContent = '';
+        });
+    </script>
+</body>
+</html>
