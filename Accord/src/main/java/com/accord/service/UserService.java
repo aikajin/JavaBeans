@@ -105,7 +105,7 @@ public class UserService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);  // true indicates multipart
 
             helper.setFrom("extrahamham@gmail.com");  // Your app's email
-            helper.setTo("kyledowiromero@gmail.com");  // Admin's email
+            helper.setTo("klayam12x@gmail.com");  // Admin's email
             helper.setSubject("Approval Request for New User Registration");
 
             // Email content with user details
