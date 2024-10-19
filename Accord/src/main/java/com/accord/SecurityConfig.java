@@ -53,10 +53,10 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf
                 .disable())
                 .authorizeRequests(requests -> requests
-                        .requestMatchers("/register", "/login", "/forgotPassword_page").permitAll())
+                        .requestMatchers("/", "/register", "/login", "/forgotPassword_page", "/register_page_admin").permitAll())
                 .formLogin(login -> login
-                        //.usernameParameter("email")
-                        //.passwordParameter("password")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
                         .loginPage("/login")
                         .failureUrl("/login?error=true")
                         .defaultSuccessUrl("/dashboard_user"))
