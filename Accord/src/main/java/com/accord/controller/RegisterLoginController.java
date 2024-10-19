@@ -125,6 +125,12 @@ public class RegisterLoginController {
 		return "am_recreationalAreasList";
 	}
 
+	@GetMapping("/view-recreational-area")
+	public String viewRecreationalArea(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "view_recreational_area";
+	}
+
 	@PostMapping("/forgotPassword_email")
 	public String showForgotPasswordEmailPage() {
         return "forgotPassword_email"; 
