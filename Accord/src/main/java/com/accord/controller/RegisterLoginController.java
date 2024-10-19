@@ -98,7 +98,7 @@ public class RegisterLoginController {
 	@GetMapping("/recreational-areas-list")
 	public String recreationalAreasList(Model model) {
 		// Add attributes to the model if needed for profile management
-		return "addNewRecreational_area";
+		return "am_recreationalAreasList";
 	}
 
 	@GetMapping("/view-recreational-area")
