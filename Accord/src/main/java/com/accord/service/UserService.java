@@ -1,16 +1,20 @@
 package com.accord.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.accord.Entity.User;
-import com.accord.notification.EmailNotification;
 import com.accord.repository.EmailNotificationRepository;
 import com.accord.repository.UserRepository;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.mail.javamail.JavaMailSender;
-
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,6 +25,8 @@ public class UserService {
 
     @Autowired
     private EmailNotificationRepository emailNotificationRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private JavaMailSender mailSender;  // Injecting JavaMailSender for sending email
@@ -33,18 +39,16 @@ public class UserService {
              MultipartFile tenancy, MultipartFile valid) {
         if (email != null && password != null) {
             if (userRepository.findFirstByEmail(email).isPresent()) {
-                System.out.println("Duplicate email");
                 return null;
             }
             if (userRepository.findByContactnumber(contactnumber).isPresent()) {
-                System.out.println("Duplicate phone number");
                 return null;
             }
         }
         
         User user = new User();
         user.setName(name);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         user.setEmail(email);
         user.setContactnumber(contactnumber);
         user.setBlock_num(block_num);
@@ -79,27 +83,63 @@ public class UserService {
                 .orElse(null);
     }
 
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+    
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public Boolean checkEmail(String email) {
+        if(email != null) {
+            if(userRepository.findFirstByEmail(email).isPresent()){
+                return null;
+            }
+            return true;
+        }
+        return true;
+    }
     public List<User> getAllUser() {
         return userRepository.findAll();
     }
 
-    // Send an email notification to the admin to approve the registration
     private void sendApprovalRequestToAdmin(User user) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("extrahamham@gmail.com");  // Your app's email
-        message.setTo("admin-email@example.com");  // Admin's email
-        message.setSubject("Approval Request for New User Registration");
+        MimeMessage message = mailSender.createMimeMessage();
 
-        // Email content with user details
-        message.setText("A new user has registered with the following details:\n\n" +
-                "Name: " + user.getName() + "\n" +
-                "Email: " + user.getEmail() + "\n" +
-                "Contact: " + user.getContactnumber() + "\n" +
-                "Block Number: " + user.getBlock_num() + "\n" +
-                "Lot Number: " + user.getLot_num() + "\n" +
-                "Property Status: " + user.getProperty_status() + "\n\n" +
-                "Please approve or reject this registration in the admin panel.");
+        try {
+            // Use MimeMessageHelper to handle multipart emails (attachments)
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);  // true indicates multipart
 
-        mailSender.send(message);
+            helper.setFrom("extrahamham@gmail.com");  // Your app's email
+            helper.setTo("klayam12x@gmail.com");  // Admin's email
+            helper.setSubject("Approval Request for New User Registration");
+
+            // Email content with user details
+            helper.setText("A new user has registered with the following details:\n\n" +
+                    "Name: " + user.getName() + "\n" +
+                    "Email: " + user.getEmail() + "\n" +
+                    "Contact: " + user.getContactnumber() + "\n" +
+                    "Block Number: " + user.getBlock_num() + "\n" +
+                    "Lot Number: " + user.getLot_num() + "\n" +
+                    "Property Status: " + user.getProperty_status() + "\n\n" +
+                    "Please approve or reject this registration in the admin panel.");
+
+            // Add the tenancy agreement as an attachment
+            if (user.getTenancy_name() != null) {
+                helper.addAttachment(user.getTenancy_name(), new ByteArrayResource(user.getTenancy_document()));
+            }
+
+            // Add the valid ID as an attachment
+            if (user.getId_name() != null) {
+                helper.addAttachment(user.getId_name(), new ByteArrayResource(user.getId_document()));
+            }
+
+            // Send the email
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            // Handle exception if sending fails
+        }
     }
 }

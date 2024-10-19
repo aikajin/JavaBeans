@@ -1,21 +1,260 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>User Dashboard</title>
-<link rel="icon" href="images/logoHead.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="icon" href="images/logoHead.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+
 </head>
 <body>
-<div class=form>
-	<h1>Sample</h1>
-	<div class="input-box">
-	
-	</div>
-	<a href="/login" class="logout">Logout</a>
+    <div class="container">
+        <div class="sidebar">
+            <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
+            <div class="nav-items">
+                <a href="#" class="nav-item active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <div>Dashboard</div>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 21h18"></path>
+                        <path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path>
+                        <path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path>
+                        <rect x="9" y="7" width="6" height="4"></rect>
+                    </svg>
+                    <div>Book a Facility</div>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <div>Manage Bookings</div>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.44" height="17.04" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <div>Manage Profile</div>
+                </a>
+            
+                <div class="nav-divider"></div>
+                
+                <a href="/login" class="logout">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <div>Log out</div>
+            </a>        
 </div>
+			
+            <div class="profile">
+                <div class="profile-pic">JD</div>
+                <div class="profile-info">
+                    <div class="profile-name">John Doe</div>
+                    <div class="profile-role">Homeowner</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <h1>Welcome, <span id="userName">John Doe</span>!</h1>
+            <p class="subtitle">Track your bookings and explore available amenities.</p>
+
+				<!-- Updated Active Bookings Section -->
+				<div class="active-bookings">
+					<div class="active-bookings-content">
+						<div class="active-bookings-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1890ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+								<line x1="16" y1="2" x2="16" y2="6"></line>
+								<line x1="8" y1="2" x2="8" y2="6"></line>
+								<line x1="3" y1="10" x2="21" y2="10"></line>
+							</svg>
+						</div>
+						<div class="active-bookings-text">
+							<span class="active-bookings-label">Active Bookings This Month</span>
+							<span class="active-bookings-count" id="activeBookingsCount">Loading...</span>
+						</div>
+					</div>
+					<button class="view-button" onclick="navigateToManageBookings()">Check This Out</button>
+				</div>
+
+            <div class="upcoming-activities">
+                <h2>Upcoming Bookings</h2>
+                <table class="activities-table">
+                    <thead>
+                        <tr>
+                            <th>Recreational Area</th>
+                            <th>Reservation Date</th>
+                            <th>Reservation Time</th>
+							<th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="upcomingActivitiesContainer">
+                        <!-- Table rows will be dynamically inserted here -->
+                    </tbody>
+                </table>
+                <div class="pagination" id="activitiesPagination">
+                    <!-- Pagination buttons will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <div class="table-container">
+                <h2>Recent Feedback and Ratings</h2>
+                <table id="feedbackTable">
+                    <thead>
+                        <tr>
+                            <th>Recreational Area</th>
+                            <th>Feedback</th>
+                            <th>Rating</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        let totalPages = 1;
+        let upcomingBookings = [];
+
+        function updateActiveBookings() {
+            setTimeout(() => {
+                const count = Math.floor(Math.random() * 5);
+                const countElement = document.getElementById('activeBookingsCount');
+                if (count > 0) {
+                    countElement.textContent = `You have ${count} active booking${count > 1 ? 's' : ''} this month.`;
+                
+                } else {
+                    countElement.textContent = 'No active bookings this month.';
+                }
+            }, 1000);
+        }
+
+        function navigateToManageBookings() {
+            alert('Navigating to Manage Bookings page...');
+        }
+
+        function updateUpcomingBookings() {
+            setTimeout(() => {
+                upcomingBookings = [
+                    { area: 'Tennis Court', date: '2024-10-18', time: '14:00' },
+                    { area: 'Swimming Pool', date: '2024-10-20', time: '10:00' },
+                    { area: 'Basketball Court', date: '2024-10-22', time: '16:00' },
+                    { area: 'Gym', date: '2024-10-25', time: '09:00' },
+                    { area: 'Yoga Studio', date: '2024-10-27', time: '18:00' },
+                    { area: 'Squash Court', date: '2024-10-30', time: '11:00' },
+                    { area: 'Badminton Court', date: '2024-11-02', time: '15:00' }
+                ];
+
+                totalPages = Math.ceil(upcomingBookings.length / 3);
+                displayUpcomingBookings();
+                updatePagination();
+            }, 1000);
+        }
+
+        function displayUpcomingBookings() {
+            const container = document.getElementById('upcomingBookingsContainer');
+            const startIndex = (currentPage - 1) * 3;
+            const endIndex = startIndex + 3;
+            const bookingsToShow = upcomingBookings.slice(startIndex, endIndex);
+
+            if (bookingsToShow.length > 0) {
+                container.innerHTML = bookingsToShow.map(booking => `
+                    <div class="booking-item">
+                        <td>${booking.area}</td>
+                        <td>${booking.date}</td>
+                        <td>${booking.time}</td>
+						<td><button class="view-button" onclick="viewBooking(${booking.id})">View Booking</button></td>
+                    </tr>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = '<p>No upcoming bookings.</p>';
+            }
+        }
+
+        function updatePagination() {
+            const pageInfo = document.getElementById('pageInfo');
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+            prevButton.disabled = currentPage === 1;
+            nextButton.disabled = currentPage === totalPages;
+        }
+
+        function changePage(direction) {
+            currentPage += direction;
+            displayUpcomingBookings();
+            updatePagination();
+        }
+
+        function updateFeedbackTable() {
+            const tableBody = document.querySelector('#feedbackTable tbody');
+            setTimeout(() => {
+                const feedbackData = [
+                    { area: 'Tennis Court', feedback: 'Great experience!', rating: 5, date: '2024-10-15' },
+                    { area: 'Swimming Pool', feedback: 'Could be cleaner', rating: 3, date: '2024-10-10' },
+                    { area: 'Basketball Court', feedback: 'Excellent facilities', rating: 4, date: '2024-10-05' }
+                ];
+
+                if (feedbackData.length > 0) {
+                    tableBody.innerHTML = feedbackData.map(item => `
+                        <tr>
+                            <td>${item.area}</td>
+                            <td>${item.feedback}</td>
+                            <td class="stars">${'★'.repeat(item.rating)}${'☆'.repeat(5 - item.rating)}</td>
+                            <td>${item.date}</td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="4">No feedback or ratings submitted.</td></tr>';
+                }
+            }, 1000);
+        }
+
+        // Initial load and periodic updates
+        updateActiveBookings();
+        updateUpcomingBookings();
+        updateFeedbackTable();
+
+        setInterval(updateActiveBookings, 60000); // Update every minute
+        setInterval(updateUpcomingBookings, 300000); // Update every 5 minutes
+        setInterval(updateFeedbackTable, 300000); // Update every 5 minutes
+
+        // Add event listeners for sidebar navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+            document.querySelector('.nav-item.active')?.classList.remove('active');
+            if (!this.classList.contains('logout')) {
+                this.classList.add('active');
+            }
+        });
+    });
+
+            // Separate event listener for the logout button
+            document.querySelector('.logout').addEventListener('click', function(e) {
+                // Redirect to login page
+            window.location.href = this.getAttribute('href');
+    });
+    </script>
 </body>
 </html>

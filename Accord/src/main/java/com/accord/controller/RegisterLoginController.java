@@ -31,37 +31,60 @@ public class RegisterLoginController {
 	public String index() {
 		return "login_page";
 	}
-	
+	@GetMapping("/login")
+	public String login() {
+		return "login_page";
+	}
 	@GetMapping("/register")
 	public String getRegisterPage(Model model) {
 		model.addAttribute("registerRequest", new User());
 		model.addAttribute("registerRequest", new Admin());
 		return "register_page";
 	}
-	
-	@GetMapping("/login")
+	@GetMapping("/register_page_admin")
+	public String getRegisterPageAdmin(Model model) {
+		model.addAttribute("registerRequest", new Admin());
+		return "register_page_admin";
+	}
+	/*@GetMapping("/login")
 	public String getLoginPage(Model model) {
 		model.addAttribute("loginRequest", new User());
 		model.addAttribute("loginRequest", new Admin());
 		return "login_page";
-	}
+	}*/
 	
 	@PostMapping("/register")
 	public String register(@ModelAttribute User user, @RequestParam("file") MultipartFile tenancy, MultipartFile valid, Admin admin, Model model) throws IOException {
-		Boolean checkAdmin = adminService.checkEmail(admin.getEmail(), admin.getPassword());
+		Boolean checkAdmin = adminService.checkEmail(admin.getEmail());
 		if(checkAdmin == null) {
-			return "duplicate_page";
+			model.addAttribute("error", "Duplicate email");
+			return "register_page";
 		}
 		else {
 			User registeredUser = userService.registerUser(user.getName(), user.getPassword(), user.getEmail(), user.getContactnumber(),
 					user.getBlock_num(), user.getLot_num(), user.getProperty_status(), tenancy, valid);
-			return registeredUser == null ? "error_page" : "redirect:/login";
+			model.addAttribute("error", "Duplicate email/phone number");
+			return registeredUser == null ? "register_page" : "redirect:/";
 		}
 	}
-	
+	@PostMapping("/register_page_admin")
+	public String registerAdmin(@ModelAttribute Admin admin, User user, Model model) throws IOException {
+		Boolean checkAdmin = adminService.checkEmail(admin.getEmail());
+		Boolean checkUser = userService.checkEmail(user.getEmail());
+		if(checkAdmin == null || checkUser == null) {
+			model.addAttribute("error", "Duplicate email");
+			return "register_page";
+		}
+		else {
+			Admin adminRegister = adminService.registerAdmin(admin.getEmail(), admin.getPassword());
+			//model.addAttribute("AdminRegister", new Admin());
+			model.addAttribute("error", "Duplicate email");
+			return adminRegister == null ? "redirect:/register_page_admin" : "redirect:/";
+		}
+	}
+
 	@PostMapping("/login")
 	public String login(@ModelAttribute User user, Admin admin, Model model) {
-		System.out.println("login request" + user);
 		User authenticatedUser = userService.authenticate(user.getEmail(), user.getPassword());
 		Admin authenticatedAdmin = adminService.authenticate(admin.getEmail(), admin.getPassword());
 		if(authenticatedUser != null) {
@@ -73,7 +96,8 @@ public class RegisterLoginController {
 			return "dashboard_admin";
 		}
 		else {
-			return "error_page";
+			model.addAttribute("error", "na error");
+			return "login_page";
 		}
 	}
 	
