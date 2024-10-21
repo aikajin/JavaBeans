@@ -11,10 +11,6 @@ import com.accord.Entity.User;
 import com.accord.repository.EmailNotificationRepository;
 import com.accord.repository.UserRepository;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.mail.javamail.JavaMailSender;
 import jakarta.mail.MessagingException;
@@ -40,7 +36,7 @@ public class UserService {
     }
 
     public User registerUser(String name, String password, String email, String contactnumber, int block_num, int lot_num, String property_status,
-             MultipartFile tenancy, MultipartFile valid, String role) {
+             MultipartFile tenancy, MultipartFile valid) {
         if (email != null && password != null) {
             if (userRepository.findFirstByEmail(email).isPresent()) {
                 return null;
@@ -71,7 +67,7 @@ public class UserService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        user.setRole(role);
+
         User registeredUser = userRepository.save(user);
         
         // Send an email to the admin for approval
@@ -80,38 +76,17 @@ public class UserService {
         return registeredUser;
     }
 
-    public User registerAdmin(String email, String password, String role) {
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRole(role);
-        User registeredAdmin = userRepository.save(user);
-        return registeredAdmin;
-    }
-
     public User authenticate(String email, String password) {
         // Only allow login if the account is approved by the admin
         return userRepository.findByEmailAndPassword(email, password)
                 .filter(User::getConfirmation_account)  // Check if account is approved
                 .orElse(null);
     }
-    public static String getCurrentEmail() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth != null && auth.isAuthenticated()) {
-            Object principal = auth.getPrincipal();
-            if(principal instanceof UserDetails) {
-                return ((UserDetails) principal).getUsername();
-            }
-            else {
-                return principal.toString();
-            }
-        }
-        return null;
-    }
-    public User findByEmail(String email) {
+
+    public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-
+    
     public User updateUser(User user) {
         return userRepository.save(user);
     }
@@ -119,15 +94,6 @@ public class UserService {
     public Boolean checkEmail(String email) {
         if(email != null) {
             if(userRepository.findFirstByEmail(email).isPresent()){
-                return null;
-            }
-            return true;
-        }
-        return true;
-    }
-    public Boolean checkPhone(String contactnumber) {
-        if(contactnumber != null) {
-            if(userRepository.findByContactnumber(contactnumber).isPresent()){
                 return null;
             }
             return true;

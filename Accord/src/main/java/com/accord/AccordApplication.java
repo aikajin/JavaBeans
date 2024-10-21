@@ -11,7 +11,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 public class AccordApplication {
 
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/resources/**").addResourceLocations("classpath:/static/css");
+		registry.addResourceHandler("/resources/**").addResourceLocations("classpath:/static/")
+		.setCacheControl(CacheControl.maxAge(2, TimeUnit.HOURS).cachePublic());
 	}
 	public static void main(String[] args) {
 		SpringApplication.run(AccordApplication.class, args);

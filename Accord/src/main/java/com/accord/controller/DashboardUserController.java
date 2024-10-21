@@ -15,24 +15,17 @@ import com.accord.repository.UserRepository;
 import com.accord.service.UserService;
 
 @Controller
-@RequestMapping("/dashboard_user")
+//@RequestMapping("/Dashboard")
 public class DashboardUserController {
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private UserRepository userRepository;
-	@ModelAttribute
-    public void getUserDetails(Principal principal, Model model) {
-        if(principal != null) {
-            String email = principal.getName();
-            User userDetails = userService.findByEmail(email);
-            model.addAttribute("user", userDetails);
-        }
-    }
+	
     @GetMapping("/dashboard_user")
     public String showDashboard(Principal principal, Model model) {
         String username = principal.getName();
-        User user = userService.findByEmail(username);
+        User user = userService.findByEmail(username).orElseThrow();
         model.addAttribute("user", user);
         return "dashboard_user";
     }
