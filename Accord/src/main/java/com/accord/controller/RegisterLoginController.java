@@ -36,7 +36,7 @@ public class RegisterLoginController {
 	public String getRegisterPage(Model model) {
 		model.addAttribute("registerRequest", new User());
 		model.addAttribute("registerRequest", new Admin());
-		return "UserAccounts_viewDetails";
+		return "register_page";
 	}
 	
 	@GetMapping("/login")
@@ -84,16 +84,13 @@ public class RegisterLoginController {
 		return "viewusers_page";
 	}
 
-	@GetMapping("/forgotPassword_page")
-    public String showForgotPasswordPage() {
+    @GetMapping("/forgotPassword_page")
+    public String showForgotPasswordPage(Model model) {
+        // Add "resetRequest" to the model for form binding
+        model.addAttribute("resetRequest", new User());
         return "forgotPassword_page";
     }
-	
-	@GetMapping("/manage-profile")
-	public String manageProfile(Model model) {
-		// Add attributes to the model if needed for profile management
-		return "manage_profile";
-	}
+
 
 	@GetMapping("/recreational-areas-list")
 	public String recreationalAreasList(Model model) {
@@ -102,7 +99,24 @@ public class RegisterLoginController {
 	}
 
 	@PostMapping("/forgotPassword_email")
-	public String showForgotPasswordEmailPage() {
-        return "forgotPassword_email"; 
+public String processForgotPassword(@ModelAttribute("resetRequest") User resetRequest, Model model) {
+    // Retrieve the User object based on the email
+    User user = userService.findByEmail(resetRequest.getEmail()).orElse(null);
+    
+    if (user != null) {
+        // Now pass the User object to sendPasswordResetEmail
+        boolean isEmailSent = userService.sendPasswordResetEmail(user);
+        
+        if (isEmailSent) {
+            model.addAttribute("message", "Password reset email sent successfully.");
+            return "forgotPassword_email";
+        } else {
+            model.addAttribute("error", "Failed to send password reset email. Please try again.");
+        }
+    } else {
+        model.addAttribute("error", "No user found with the provided email.");
     }
+    
+    return "forgotPassword_page"; // Redirect back to the form in case of an error
+}
 }
