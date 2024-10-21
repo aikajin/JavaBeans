@@ -959,17 +959,42 @@ h1 {
             margin-left: 1rem;
         }
 
-        .submit-btn {
-            background-color: #FF5916;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            font-family: 'Lexend', sans-serif;
-        }
+      .submit-btn, .delete-btn2 {
+          padding: 0.75rem 1.5rem;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: 500;
+          font-family: 'Lexend', sans-serif;
+          border: none;
+      }
+      .submit-btn {
+        background-color: #FF5916; /* Default background color */
+        color: white; /* Default text color */
+        transition: background-color 0.3s ease; /* Smooth transition for the hover effect */
+    }
+    
+    .submit-btn:hover {
+        background-color: #e04f14; /* Slightly darker shade of the original color */
+    }
+    
+      .delete-btn2 {
+        background-color: transparent; /* No background color */
+        border: 2px solid #dc3545; /* Red border */
+        color: #dc3545; /* Red text color */
+        transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+    }
+    
+    .delete-btn2:hover {
+        background-color: #dc3545; /* Red background on hover */
+        color: white; /* White text on hover */
+    }
+
+      .button-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+      }
 
         .error-message {
             color: red;
@@ -981,3 +1006,8 @@ h1 {
             margin-top: 1rem;
             font-weight: 500;
         }
+
+        .button-group {
+          display: flex;
+          gap: 10px;
+      }

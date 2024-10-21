@@ -137,6 +137,12 @@ public class RegisterLoginController {
 		return "addNewRecreational_area";
 	}
 
+	@GetMapping("/modify-recreational-area")
+	public String modifyRecreationalArea(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "modifyDelete_area";
+	}
+
 	@PostMapping("/forgotPassword_email")
 	public String showForgotPasswordEmailPage() {
         return "forgotPassword_email"; 
