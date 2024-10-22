@@ -43,7 +43,7 @@ public class UserService {
 
         public boolean sendPasswordResetEmail(User user) {
         String token = UUID.randomUUID().toString();  // Generate unique token
-        String resetLink = "http://localhost:8085/forgotPassword_setPass?token=" + token;
+        String resetLink = "http://localhost:8086/forgotPassword_setPass?token=" + token;
     
         MimeMessage message = mailSender.createMimeMessage();
     
