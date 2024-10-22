@@ -19,6 +19,8 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -38,6 +40,51 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+        public boolean sendPasswordResetEmail(User user) {
+        String token = UUID.randomUUID().toString();  // Generate unique token
+        String resetLink = "http://localhost:8085/forgotPassword_setPass?token=" + token;
+    
+        MimeMessage message = mailSender.createMimeMessage();
+    
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom("extrahamham@gmail.com");
+            helper.setTo(user.getEmail());
+            helper.setSubject("Password Reset Request");
+    
+            String emailContent = "<p>Hi " + user.getName() + ",</p>" +
+                                  "<p>To reset your password, click the link below:</p>" +
+                                  "<a href=\"" + resetLink + "\">Reset Password</a>" +
+                                  "<p>If you didn't request a password reset, please ignore this email.</p>";
+            
+            helper.setText(emailContent, true);
+    
+            // Send email
+            mailSender.send(message);
+    
+            return true; // Return true if email is sent successfully
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return false; // Return false if email sending failed
+        }
+    }
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findFirstByEmail(email);
+    }
+
+    public boolean resetPassword(String token, String newPassword) {
+        // Here, you need to implement the logic to validate the token
+        // and reset the password for the user associated with that token.
+    
+        // For this example, let's assume you have a method to find a user by token:
+        Optional<User> userOptional = userRepository.findByResetToken(token);
+        
+   
+        
+        return false; // Token is invalid or user not found
+    }
+
 
     public User registerUser(String name, String password, String email, String contactnumber, int block_num, int lot_num, String property_status,
              MultipartFile tenancy, MultipartFile valid, String role) {
@@ -111,9 +158,7 @@ public class UserService {
         return false;
         //return userRepository.findByEmailAndPassword(email, password);
     }
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
+
 
     public static String getCurrentEmail() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

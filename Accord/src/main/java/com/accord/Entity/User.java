@@ -56,7 +56,7 @@ public class User {
 	private String profile_name;
 
 	private String profile_type;
-	
+	private String resetToken;
 	public Long getId() {
 		return id;
 	}
