@@ -29,11 +29,12 @@
                 <div class="input-box mb-1">
                     <input type="password" name="password" class="form-control" placeholder="Enter your Password" required>
                 </div>
-                
+                <div th:if="${error}"> <!-- ERROR MESSAGES-->
+                    <p th:text="${error}"></p> <!-- ERROR MESSAGES -->
+                </div> <!-- ERROR MESSAGES -->
                 <p class="text-end text-danger fs-6 fw-normal m-0 px-6 py-1 mb-3">
                     <a href="/forgotPassword_page" class="text-danger text-decoration-none hover-shadow">Forgot Password?</a>
                 </p>
-
                 <div class="input-box mb-4">
                     <input type="submit" name="sign-in" value="Login" class="btn-login w-100 h-10">
                 </div>
