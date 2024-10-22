@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
+import java.util.Optional;
 import com.accord.Entity.User;
 import com.accord.service.UserService;
 
@@ -25,16 +25,18 @@ public class RegisterLoginController {
 	private UserService userService;
 	
 	@GetMapping("/")
-	public String getLoginPage() {
+	public String index() {
 		return "login_page";
 	}
 
 	@GetMapping("/register")
-	public String getRegisterPage() {
+	public String getRegisterPage(Model model) {
+		model.addAttribute("registerRequest", new User());;
 		return "register_page";
 	}
 	@GetMapping("/register_page_admin")
-	public String getRegisterPageAdmin() {
+	public String getRegisterPageAdmin(Model model) {
+		model.addAttribute("registerRequest", new User());
 		return "register_page_admin";
 	}
 	
@@ -42,18 +44,15 @@ public class RegisterLoginController {
 	public String register(@ModelAttribute User user, @RequestParam("file") MultipartFile tenancy, MultipartFile valid, Model model) throws IOException {
 		Boolean checkUserEmail = userService.checkEmail(user.getEmail());
 		Boolean checkUserPhone = userService.checkPhone(user.getContactnumber());
-		if(checkUserEmail == null) {
-			model.addAttribute("error", "Duplicate Email"); //model.addAttribute("variablename", "variableMessage");
-			return "register_page"; //Ilisda lang ang message
-		}
-		else if (checkUserPhone == null){
-			model.addAttribute("error", "Duplicate Contact Number"); //model.addAttribute("variablename", "variableMessage");
+		if(checkUserEmail == null || checkUserPhone == null) {
+			model.addAttribute("error", "Duplicate email/Contact Number");
 			return "register_page";
 		}
 		else {
-			userService.registerUser(user.getName(), user.getPassword(), user.getEmail(), user.getContactnumber(),
+			User registeredUser = userService.registerUser(user.getName(), user.getPassword(), user.getEmail(), user.getContactnumber(),
 					user.getBlock_num(), user.getLot_num(), user.getProperty_status(), tenancy, valid, "ROLE_USER");
-			return "redirect:/";
+			model.addAttribute("error", "Duplicate email/phone number");
+			return registeredUser == null ? "register_page" : "redirect:/";
 		}
 	}
 	@PostMapping("/register_page_admin")
@@ -61,11 +60,13 @@ public class RegisterLoginController {
 		Boolean checkUser = userService.checkEmail(user.getEmail());
 		if(checkUser == null) {
 			model.addAttribute("error", "Duplicate email");
-			return "register_page_admin";
+			return "register_page";
 		}
 		else {
-			userService.registerAdmin(user.getEmail(), user.getPassword(), "ROLE_ADMIN");
-			return "redirect:/";
+			User adminRegister = userService.registerAdmin(user.getEmail(), user.getPassword(), "ROLE_ADMIN");
+			//model.addAttribute("AdminRegister", new Admin());
+			model.addAttribute("error", "Duplicate email");
+			return adminRegister == null ? "redirect:/register_page_admin" : "redirect:/";
 		}
 	}
 
@@ -96,17 +97,25 @@ public class RegisterLoginController {
 		}*/
 		String currentEmail = user.getEmail();
 		Boolean authenticateUser = userService.authenticateLogin(user.getEmail(), user.getPassword());
-		if(authenticateUser == true) {
-			User currectUser = userService.findByEmail(currentEmail);
-			if(currectUser.getRole().contains("ROLE_USER")){
-				return "dashboard_user";
-			}
-			else {
-				return "dashboard_admin";
+		//User currectUser = userService.findByEmail(currentEmail);
+		
+		if (authenticateUser) {
+			// Use Optional to safely get the User object
+			Optional<User> optionalUser = userService.findByEmail(currentEmail);
+	
+			if (optionalUser.isPresent()) {
+				User currectUser = optionalUser.get(); // Get the actual User object
+				if (currectUser.getRole().contains("ROLE_USER")) {
+					return "dashboard_user";
+				} else {
+					return "dashboard_admin";
+				}
+			} else {
+				model.addAttribute("error", "User not found");
+				return "login_page"; // Return to login page if user not found
 			}
 		}
-		model.addAttribute("error", "Invalid Input!");
-		return "login_page";
+		return "login_page"; // Return to login page if authentication fails
 	}
 
     @GetMapping("/dashboard_user")
@@ -122,9 +131,12 @@ public class RegisterLoginController {
 	}
 
 	@GetMapping("/forgotPassword_page")
-    public String showForgotPasswordPage() {
+    public String showForgotPasswordPage(Model model) {
+        // Add "resetRequest" to the model for form binding
+        model.addAttribute("resetRequest", new User());
         return "forgotPassword_page";
     }
+
 	
 	@GetMapping("/manage-profile")
 	public String manageProfile(Model model) {
@@ -136,11 +148,6 @@ public class RegisterLoginController {
 	public String recreationalAreasList(Model model) {
 		// Add attributes to the model if needed for profile management
 		return "am_recreationalAreasList";
-	}
-	@GetMapping("/dash_admin")
-	public String dashboardAdmin(Model model) {
-		// Add attributes to the model if needed for profile management
-		return "dashboard_admin";
 	}
 
 	@GetMapping("/view-recreational-area")
@@ -155,20 +162,54 @@ public class RegisterLoginController {
 		return "addNewRecreational_area";
 	}
 
-	@GetMapping("/modifyrec_admin")
+	@GetMapping("/modify-recreational-area")
 	public String modifyRecreationalArea(Model model) {
 		// Add attributes to the model if needed for profile management
 		return "modifyDelete_area";
 	}
-	@GetMapping("/useracc_admin")
-	public String UserAccountsp(Model model) {
-		// Add attributes to the model if needed for profile management
-		return "UserAccounts_page";
-	}
-
 
 	@PostMapping("/forgotPassword_email")
-	public String showForgotPasswordEmailPage() {
-        return "forgotPassword_email"; 
+public String processForgotPassword(@ModelAttribute("resetRequest") User resetRequest, Model model) {
+    // Retrieve the User object based on the email
+    User user = userService.findByEmail(resetRequest.getEmail()).orElse(null);
+    
+    if (user != null) {
+        // Now pass the User object to sendPasswordResetEmail
+        boolean isEmailSent = userService.sendPasswordResetEmail(user);
+        
+        if (isEmailSent) {
+            model.addAttribute("message", "Password reset email sent successfully.");
+            return "forgotPassword_email";
+        } else {
+            model.addAttribute("error", "Failed to send password reset email. Please try again.");
+        }
+    } else {
+        model.addAttribute("error", "No user found with the provided email.");
     }
+    
+    return "forgotPassword_page"; // Redirect back to the form in case of an error
+}
+@GetMapping("/forgotPassword_setPass")
+public String showResetPasswordPage(Model model) {
+    // Add any required model attributes for the form, if needed
+    model.addAttribute("loginRequest", new User()); // Assuming User is needed for form binding
+    return "forgotPassword_setPass"; // This must match the name of your HTML file without ".html"
+}
+@PostMapping("/resetpassword")
+public String handlePasswordReset(
+    @RequestParam("token") String token, 
+    @RequestParam("password") String newPassword,
+    Model model) {
+    
+    // Validate the token again and reset the password
+    boolean isPasswordReset = userService.resetPassword(token, newPassword);
+    
+    if (isPasswordReset) {
+        model.addAttribute("message", "Password has been successfully reset.");
+        return "login_page"; // Redirect to login page after success
+    } else {
+        model.addAttribute("error", "Failed to reset password. The token might be invalid or expired.");
+        return "forgotPassword_setPass"; // Stay on the form if there's an error
+    }
+}
 }

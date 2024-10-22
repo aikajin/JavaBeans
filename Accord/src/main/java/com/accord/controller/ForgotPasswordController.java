@@ -23,17 +23,16 @@ public class ForgotPasswordController {
 
     @Autowired
     private UserService userService;
-
     @PostMapping("/forgotPassword")
     public String processForgotPassword(@RequestParam("email") String email, Model model) {
         // Look for the user by email
-        Optional<User> optionalUser = userService.findByEmail(email);
-
-        if (optionalUser.isPresent()) {
+        Optional<User> userOptional = userService.findByEmail(email); // This returns Optional<User>
+        
+        if (userOptional.isPresent()) {
             // If the user exists, send a password reset email
-            User user = optionalUser.get();
+            User user = userOptional.get(); // Extract the User from Optional
             userService.sendPasswordResetEmail(user);
-
+    
             // Add a success message to the model
             model.addAttribute("message", "Password reset email has been sent to " + email);
             return "forgotPassword_email"; // Show a confirmation page
