@@ -118,7 +118,7 @@ public class RegisterLoginController {
 		return "login_page"; // Return to login page if authentication fails
 	}
 
-    @GetMapping("/dashboard_user")
+    @GetMapping("/dash_user")
     public String showDashboard() {
         return "dashboard_user";
     }
@@ -165,7 +165,7 @@ public class RegisterLoginController {
 		return "UserAccounts_page";
 	}
 
-	@GetMapping("/add-recreational-area")
+	@GetMapping("/add_area")
 	public String addRecreationalArea(Model model) {
 		// Add attributes to the model if needed for profile management
 		return "addNewRecreational_area";
