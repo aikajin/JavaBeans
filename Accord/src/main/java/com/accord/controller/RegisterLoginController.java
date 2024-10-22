@@ -139,6 +139,11 @@ public class RegisterLoginController {
 		// Add attributes to the model if needed for profile management
 		return "am_recreationalAreasList";
 	}
+	@GetMapping("/dash_admin")
+	public String dashboardAdmin(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "dashboard_admin";
+	}
 
 	@GetMapping("/view-recreational-area")
 	public String viewRecreationalArea(Model model) {
@@ -152,11 +157,17 @@ public class RegisterLoginController {
 		return "addNewRecreational_area";
 	}
 
-	@GetMapping("/modify-recreational-area")
+	@GetMapping("/modifyrec_admin")
 	public String modifyRecreationalArea(Model model) {
 		// Add attributes to the model if needed for profile management
 		return "modifyDelete_area";
 	}
+	@GetMapping("/useracc_admin")
+	public String UserAccountsp(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "UserAccounts_page";
+	}
+
 
 	@PostMapping("/forgotPassword_email")
 	public String showForgotPasswordEmailPage() {
