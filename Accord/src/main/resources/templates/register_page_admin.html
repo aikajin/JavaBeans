@@ -36,9 +36,11 @@
                 <div class="input-box mb-4">
                     <input type="submit" name="sign-in" value="Register" class="btn-login w-100 h-10">
                 </div>
-
+                <div th:if="${error}"> <!-- ERROR MESSAGES-->
+                    <p th:text="${error}"></p> <!-- ERROR MESSAGES -->
+                </div> <!-- ERROR MESSAGES -->
                 <p>
-                    <span>Already have an account?</span> <a href="/login" class="text-danger text-decoration-none">Log in here.</a>
+                    <span>Already have an account?</span> <a href="/" class="text-danger text-decoration-none">Log in here.</a>
                 </p>
             </form>
         </div>

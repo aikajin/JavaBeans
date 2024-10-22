@@ -25,18 +25,16 @@ public class RegisterLoginController {
 	private UserService userService;
 	
 	@GetMapping("/")
-	public String index() {
+	public String getLoginPage() {
 		return "login_page";
 	}
 
 	@GetMapping("/register")
-	public String getRegisterPage(Model model) {
-		model.addAttribute("registerRequest", new User());;
+	public String getRegisterPage() {
 		return "register_page";
 	}
 	@GetMapping("/register_page_admin")
-	public String getRegisterPageAdmin(Model model) {
-		model.addAttribute("registerRequest", new User());
+	public String getRegisterPageAdmin() {
 		return "register_page_admin";
 	}
 	
@@ -44,15 +42,18 @@ public class RegisterLoginController {
 	public String register(@ModelAttribute User user, @RequestParam("file") MultipartFile tenancy, MultipartFile valid, Model model) throws IOException {
 		Boolean checkUserEmail = userService.checkEmail(user.getEmail());
 		Boolean checkUserPhone = userService.checkPhone(user.getContactnumber());
-		if(checkUserEmail == null || checkUserPhone == null) {
-			model.addAttribute("error", "Duplicate email/Contact Number");
+		if(checkUserEmail == null) {
+			model.addAttribute("error", "Duplicate Email"); //model.addAttribute("variablename", "variableMessage");
+			return "register_page"; //Ilisda lang ang message
+		}
+		else if (checkUserPhone == null){
+			model.addAttribute("error", "Duplicate Contact Number"); //model.addAttribute("variablename", "variableMessage");
 			return "register_page";
 		}
 		else {
-			User registeredUser = userService.registerUser(user.getName(), user.getPassword(), user.getEmail(), user.getContactnumber(),
+			userService.registerUser(user.getName(), user.getPassword(), user.getEmail(), user.getContactnumber(),
 					user.getBlock_num(), user.getLot_num(), user.getProperty_status(), tenancy, valid, "ROLE_USER");
-			model.addAttribute("error", "Duplicate email/phone number");
-			return registeredUser == null ? "register_page" : "redirect:/";
+			return "redirect:/";
 		}
 	}
 	@PostMapping("/register_page_admin")
@@ -60,13 +61,11 @@ public class RegisterLoginController {
 		Boolean checkUser = userService.checkEmail(user.getEmail());
 		if(checkUser == null) {
 			model.addAttribute("error", "Duplicate email");
-			return "register_page";
+			return "register_page_admin";
 		}
 		else {
-			User adminRegister = userService.registerAdmin(user.getEmail(), user.getPassword(), "ROLE_ADMIN");
-			//model.addAttribute("AdminRegister", new Admin());
-			model.addAttribute("error", "Duplicate email");
-			return adminRegister == null ? "redirect:/register_page_admin" : "redirect:/";
+			userService.registerAdmin(user.getEmail(), user.getPassword(), "ROLE_ADMIN");
+			return "redirect:/";
 		}
 	}
 
@@ -97,9 +96,7 @@ public class RegisterLoginController {
 		}*/
 		String currentEmail = user.getEmail();
 		Boolean authenticateUser = userService.authenticateLogin(user.getEmail(), user.getPassword());
-		//User currectUser = userService.findByEmail(currentEmail);
 		if(authenticateUser == true) {
-			//String currentEmail = user.getEmail();
 			User currectUser = userService.findByEmail(currentEmail);
 			if(currectUser.getRole().contains("ROLE_USER")){
 				return "dashboard_user";
@@ -108,6 +105,7 @@ public class RegisterLoginController {
 				return "dashboard_admin";
 			}
 		}
+		model.addAttribute("error", "Invalid Input!");
 		return "login_page";
 	}
 
