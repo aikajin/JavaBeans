@@ -122,6 +122,10 @@ public class RegisterLoginController {
     public String showDashboard() {
         return "dashboard_user";
     }
+	@GetMapping("/dash_admin")
+    public String showDashboardAdmin() {
+        return "dashboard_admin";
+    }
     
 	@GetMapping("/dashboard_admin")
 	public String allUsers(@ModelAttribute("form") User form, Model model) {
@@ -155,6 +159,11 @@ public class RegisterLoginController {
 		// Add attributes to the model if needed for profile management
 		return "view_recreational_area";
 	}
+	@GetMapping("/useracc_admin")
+	public String UserAccountsAdmin(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "UserAccounts_page";
+	}
 
 	@GetMapping("/add-recreational-area")
 	public String addRecreationalArea(Model model) {
@@ -162,7 +171,7 @@ public class RegisterLoginController {
 		return "addNewRecreational_area";
 	}
 
-	@GetMapping("/modify-recreational-area")
+	@GetMapping("/modifyrec_admin")
 	public String modifyRecreationalArea(Model model) {
 		// Add attributes to the model if needed for profile management
 		return "modifyDelete_area";
