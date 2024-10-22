@@ -1,7 +1,5 @@
 package com.accord.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
@@ -11,6 +9,10 @@ import com.accord.Entity.User;
 import com.accord.repository.EmailNotificationRepository;
 import com.accord.repository.UserRepository;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.mail.javamail.JavaMailSender;
 import jakarta.mail.MessagingException;
@@ -27,6 +29,8 @@ public class UserService {
     private EmailNotificationRepository emailNotificationRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private JavaMailSender mailSender;  // Injecting JavaMailSender for sending email
@@ -36,7 +40,7 @@ public class UserService {
     }
 
     public User registerUser(String name, String password, String email, String contactnumber, int block_num, int lot_num, String property_status,
-             MultipartFile tenancy, MultipartFile valid) {
+             MultipartFile tenancy, MultipartFile valid, String role) {
         if (email != null && password != null) {
             if (userRepository.findFirstByEmail(email).isPresent()) {
                 return null;
@@ -54,8 +58,8 @@ public class UserService {
         user.setBlock_num(block_num);
         user.setLot_num(lot_num);
         user.setProperty_status(property_status);
-        user.setConfirmation_email(false);  // Email confirmation pending
-        user.setConfirmation_account(false);  // Admin approval pending
+        user.setConfirmation_email(null);  // Email confirmation pending
+        user.setConfirmation_account(null);  // Admin approval pending
 
         try {
             user.setTenancy_name(tenancy.getOriginalFilename());
@@ -67,7 +71,7 @@ public class UserService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        user.setRole(role);
         User registeredUser = userRepository.save(user);
         
         // Send an email to the admin for approval
@@ -76,17 +80,65 @@ public class UserService {
         return registeredUser;
     }
 
-    public User authenticate(String email, String password) {
+    public User registerAdmin(String email, String password, String role) {
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setConfirmation_email(true);
+        user.setConfirmation_account(true);
+        user.setRole(role);
+        User registeredAdmin = userRepository.save(user);
+        return registeredAdmin;
+    }
+
+    /*public User authenticate(String email, String password) {
         // Only allow login if the account is approved by the admin
         return userRepository.findByEmailAndPassword(email, password)
                 .filter(User::getConfirmation_account)  // Check if account is approved
                 .orElse(null);
+    }*/
+    public Boolean authenticateLogin(String email , String password) {
+        User user = userRepository.findByEmail(email);
+        if(user != null) {
+            Boolean match = passwordEncoder.matches(password, user.getPassword());
+            if(match == true) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        return false;
+        //return userRepository.findByEmailAndPassword(email, password);
     }
-
-    public Optional<User> findByEmail(String email) {
+    public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-    
+
+    public static String getCurrentEmail() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth != null && auth.isAuthenticated()) {
+            Object principal = auth.getPrincipal();
+            if(principal instanceof UserDetails) {
+                return ((UserDetails) principal).getUsername();
+            }
+            else {
+                return principal.toString();
+            }
+        }
+        return null;
+    }
+
+    public Boolean checkPhone(String contactnumber) {
+        if(contactnumber != null) {
+            if(userRepository.findByContactnumber(contactnumber).isPresent()){
+                return null;
+            }
+            return true;
+        }
+        return true;
+    }
+
     public User updateUser(User user) {
         return userRepository.save(user);
     }
