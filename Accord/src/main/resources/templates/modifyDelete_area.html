@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Recreational Area</title>
+    <title>Modify Recreational Area</title>
     <link rel="icon" href="images/logoHead.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
@@ -28,7 +28,7 @@
                     <div>Dashboard</div>
                 </a>
                 
-                <a href="/recreational-areas-list" class="nav-item active">
+                <a href="#" class="nav-item active">
                     <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                         <circle cx="12" cy="10" r="3"></circle>
@@ -92,9 +92,9 @@
         </div>
         <main class="main-content">
             <header class="header">
-                <p> <a href="/recreational-areas-list" style="text-decoration: none; font-weight:bold;">Areas Management </a> / Add New Recreational Area</p>
-                 <h1>Add New Recreational Area</h1>
-             </header>
+               <p> <a href="/recreational-areas-list" style="text-decoration: none; font-weight:bold;">Areas Management </a> / Modify Recreational Area</p>
+                <h1>Modify Recreational Area</h1>
+            </header>
             <div class="form-container">
                 <form id="add-area-form">
                     <div class="form-group">
@@ -128,9 +128,11 @@
                     </div>
                     <div class="button-container">
                     <div class="button-group">
-                    <button type="submit" class="submit-btn">Add Recreational Area</button>
+                        <button type="submit" class="submit-btn">Save changes</button>
+                        <button type="button" class="delete-btn2">Delete</button>
                     </div>
                     </div>
+                    
                 </form>
                 <div class="success-message" id="success-message"></div>
             </div>
@@ -148,12 +150,11 @@
             document.getElementById('additional-photos-name').textContent = message;
         });
 
-        document.getElementById('add-area-form').addEventListener('submit', function(e) {
+        document.getElementById('modify-area-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
             // Reset error messages
             document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-            
             
             let hasError = false;
 
@@ -197,12 +198,21 @@
 
             // If all validations pass, you would typically send this data to a server
             // For this example, we'll just show a success message
-            document.getElementById('success-message').textContent = 'Recreational area added successfully!';
+            document.getElementById('success-message').textContent = 'Recreational area modified successfully!';
 
             // Reset the form
             e.target.reset();
             document.getElementById('cover-photo-name').textContent = '';
             document.getElementById('additional-photos-name').textContent = '';
+        });
+
+        document.querySelector('.delete-btn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to delete this recreational area?')) {
+                // Add delete logic here
+                console.log('Recreational area deleted');
+                // For demonstration purposes, show a message
+                document.getElementById('success-message').textContent = 'Recreational area deleted successfully!';
+            }
         });
     </script>
 </body>

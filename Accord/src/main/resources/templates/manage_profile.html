@@ -7,110 +7,75 @@
     <link rel="icon" href="images/logoHead.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+   
     <link rel="stylesheet" href="css/style.css">
-    
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Lexend', sans-serif;
-        }
-        .popup {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 5px;
-            color:white;
-            font-size: 16px;
-            z-index: 1000;
-            display: none;
-        }
-        .popup-success {
-            background-color: #FF5916;
-        }
-        .popup-error {
-            background-color: #f44336;
-        }
-    </style>
+
 </head>
-<body class ="manage-profile">
-    <div id="successPopup" class="popup popup-success">Your profile picture has been successfully updated!</div>
-    <div id="errorPopup" class="popup popup-error"></div>
-
-    <div style="width: 100%; height: 100vh; position: relative; background: #FFF5F4; overflow: auto;">
-        <div style="width: 322px; min-height: 100vh; left: 0px; top: 0px; position: fixed; background: white; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);">
-            <img style="width: 262px; height: 56px; left: 18px; top: 36px; position: absolute" src="images/logo.png" alt="Logo" />
-            
-            <div style="left: 51px; top: 167.65px; position: absolute; display: flex; align-items: center; gap: 15px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect>
+<body>
+    <div class="containerM">
+    <div class="sidebar">
+        <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
+        <div class="nav-items">
+            <a href="/dash_user" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
                 </svg>
-                <div style="color: black; font-size: 15px; font-weight: 400; line-height: 35px;">Dashboard</div>
-            </div>
-            
-
-            <div style="left: 51px; top: 231.35px; position: absolute; display: flex; align-items: center; gap: 15px;">
-                <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1.43273 20.6501C0.98968 20.6501 0.640127 20.493 0.384069 20.1788C0.147719 19.8888 0.0204534 19.5081 0.0022726 19.0369L0 18.9172V2.08304C0 1.54983 0.128023 1.1277 0.384069 0.81666C0.62043 0.529545 0.936456 0.374944 1.33215 0.352858L1.43273 0.350098H12.3164C12.7537 0.350098 13.1004 0.505618 13.3564 0.81666C13.5928 1.10378 13.72 1.48554 13.7382 1.96197L13.7405 2.08304L13.7403 5.03464L18.8759 5.03474C19.2795 5.03474 19.606 5.1686 19.8552 5.43633L19.9159 5.50606C20.1523 5.7961 20.2796 6.17674 20.2978 6.64797L20.3 6.76766V18.9172C20.3 19.4441 20.172 19.8646 19.9159 20.1788C19.6796 20.4689 19.366 20.625 18.9752 20.6474L18.8759 20.6501H1.43273ZM13.7405 18.9172C13.7405 18.9858 13.7383 19.0525 13.734 19.1174L18.4184 19.1172C18.5853 19.1172 18.709 19.0727 18.7896 18.9839C18.8587 18.9077 18.8982 18.7942 18.9081 18.6434L18.9105 18.5649V7.11995C18.9105 6.92953 18.8702 6.78988 18.7896 6.70101C18.7205 6.62484 18.6198 6.58131 18.4873 6.57043L18.4184 6.56771L13.7403 6.56734L13.7405 18.9172ZM11.8589 1.88309H1.89017C1.71756 1.88309 1.59097 1.92752 1.51042 2.01639C1.44137 2.09257 1.40191 2.20605 1.39205 2.35683L1.38958 2.43533V18.5649C1.38958 18.7554 1.42986 18.895 1.51042 18.9839C1.57946 19.06 1.68233 19.1036 1.81901 19.1145L1.89017 19.1172L3.86635 19.1169L3.86667 16.3083C3.86667 15.9332 3.93681 15.6486 4.07709 15.4545L4.12128 15.399C4.27559 15.223 4.5048 15.127 4.8089 15.111L4.90238 15.1086H8.83811C9.19485 15.1086 9.45666 15.2054 9.62352 15.399C9.77521 15.575 9.85796 15.8415 9.87175 16.1985L9.87382 16.3083L9.87354 19.1169L11.8589 19.1172C12.0258 19.1172 12.1495 19.0727 12.2301 18.9839C12.2991 18.9077 12.3386 18.7942 12.3484 18.6434L12.3509 18.5649V2.43533C12.3509 2.24491 12.3106 2.10526 12.2301 2.01639C12.1495 1.92752 12.0258 1.88309 11.8589 1.88309ZM8.46698 16.3559H5.27353C5.10614 16.3559 5.01483 16.4398 4.99962 16.6077L4.99733 16.6606L4.99706 19.1169H8.74283L8.74317 16.6606C8.74317 16.4759 8.66709 16.3752 8.51492 16.3584L8.46698 16.3559ZM17.0202 15.4133C17.1995 15.4133 17.2967 15.5039 17.3116 15.6853L17.3137 15.737V17.2224C17.3137 17.4202 17.2315 17.5274 17.0671 17.5439L17.0202 17.5461H15.6307C15.4566 17.5461 15.3623 17.4554 15.3478 17.2741L15.3459 17.2224V15.737C15.3459 15.5392 15.4256 15.432 15.5852 15.4155L15.6307 15.4133H17.0202ZM17.0202 11.776C17.1995 11.776 17.2967 11.8667 17.3116 12.048L17.3137 12.0997V13.5851C17.3137 13.783 17.2315 13.8901 17.0671 13.9066L17.0202 13.9089H15.6307C15.4566 13.9089 15.3623 13.8182 15.3478 13.6368L15.3459 13.5851V12.0997C15.3459 11.9019 15.4256 11.7948 15.5852 11.7783L15.6307 11.776H17.0202ZM5.6878 11.0048C5.90557 11.0048 6.02283 11.1157 6.03959 11.3374L6.04168 11.3952V13.1947C6.04168 13.435 5.94117 13.5643 5.74015 13.5828L5.6878 13.5851H4.00476C3.79762 13.5851 3.68608 13.4742 3.67014 13.2525L3.66815 13.1947V11.3952C3.66815 11.1549 3.76376 11.0256 3.95497 11.0071L4.00476 11.0048H5.6878ZM9.7271 11.0048C9.94486 11.0048 10.0621 11.1157 10.0789 11.3374L10.081 11.3952V13.1947C10.081 13.435 9.98046 13.5643 9.77945 13.5828L9.7271 13.5851H8.05269C7.84024 13.5851 7.72584 13.4742 7.7095 13.2525L7.70745 13.1947V11.3952C7.70745 11.1549 7.80551 11.0256 8.00162 11.0071L8.05269 11.0048H9.7271ZM17.0202 8.13876C17.1995 8.13876 17.2967 8.22944 17.3116 8.4108L17.3137 8.4625V9.94788C17.3137 10.1457 17.2315 10.2529 17.0671 10.2694L17.0202 10.2716H15.6307C15.4566 10.2716 15.3623 10.1809 15.3478 9.99958L15.3459 9.94788V8.4625C15.3459 8.26466 15.4256 8.1575 15.5852 8.14101L15.6307 8.13876H17.0202ZM5.6878 7.23422C5.90557 7.23422 6.02283 7.3451 6.03959 7.56685L6.04168 7.6246V9.42418C6.04168 9.66442 5.94117 9.79378 5.74015 9.81226L5.6878 9.81457H4.00476C3.79762 9.81457 3.68608 9.70369 3.67014 9.48193L3.66815 9.42418V7.6246C3.66815 7.38437 3.76376 7.25501 3.95497 7.23653L4.00476 7.23422H5.6878ZM9.7271 7.23422C9.94486 7.23422 10.0621 7.3451 10.0789 7.56685L10.081 7.6246V9.42418C10.081 9.66442 9.98046 9.79378 9.77945 9.81226L9.7271 9.81457H8.05269C7.84024 9.81457 7.72584 9.70369 7.7095 9.48193L7.70745 9.42418V7.6246C7.70745 7.38437 7.80551 7.25501 8.00162 7.23653L8.05269 7.23422H9.7271ZM5.6878 3.46366C5.90557 3.46366 6.02283 3.57454 6.03959 3.7963L6.04168 3.85405V5.65363C6.04168 5.89388 5.94117 6.02324 5.74015 6.04172L5.6878 6.04403H4.00476C3.79762 6.04403 3.68608 5.93315 3.67014 5.71138L3.66815 5.65363V3.85405C3.66815 3.61381 3.76376 3.48445 3.95497 3.46597L4.00476 3.46366H5.6878ZM9.7271 3.46366C9.94486 3.46366 10.0621 3.57454 10.0789 3.7963L10.081 3.85405V5.65363C10.081 5.89388 9.98046 6.02324 9.77945 6.04172L9.7271 6.04403H8.05269C7.84024 6.04403 7.72584 5.93315 7.7095 5.71138L7.70745 5.65363V3.85405C7.70745 3.61381 7.80551 3.48445 8.00162 3.46597L8.05269 3.46366H9.7271Z" fill="black"/>
-                </svg>                    
-                <div style="color: black; font-size: 15px; font-weight: 400; line-height: 35px;">Book a Facility</div>
-            </div>
-            
-
-            <div style="left: 51px; top: 295px; position: absolute; display: flex; align-items: center; gap: 15px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <div>Dashboard</div>
+            </a>
+            <a href="#" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 21h18"></path>
+                    <path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path>
+                    <path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path>
+                    <rect x="9" y="7" width="6" height="4"></rect>
+                </svg>
+                <div>Book a Facility</div>
+            </a>
+            <a href="#" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                 </svg>
-                <div style="color: black; font-size: 15px; font-weight: 400; line-height: 35px;">Manage Bookings</div>
-            </div>
-            
-
-            <div style="width: 260px; padding-top: 5px; padding-bottom: 5px; padding-left: 20px; left: 32px; top: 358px; position: absolute; background: rgba(255, 89, 22, 0.15); border-radius: 10px; border: 1px #FF5916 solid; display: flex; align-items: center; gap: 15px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="17.44" height="17.04" viewBox="0 0 24 24" fill="none" stroke="#FF5916" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <div>Manage Bookings</div>
+            </a>
+            <a href="#" class="nav-item active">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17.44" height="17.04" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
                 </svg>
-                <div style="color: #FF5916; font-size: 15px; font-weight: 400; line-height: 35px;">Manage Profile</div>
-            </div>
+                <div>Manage Profile</div>
+            </a>
+        
+            <div class="nav-divider"></div>
             
-            <div style="width: 260px; padding-top: 5px; padding-bottom: 5px; padding-left: 20px; left: 32px; top: 422px; position: absolute; display: flex; align-items: center; gap: 15px;">
-                <svg width="184" height="37" viewBox="0 0 184 37" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6.60156 14C6.61125 12.26 6.68841 11.3176 7.30311 10.7029C8.00607 10 9.13742 10 11.4001 10H12.2001C14.4628 10 15.5942 10 16.2971 10.7029C17.0001 11.4059 17.0001 12.5372 17.0001 14.8V21.1999C17.0001 23.4626 17.0001 24.5939 16.2971 25.2969C15.5942 25.9998 14.4628 25.9998 12.2001 25.9998H11.4001C9.13742 25.9998 8.00607 25.9998 7.30311 25.2969C6.68841 24.6822 6.61125 23.7399 6.60156 21.9999" stroke="#FF5916" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M11.3999 17.9998H1M1 17.9998L3.79997 15.5999M1 17.9998L3.79997 20.3998" stroke="#FF5916" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M29.47 24V13.5H31.09V22.44H36.01V24H29.47ZM41.3065 24.15C40.5365 24.15 39.8465 23.975 39.2365 23.625C38.6365 23.265 38.1615 22.78 37.8115 22.17C37.4615 21.55 37.2865 20.845 37.2865 20.055C37.2865 19.265 37.4615 18.565 37.8115 17.955C38.1615 17.335 38.6365 16.85 39.2365 16.5C39.8465 16.14 40.5365 15.96 41.3065 15.96C42.0665 15.96 42.7465 16.14 43.3465 16.5C43.9565 16.85 44.4365 17.335 44.7865 17.955C45.1365 18.565 45.3115 19.265 45.3115 20.055C45.3115 20.845 45.1365 21.55 44.7865 22.17C44.4365 22.78 43.9565 23.265 43.3465 23.625C42.7465 23.975 42.0665 24.15 41.3065 24.15ZM41.3065 22.74C41.7765 22.74 42.1965 22.625 42.5665 22.395C42.9365 22.155 43.2265 21.835 43.4365 21.435C43.6465 21.025 43.7465 20.565 43.7365 20.055C43.7465 19.535 43.6465 19.075 43.4365 18.675C43.2265 18.265 42.9365 17.945 42.5665 17.715C42.1965 17.485 41.7765 17.37 41.3065 17.37C40.8365 17.37 40.4115 17.49 40.0315 17.73C39.6615 17.96 39.3715 18.28 39.1615 18.69C38.9515 19.09 38.8515 19.545 38.8615 20.055C38.8515 20.565 38.9515 21.025 39.1615 21.435C39.3715 21.835 39.6615 22.155 40.0315 22.395C40.4115 22.625 40.8365 22.74 41.3065 22.74ZM50.52 27.45C49.96 27.45 49.4 27.36 48.84 27.18C48.29 27.01 47.845 26.785 47.505 26.505L48.075 25.305C48.275 25.455 48.51 25.585 48.78 25.695C49.05 25.815 49.335 25.905 49.635 25.965C49.935 26.035 50.23 26.07 50.52 26.07C51.07 26.07 51.53 25.98 51.9 25.8C52.27 25.62 52.55 25.355 52.74 25.005C52.93 24.655 53.025 24.22 53.025 23.7V22.185L53.19 22.29C53.14 22.6 52.975 22.9 52.695 23.19C52.425 23.47 52.085 23.7 51.675 23.88C51.265 24.06 50.845 24.15 50.415 24.15C49.665 24.15 48.995 23.975 48.405 23.625C47.825 23.265 47.365 22.78 47.025 22.17C46.685 21.55 46.515 20.845 46.515 20.055C46.515 19.265 46.68 18.565 47.01 17.955C47.35 17.335 47.81 16.85 48.39 16.5C48.98 16.14 49.64 15.96 50.37 15.96C50.67 15.96 50.96 16 51.24 16.08C51.52 16.15 51.78 16.255 52.02 16.395C52.26 16.525 52.475 16.67 52.665 16.83C52.855 16.99 53.01 17.16 53.13 17.34C53.25 17.52 53.325 17.69 53.355 17.85L53.025 17.97V16.125H54.57V23.52C54.57 24.15 54.475 24.705 54.285 25.185C54.105 25.675 53.84 26.085 53.49 26.415C53.14 26.755 52.715 27.01 52.215 27.18C51.715 27.36 51.15 27.45 50.52 27.45ZM50.58 22.725C51.07 22.725 51.505 22.61 51.885 22.38C52.265 22.15 52.56 21.835 52.77 21.435C52.98 21.035 53.085 20.575 53.085 20.055C53.085 19.535 52.975 19.075 52.755 18.675C52.545 18.265 52.25 17.945 51.87 17.715C51.5 17.485 51.07 17.37 50.58 17.37C50.1 17.37 49.67 17.49 49.29 17.73C48.92 17.96 48.625 18.28 48.405 18.69C48.195 19.09 48.09 19.545 48.09 20.055C48.09 20.565 48.195 21.025 48.405 21.435C48.625 21.835 48.92 22.15 49.29 22.38C49.67 22.61 50.1 22.725 50.58 22.725ZM64.4804 24.15C63.7104 24.15 63.0204 23.975 62.4104 23.625C61.8104 23.265 61.3354 22.78 60.9854 22.17C60.6354 21.55 60.4604 20.845 60.4604 20.055C60.4604 19.265 60.6354 18.565 60.9854 17.955C61.3354 17.335 61.8104 16.85 62.4104 16.5C63.0204 16.14 63.7104 15.96 64.4804 15.96C65.2404 15.96 65.9204 16.14 66.5204 16.5C67.1304 16.85 67.6104 17.335 67.9604 17.955C68.3104 18.565 68.4854 19.265 68.4854 20.055C68.4854 20.845 68.3104 21.55 67.9604 22.17C67.6104 22.78 67.1304 23.265 66.5204 23.625C65.9204 23.975 65.2404 24.15 64.4804 24.15ZM64.4804 22.74C64.9504 22.74 65.3704 22.625 65.7404 22.395C66.1104 22.155 66.4004 21.835 66.6104 21.435C66.8204 21.025 66.9204 20.565 66.9104 20.055C66.9204 19.535 66.8204 19.075 66.6104 18.675C66.4004 18.265 66.1104 17.945 65.7404 17.715C65.3704 17.485 64.9504 17.37 64.4804 17.37C64.0104 17.37 63.5854 17.49 63.2054 17.73C62.8354 17.96 62.5454 18.28 62.3354 18.69C62.1254 19.09 62.0254 19.545 62.0354 20.055C62.0254 20.565 62.1254 21.025 62.3354 21.435C62.5454 21.835 62.8354 22.155 63.2054 22.395C63.5854 22.625 64.0104 22.74 64.4804 22.74ZM72.9289 24.15C72.3689 24.15 71.8789 24.02 71.4589 23.76C71.0489 23.5 70.7289 23.135 70.4989 22.665C70.2789 22.195 70.1689 21.635 70.1689 20.985V16.125H71.7139V20.565C71.7139 21.025 71.7839 21.425 71.9239 21.765C72.0739 22.095 72.2839 22.35 72.5539 22.53C72.8339 22.71 73.1689 22.8 73.5589 22.8C73.8489 22.8 74.1139 22.755 74.3539 22.665C74.5939 22.565 74.7989 22.43 74.9689 22.26C75.1489 22.09 75.2889 21.885 75.3889 21.645C75.4889 21.405 75.5389 21.145 75.5389 20.865V16.125H77.0839V24H75.5389V22.35L75.8089 22.17C75.6889 22.54 75.4839 22.875 75.1939 23.175C74.9139 23.475 74.5789 23.715 74.1889 23.895C73.7989 24.065 73.3789 24.15 72.9289 24.15ZM80.2259 24V14.115H81.7709V24H80.2259ZM78.5909 17.625V16.125H83.6009V17.625H78.5909Z" fill="black"/>
-                </svg>                    
-                <div style="color: black; font-size: 15px; font-weight: 400; line-height: 35px;"></div>
-            </div>
-
-            <div style="width: 321px; height: 0px; left: 1px; top: 562px; position: absolute; border: 1px rgba(138, 136, 136, 0.41) solid"></div>
-
-            <div style="left: 55px; bottom: 50px; position: absolute; display: flex; align-items: center;">
-                <div style="width: 44px; height: 44px; background: #FFCFBB; border-radius: 9999px; display: flex; align-items: center; justify-content: center;">
-                    <div style="color: black; font-size: 12px; font-family: Lexend; font-weight: 400; line-height: 1;">JD</div>
-                </div>
-                <div style="margin-left: 19px; display: flex; flex-direction: column; justify-content: center;">
-                    <div style="color: black; font-size: 12px; font-weight: 400; line-height: 2;">John Doe</div>
-                    <div style="color: #8A8888; font-size: 10px; font-weight: 400; line-height: 2;">Home Owner</div>
-                </div>
-            </div>
-            
+            <a href="/" class="logout">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <div>Log out</div>
+        </a>        
         </div>
-
-        <div style="margin-left: 322px; min-height: 100vh; background-color: #FFF5F4; padding: 37px 40px;">
-            <div style="color: black; font-size: 36px; font-weight: 600; word-wrap: break-word">Hello, John Doe!</div>
-            <div style="width: 513px; color: #646464; font-size: 16px; font-weight: 300; word-wrap: break-word; margin-top: 5px;">
-                Update your personal information and profile picture.
+        
+        <div class="profile">
+            <div class="profile-pic">JD</div>
+            <div class="profile-info">
+                <div class="profile-name">John Doe</div>
+                <div class="profile-role">Homeowner</div>
             </div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        
+        <h1>Welcome, <span id="userName">John Doe</span>!</h1>
+        <p class="subtitle">Track your bookings and explore available amenities.</p>
 
-            <div style="margin-top: 40px; max-width: 600px;">
+            <div style="max-width: 100%;">
                 <div style="margin-bottom: 30px;">
                     <label style="display: block; color: black; font-size: 18px; font-weight: 500; margin-bottom: 10px;">Profile Picture</label>
                     <div style="display: flex; align-items: center;">
@@ -143,6 +108,9 @@
             </div>
         </div>
     </div>
+</div>
+        
+    
 
     <script>
         const profilePictureInput = document.getElementById('profile-picture');

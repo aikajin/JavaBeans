@@ -15,7 +15,7 @@
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
             
             <div class="nav-items">
-                <a href="#" class="nav-item">
+                <a href="/dash_admin" class="nav-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="7" height="7"></rect>
                         <rect x="14" y="3" width="7" height="7"></rect>
@@ -43,7 +43,7 @@
                     <div>Manage Bookings</div>
                 </a>
                 
-                <a href="#" class="nav-item">
+                <a href="/useracc_admin" class="nav-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="17.44" height="17.04" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
@@ -69,7 +69,7 @@
                 
                 <div class="nav-divider"></div>
                 
-                <a href="/login" class="logout">
+                <a href="/" class="logout">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
@@ -92,7 +92,14 @@
             <header class="header">
                 <p>Areas Management / List of Recreational Areas</p>
             </header>
+            <div class="header-container">
             <h1 style="margin-bottom: 2rem;">Recreational Areas</h1>
+            <!-- //<button class="add-area-btn"> + Add New Area</button> -->
+            <a href="/add_area" style="text-decoration: none;">
+                <button class="add-area-btn">+ Add New Area</button>
+              </a>
+              
+            </div>
             <div class="search-and-view">
             <input type="text" placeholder="Search Area..." class="controls">
 
@@ -125,8 +132,8 @@
                         <h3 class="area-name">Swimming Pool Area</h3>
                         <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
                         <div class="area-actions">
-                            <button class="edit-btn">Edit</button>
-                            <a href="#" class="view-details">View details →</a>
+                            <a href="/modifyrec_admin" class="edit-btn">Edit</a>
+                            <a href="/view-recreational-area" class="view-details">View details →</a>
                         </div>
                     </div>
                 </div>

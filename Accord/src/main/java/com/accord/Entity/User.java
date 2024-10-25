@@ -1,8 +1,5 @@
 package com.accord.Entity;
 
-import java.util.Arrays;
-import java.util.Objects;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,38 +14,49 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false)
+
 	private String name;
-	@Column(nullable = false)
+
 	private String password;
-	@Column(nullable = false)
+
 	private String email;
-	@Column(nullable = false)
+
 	private String contactnumber;
-	@Column(nullable = false)
+
 	private int block_num;
-	@Column(nullable = false)
+
 	private int lot_num;
-	@Column(nullable = false)
+
 	private String property_status;
-	@Column(nullable = true)
+
 	private Boolean confirmation_email;
-	@Column(nullable = true)
+
 	private Boolean confirmation_account;
-	@Column(nullable = false)
+
 	private String tenancy_name;
-	@Column(nullable = false)
+
 	private String tenancy_type;
 	@Lob
-	@Column(nullable = false, length = 1999999999)
+	@Column(length = 1999999999)
 	private byte[] tenancy_document;
-	@Column(nullable = false)
+
 	private String id_name;
-	@Column(nullable = false)
+
 	private String id_type;
 	@Lob
-	@Column(nullable = false, length = 1999999999)
+	@Column(length = 1999999999)
 	private byte[] id_document;
+
+	private String role;
+
+	@Lob
+	@Column(length = 1999999999)
+	private byte[] profile_picture;
+
+	private String profile_name;
+
+	private String profile_type;
+	private String resetToken;
 	public Long getId() {
 		return id;
 	}
@@ -146,11 +154,35 @@ public class User {
 	public void setId_document(byte[] id_document) {
 		this.id_document = id_document;
 	}
-
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
+	}
+	public byte[] getProfile_picture() {
+		return profile_picture;
+	}
+	public void setProfile_picture(byte[] profile_picture) {
+		this.profile_picture = profile_picture;
+	}
+	public String getProfile_name() {
+		return profile_name;
+	}
+	public void setProfile_name(String profile_name) {
+		this.profile_name = profile_name;
+	}
+	public String getProfile_type() {
+		return profile_type;
+	}
+	public void setProfile_type(String profile_type) {
+		this.profile_type = profile_type;
+	}
+	
 	public User(Long id, String name, String password, String email, String contactnumber, int block_num, int lot_num,
 			String property_status, Boolean confirmation_email, Boolean confirmation_account, String tenancy_name,
-			String tenancy_type, byte[] tenancy_document, String id_name, String id_type, byte[] id_document) {
-		super();
+			String tenancy_type, byte[] tenancy_document, String id_name, String id_type, byte[] id_document,
+			String role, byte[] profile_picture, String profile_name, String profile_type) {
 		this.id = id;
 		this.name = name;
 		this.password = password;
@@ -167,10 +199,13 @@ public class User {
 		this.id_name = id_name;
 		this.id_type = id_type;
 		this.id_document = id_document;
+		this.role = role;
+		this.profile_picture = profile_picture;
+		this.profile_name = profile_name;
+		this.profile_type = profile_type;
 	}
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
 }

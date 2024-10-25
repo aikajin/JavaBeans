@@ -95,8 +95,8 @@ body.recreational-areas-list {
 }
 
 .btn-login:hover {
-  background-color: #FFF5F4;
-  color: #FF5916;
+  background-color: #d74409;
+  color: white;
   border: 2px solid #FF5916;
 }
 
@@ -148,6 +148,19 @@ input::placeholder {
   display: flex;
   height: 100vh;
 }
+
+.containerM {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+form2 {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
 .sidebar {
   width: 322px;
   height: 100vh;
@@ -703,8 +716,12 @@ h1 {
   text-align: center; /* Center the text */
   cursor: pointer;
   outline: none;
+  text-decoration: none;
   }
-
+  
+  .edit-btn:hover {
+    background-color: #052950;
+}
 .search-and-view {
   display: flex;
   justify-content: space-between;
@@ -723,4 +740,337 @@ h1 {
 }
 .view-details:hover {
   text-decoration: underline;
+}
+
+.area-photos {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.area-photo {
+  width: 500px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.area-guidelines2 {
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.schedule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.view-options2 {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.view-option2 {
+  background: none;
+  border: 1px solid #ccc;
+  padding: 0.25rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.view-option2:hover {
+  background-color: #f0f0f0;
+}
+
+.view-option2.active {
+  background-color: #FF5916;
+  border-color: #FF5916;
+}
+
+.view-option2.active svg {
+  stroke: white;
+}
+.search-and-view2 {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.schedule-list, .schedule-calendar {
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 1rem;
+}
+
+.schedule-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+
+.schedule-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.schedule-item.available {
+  background-color: rgba(76, 175, 80, 0.1);
+  border: 1px solid var(--available-color);
+}
+
+.schedule-item.booked {
+  background-color: rgba(244, 67, 54, 0.1);
+  border: 1px solid var(--booked-color);
+}
+
+.schedule-item-status {
+  font-weight: bold;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+}
+
+.schedule-item-status.available {
+  background-color: var(--available-color);
+  color: rgb(6, 108, 21);
+}
+
+.schedule-item-status.booked {
+  background-color: var(--booked-color);
+  color: white;
+}
+
+.schedule-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+.calendar-header {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.calendar-day.available {
+  background-color: rgba(76, 175, 80, 0.2);
+}
+
+.calendar-day.booked {
+  background-color: rgba(244, 67, 54, 0.2);
+}
+
+.calendar-day:not(.current-month) {
+  color: var(--text-muted);
+}
+
+.calendar-day.today {
+  font-weight: bold;
+  border: 2px solid var(--primary-color);
+}
+
+.booking-details {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 1rem;
+  z-index: 1000;
+  max-width: 300px;
+  width: 100%;
+}
+
+.booking-details h3 {
+  margin-bottom: 1rem;
+}
+
+.booking-details ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.booking-details li {
+  margin-bottom: 0.5rem;
+}
+
+.close-details {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+        .form-container {
+          background-color: white;
+          border-radius: 10px;
+          padding: 2rem;
+          max-width: 100%; 
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #DDDCDD;
+            border-radius: 5px;
+            font-family: 'Lexend', sans-serif;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .form-group input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #323AA1;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .file-name {
+            margin-left: 1rem;
+        }
+
+      .submit-btn, .delete-btn2 {
+          padding: 0.75rem 1.5rem;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: 500;
+          font-family: 'Lexend', sans-serif;
+          border: none;
+      }
+      .submit-btn {
+        background-color: #FF5916; /* Default background color */
+        color: white; /* Default text color */
+        transition: background-color 0.3s ease; /* Smooth transition for the hover effect */
+    }
+    
+    .submit-btn:hover {
+        background-color: #e04f14; /* Slightly darker shade of the original color */
+    }
+    
+      .delete-btn2 {
+        background-color: transparent; /* No background color */
+        border: 2px solid #dc3545; /* Red border */
+        color: #dc3545; /* Red text color */
+        transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+    }
+    
+    .delete-btn2:hover {
+        background-color: #dc3545; /* Red background on hover */
+        color: white; /* White text on hover */
+    }
+
+      .button-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+      }
+
+        .error-message {
+            color: red;
+            margin-top: 0.5rem;
+        }
+
+        .success-message {
+            color: green;
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        .button-group {
+          display: flex;
+          gap: 10px;
+      }
+
+      .error-message {
+        color: red;
+        margin-top: -15px;
+        margin-bottom: 25px;
+        font-size: small;
+      }
+
+      .popup {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 5px;
+        color:white;
+        font-size: 16px;
+        z-index: 1000;
+        display: none;
+    }
+    .popup-success {
+        background-color: #FF5916;
+    }
+    .popup-error {
+        background-color: #f44336;
+    }
+
+    .add-area-btn {
+      background-color: #323aa1;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-family: 'Lexend', sans-serif;
+  }
+  .add-area-btn:hover {
+      background-color: #052950;
+  }
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
 }
