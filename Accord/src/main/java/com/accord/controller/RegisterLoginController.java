@@ -154,6 +154,48 @@ public class RegisterLoginController {
 		return "am_recreationalAreasList";
 	}
 
+	@GetMapping("/recreationalAreasList-user")
+	public String recreationalAreasListUser(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "am_recreationalAreasList_user";
+	}
+
+	@GetMapping("/view-recre-area-basketball-user")
+	public String recreationalBasketballUser(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "view_recre_area_basketball_user";
+	}
+
+	@GetMapping("/view-recre-area-clubhouse-user")
+	public String recreationalClubhouseUser(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "view_recre_area_clubhouse_user";
+	}
+
+	@GetMapping("/view-recre-area-coveredcourt-user")
+	public String recreationalCoveredCourteUser(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "view_recre_area_coveredcourt_user";
+	}
+
+	@GetMapping("/view-recre-area-hall-user")
+	public String recreationalHallUser(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "view_recre_area_hall_user";
+	}
+
+	@GetMapping("/view-recre-area-tenniscourt-user")
+	public String recreationalTennisCourtUser(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "view_recre_area_tenniscourt_user";
+	}
+
+	@GetMapping("/view-recreational-area-user")
+	public String recreationalSwmmingPoolUser(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "view_recreational_area_user";
+	}
+
 	@GetMapping("/view-recreational-area")
 	public String viewRecreationalArea(Model model) {
 		// Add attributes to the model if needed for profile management
