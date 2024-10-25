@@ -26,7 +26,7 @@ public class RegisterLoginController {
 	
 	@GetMapping("/")
 	public String index() {
-		return "test";
+		return "login_page";
 	}
 
 	@GetMapping("/register")
