@@ -152,7 +152,7 @@
         </div>
     </div>
 
-    <script>
+    <!-- <script>
         const users = [
             { id: '1', name: 'Vince Pateres', email: 'vince@example.com', propertyStatus: 'Renter', blockNo: '1', lotNo: '1', avatar: '/images/tooltip.png' },
             { id: '2', name: 'Cristal Quiamco', email: 'cristal@example.com', propertyStatus: 'Homeowner - Assumed', blockNo: '2', lotNo: '2', avatar: '/placeholder.svg?height=32&width=32' },
@@ -229,6 +229,107 @@
                 // Redirect to login page
             window.location.href = this.getAttribute('href');
     });
+    </script> -->
+    <script>
+        // Fetch and display users once the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchUsers();
+
+            // Search and filter functionality
+            const searchInput = document.getElementById('searchInputUsers');
+            const filterSelect = document.getElementById('filterSelectUsers');
+
+            searchInput.addEventListener('input', filterUsers);
+            filterSelect.addEventListener('change', filterUsers);
+        });
+
+        // Fetch users from the back-end and render them in the table
+        function fetchUsers() {
+            fetch('/users/list')  // Make sure this endpoint returns users in JSON format
+                .then(response => response.json())
+                .then(users => {
+                    renderUsers(users);
+                })
+                .catch(error => console.error('Error fetching users:', error));
+        }
+
+        // Render the users in the HTML table
+        function renderUsers(users) {
+            const tableBody = document.querySelector('#usersTable tbody');
+            tableBody.innerHTML = '';  // Clear existing table rows
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.property_status}</td>
+                    <td>${user.block_num}</td>
+                    <td>${user.lot_num}</td>
+                    <td>
+                        
+                        <a href="/users/view/${user.id}" class="btn-view">View</a>
+
+                        
+                        <button onclick="deleteUser(${user.id})">Delete</button>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Filter users based on search input and property status filter
+        function filterUsers() {
+            const searchValue = document.getElementById('searchInputUsers').value.toLowerCase();
+            const filterValue = document.getElementById('filterSelectUsers').value;
+
+            fetch('/users/list')  // Fetch the full user list again
+                .then(response => response.json())
+                .then(users => {
+                    const filteredUsers = users.filter(user => {
+                        const matchesSearch = user.name.toLowerCase().includes(searchValue);
+                        const matchesFilter = filterValue === '' || user.property_status === filterValue;
+                        return matchesSearch && matchesFilter;
+                    });
+
+                    renderUsers(filteredUsers);  // Re-render the filtered users
+                })
+                .catch(error => console.error('Error filtering users:', error));
+        }
+
+        // Redirect to edit user page
+        function editUser(userId) {
+            window.location.href = `/users/edit/${userId}`;
+        }
+        function viewUser(userId) {
+        window.location.href = `/details/${userId}`;
+        }
+
+        // Redirect to delete user confirmation
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                window.location.href = `/users/delete/${userId}`;
+            }
+        }
+
+        function filterUsers() {
+        const searchValue = document.getElementById('searchInputUsers').value.toLowerCase();
+        const filterValue = document.getElementById('filterSelectUsers').value;
+
+        fetch('/users/list')  // Fetch the full user list again
+            .then(response => response.json())
+            .then(users => {
+                const filteredUsers = users.filter(user => {
+                    const matchesSearch = user.name.toLowerCase().includes(searchValue);
+                    const matchesFilter = filterValue === '' || user.property_status === filterValue;
+                    return matchesSearch && matchesFilter;
+                });
+
+                renderUsers(filteredUsers);  // Re-render the filtered users
+            })
+            .catch(error => console.error('Error filtering users:', error));
+    }
     </script>
 </body>
 </html>

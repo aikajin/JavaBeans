@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Account Management</title>
-    <link rel="icon" href="images/logoHead.png" type="image/png">
+    <link rel="icon" th:href="@{/images/logoHead.png}" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
     <div class="container">
         <div class="sidebar">
-            <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
-            
+            <img class="logo" style="width: 262px; height: 56px;" th:src="@{/images/logo.png}" alt="Logo" />
             <div class="nav-items">
-                <a href="#" class="nav-item">
+                <a href="/dash_admin" class="nav-item"> <!-- Dashboard -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="7" height="7"></rect>
                         <rect x="14" y="3" width="7" height="7"></rect>
@@ -24,7 +23,7 @@
                     <div>Dashboard</div>
                 </a>
                 
-                <a href="#" class="nav-item">
+                <a href="/recreational-areas-list" class="nav-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                         <circle cx="12" cy="10" r="3"></circle>
@@ -42,7 +41,7 @@
                     <div>Manage Bookings</div>
                 </a>
                 
-                <a href="#" class="nav-item active">
+                <a href="/useracc_admin" class="nav-item active">
                     <svg xmlns="http://www.w3.org/2000/svg" width="17.44" height="17.04" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
@@ -68,7 +67,7 @@
                 
                 <div class="nav-divider"></div>
                 
-                <a href="/login" class="logout">
+                <a href="/" class="logout">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
@@ -78,7 +77,7 @@
                 </a> 
             </div>
             
-            <div class="profile">
+            <!-- <div class="profile">
                 <div class="profile-pic">JD</div>
                 <div class="profile-info">
                     <div class="profile-name">John Doe</div>
@@ -130,5 +129,74 @@
             </div>
         </div>
     </div>
+</body>
+</html> -->
+<div class="profile">
+    <div class="profile-pic" th:text="${user.name.substring(0, 2)}">JD</div>
+    <div class="profile-info">
+        <div class="profile-name">John Doe</div>
+        <div class="profile-role">Super Admin</div>
+
+    </div>
+</div>
+</div>
+
+<div class="main-content">
+    <header class="header">
+        <p> <a href="/useracc_admin" style="text-decoration: none; font-weight:bold;">User Accounts </a> / View Details</p>
+         
+     </header>
+    
+    
+    <div class="user-details">
+        <div class="user-header">
+            <img th:src="@{'/images/profile/' + user.id}" alt="User Avatar" class="user-avatar">
+            <div>
+                <h1 class="user-name" th:text="${user.name}">User Name</h1>
+                <p class="user-email" th:text="${user.email}">Email Address</p>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="info-grid">
+            <div class="info-section">
+                <h2>Contact Information</h2>
+                <p th:text="${user.contactnumber}">09123456998</p>
+            </div>
+            <div class="info-section">
+                <h2>Address</h2>
+                <p th:text="'Block ' + ${user.block_num} + ', Lot ' + ${user.lot_num}">Block 1, Lot 9</p>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="info-section">
+            <h2>Property Status</h2>
+            <p th:text="${user.property_status}">Homeowner</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="info-section">
+            <h2>Uploaded Documents</h2>
+            <div class="document-list">
+                <div class="document-item" th:if="${user.tenancy_name}">
+                    <span th:text="${user.tenancy_name}">Agreement.pdf</span>
+                    <span th:if="${user.tenancy_document != null}" th:text="${formattedSize}">1.2MB</span>
+                </div>
+                
+                <div class="document-item" th:if="${user.id_name}">
+                    <span th:text="${user.id_name}">ValidID.png</span>
+                    <span style="color: #888; font-size: 12px;" th:text="${formattedSize}">1.2MB</span>
+                </div>
+            </div>
+        </div>
+
+        <button class="delete-btn" th:onclick="'window.location.href=\'/users/delete/' + ${user.id} + '\''">Delete</button>
+    </div>
+</div>
+</div>
 </body>
 </html>
