@@ -30,9 +30,9 @@ public class DashboardUserController {
         return "dashboard_user";
     }*/
     
-    @PostMapping("/update")
-    public String updateUser(@ModelAttribute User user) {
-        userService.updateUser(user);
-        return "redirect:/dashboard";
-    }
+    // @PostMapping("/update")
+    // public String updateUser(@ModelAttribute User user) {
+    //     userService.updateUser(user);
+    //     return "redirect:/dashboard";
+    // }
 }

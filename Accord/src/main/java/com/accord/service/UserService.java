@@ -41,53 +41,114 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-        public boolean sendPasswordResetEmail(User user) {
+    // ================== CRUD METHODS ==================
+
+    /**
+     * Create a new user and save to the database
+     * @param user - User entity to be created
+     * @return - The saved user entity
+     */
+    public User createUser(User user) {
+        return userRepository.save(user);  // Save the user object to the repository
+    }
+
+    /**
+     * Read/Get a user by their ID
+     * @param id - User ID
+     * @return - Optional User entity (returns empty if not found)
+     */
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);  // Find user by ID from the repository
+    }
+
+    /**
+     * Get all users from the database
+     * @return - List of all users
+     */
+    public List<User> getAllUsers() {
+        return userRepository.findAll();  // Retrieve all users from the repository
+    }
+
+    /**
+     * Update an existing user by their ID
+     * @param id - User ID
+     * @param updatedUser - User object with updated fields
+     * @return - The updated user entity or null if not found
+     */
+    public User updateUser(Long id, User updatedUser) {
+        Optional<User> existingUserOptional = userRepository.findById(id);
+        if (existingUserOptional.isPresent()) {
+            User existingUser = existingUserOptional.get();
+            // Update the fields of the existing user with new values
+            existingUser.setName(updatedUser.getName());
+            existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setContactnumber(updatedUser.getContactnumber());
+            // Add other fields that need to be updated...
+            return userRepository.save(existingUser);  // Save updated user to the repository
+        } else {
+            return null;  // Return null if user not found
+        }
+    }
+
+    /**
+     * Delete a user by their ID
+     * @param id - User ID
+     */
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);  // Delete the user by ID from the repository
+    }
+
+    // ================== END OF CRUD METHODS ==================
+
+    // Other service methods you already have
+    public boolean sendPasswordResetEmail(User user) {
         String token = UUID.randomUUID().toString();  // Generate unique token
         String resetLink = "http://localhost:8086/forgotPassword_setPass?token=" + token;
-    
+
         MimeMessage message = mailSender.createMimeMessage();
-    
+
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom("extrahamham@gmail.com");
             helper.setTo(user.getEmail());
             helper.setSubject("Password Reset Request");
-    
+
             String emailContent = "<p>Hi " + user.getName() + ",</p>" +
-                                  "<p>To reset your password, click the link below:</p>" +
-                                  "<a href=\"" + resetLink + "\">Reset Password</a>" +
-                                  "<p>If you didn't request a password reset, please ignore this email.</p>";
-            
+                    "<p>To reset your password, click the link below:</p>" +
+                    "<a href=\"" + resetLink + "\">Reset Password</a>" +
+                    "<p>If you didn't request a password reset, please ignore this email.</p>";
+
             helper.setText(emailContent, true);
-    
+
             // Send email
             mailSender.send(message);
-    
-            return true; // Return true if email is sent successfully
+
+            return true;  // Return true if email is sent successfully
         } catch (MessagingException e) {
             e.printStackTrace();
-            return false; // Return false if email sending failed
+            return false;  // Return false if email sending failed
         }
     }
+
     public Optional<User> findByEmail(String email) {
         return userRepository.findFirstByEmail(email);
     }
 
     public boolean resetPassword(String token, String newPassword) {
-        // Here, you need to implement the logic to validate the token
-        // and reset the password for the user associated with that token.
-    
-        // For this example, let's assume you have a method to find a user by token:
         Optional<User> userOptional = userRepository.findByResetToken(token);
-        
-   
-        
-        return false; // Token is invalid or user not found
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setPassword(passwordEncoder.encode(newPassword));  // Update password
+            userRepository.save(user);  // Save the updated user
+            return true;  // Password reset successful
+        }
+
+        return false;  // Token is invalid or user not found
     }
 
-
     public User registerUser(String name, String password, String email, String contactnumber, int block_num, int lot_num, String property_status,
-             MultipartFile tenancy, MultipartFile valid, String role) {
+            MultipartFile tenancy, MultipartFile valid, String role) {
         if (email != null && password != null) {
             if (userRepository.findFirstByEmail(email).isPresent()) {
                 return null;
@@ -96,7 +157,7 @@ public class UserService {
                 return null;
             }
         }
-        
+
         User user = new User();
         user.setName(name);
         user.setPassword(passwordEncoder.encode(password));
@@ -120,7 +181,7 @@ public class UserService {
         }
         user.setRole(role);
         User registeredUser = userRepository.save(user);
-        
+
         // Send an email to the admin for approval
         sendApprovalRequestToAdmin(registeredUser);
 
@@ -134,40 +195,24 @@ public class UserService {
         user.setConfirmation_email(true);
         user.setConfirmation_account(true);
         user.setRole(role);
-        User registeredAdmin = userRepository.save(user);
-        return registeredAdmin;
+        return userRepository.save(user);
     }
 
-    /*public User authenticate(String email, String password) {
-        // Only allow login if the account is approved by the admin
-        return userRepository.findByEmailAndPassword(email, password)
-                .filter(User::getConfirmation_account)  // Check if account is approved
-                .orElse(null);
-    }*/
-    public Boolean authenticateLogin(String email , String password) {
+    public Boolean authenticateLogin(String email, String password) {
         User user = userRepository.findByEmail(email);
-        if(user != null) {
-            Boolean match = passwordEncoder.matches(password, user.getPassword());
-            if(match == true) {
-                return true;
-            }
-            else {
-                return false;
-            }
+        if (user != null) {
+            return passwordEncoder.matches(password, user.getPassword());
         }
         return false;
-        //return userRepository.findByEmailAndPassword(email, password);
     }
-
 
     public static String getCurrentEmail() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth != null && auth.isAuthenticated()) {
+        if (auth != null && auth.isAuthenticated()) {
             Object principal = auth.getPrincipal();
-            if(principal instanceof UserDetails) {
+            if (principal instanceof UserDetails) {
                 return ((UserDetails) principal).getUsername();
-            }
-            else {
+            } else {
                 return principal.toString();
             }
         }
@@ -175,28 +220,13 @@ public class UserService {
     }
 
     public Boolean checkPhone(String contactnumber) {
-        if(contactnumber != null) {
-            if(userRepository.findByContactnumber(contactnumber).isPresent()){
-                return null;
-            }
-            return true;
-        }
-        return true;
-    }
-
-    public User updateUser(User user) {
-        return userRepository.save(user);
+        return !userRepository.findByContactnumber(contactnumber).isPresent();
     }
 
     public Boolean checkEmail(String email) {
-        if(email != null) {
-            if(userRepository.findFirstByEmail(email).isPresent()){
-                return null;
-            }
-            return true;
-        }
-        return true;
+        return !userRepository.findFirstByEmail(email).isPresent();
     }
+
     public List<User> getAllUser() {
         return userRepository.findAll();
     }
@@ -205,7 +235,6 @@ public class UserService {
         MimeMessage message = mailSender.createMimeMessage();
 
         try {
-            // Use MimeMessageHelper to handle multipart emails (attachments)
             MimeMessageHelper helper = new MimeMessageHelper(message, true);  // true indicates multipart
 
             helper.setFrom("extrahamham@gmail.com");  // Your app's email
@@ -236,7 +265,6 @@ public class UserService {
             mailSender.send(message);
         } catch (MessagingException e) {
             e.printStackTrace();
-            // Handle exception if sending fails
         }
     }
 }
