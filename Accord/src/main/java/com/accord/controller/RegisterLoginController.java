@@ -173,9 +173,14 @@ public class RegisterLoginController {
 
 	@GetMapping("/modifyrec_admin")
 	public String modifyRecreationalArea(Model model) {
-		// Add attributes to the model if needed for profile management
 		return "modifyDelete_area";
 	}
+
+	// @GetMapping("/details")
+	// public String UserAcc_VIewDetails(Model model) {
+	// 	return "UserAccounts_viewDetails";
+	// }
+
 
 	@PostMapping("/forgotPassword_email")
 public String processForgotPassword(@ModelAttribute("resetRequest") User resetRequest, Model model) {
