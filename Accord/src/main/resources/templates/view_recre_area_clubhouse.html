@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Recreational Area Details</title>
+    <link rel="icon" href="images/logoHead.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="view-recreational-area">
+    <div class="container">
+        <div class="sidebar">
+            <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
+            
+            <div class="nav-items">
+                <a href="/dash_admin" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <div>Dashboard</div>
+                </a>
+                
+                <a href="#" class="nav-item active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <div>Areas Management</div>
+                </a>
+                
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <div>Manage Bookings</div>
+                </a>
+                
+                <a href="/useracc_admin" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.44" height="17.04" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <div>User Accounts</div>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <div>Analytics</div>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <div>Feedback</div>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="/" class="logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <div>Log out</div>
+                </a> 
+            </div>
+            
+            <div class="profile">
+                <div class="profile-pic">JD</div>
+                <div class="profile-info">
+                    <div class="profile-name">John Doe</div>
+                    <div class="profile-role">Superadmin</div>
+                </div>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <header class="header">
+                <p><a href="/recreational-areas-list"style="text-decoration: none; font-weight:bold;">Areas Management </a>/ View Recreational Area Details</p>
+            </header>
+            <h1 style="margin-bottom: 2rem;">Clubhouse</h1>
+            
+            <section class="area-photos">
+                <img src="https://i.pinimg.com/736x/7e/ba/47/7eba4729dbca24a1378902ac01d93923.jpg" alt="Clubhouse" class="area-photo">
+                <img src="https://www.shutterstock.com/image-photo/orange-park-florida-usa-february-600nw-1649878960.jpg" alt="Clubhouse" class="area-photo">
+                <img src="https://st.hzcdn.com/simgs/pictures/family-rooms/clubhouse-design-designer-interiors-by-mary-olk-img~b811ccc9056b62eb_14-4052-1-91a464d.jpg" alt="Clubhouse" class="area-photo">
+                <img src="https://www.inidesignstudio.com/wp-content/uploads/2020/11/final-new-club-house-scaled.jpg" alt="Clubhouse" class="area-photo">
+            </section>
+            <section class="area-guidelines2">
+                <h2>Guidelines</h2>
+                <ul>
+                    <li>No running around the pool area</li>
+                    <li>No diving in shallow areas</li>
+                    <li>Children under 12 must be accompanied by an adult</li>
+                    <li>No food or drinks allowed in the pool</li>
+                    <li>Shower before entering the pool</li>
+                </ul>
+            </section>
+            <div class="schedule-header" id="schedules">
+            <h1 style="margin-bottom: 2rem;">Schedules</h1>
+
+            <div class="view-options2">
+                <button class="view-option2 list-view-button"  onclick="showListView(); scrollToSchedules()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                </button>
+                
+                <button class="view-option2 calendar-view-button" onclick="showCalendarView() ; scrollToSchedules()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+                
+                <div class="schedule-list">
+                </div>
+                <div class="schedule-calendar">
+                </div>
+            </section>
+        </main>
+    </div>
+    <div class="booking-details">
+        <span class="close-details" onclick="closeBookingDetails()">&times;</span>
+        <h3>Booking Details</h3>
+        <ul id="booking-list"></ul>
+    </div>
+    <script>
+        // Sample booking data (replace with actual data from your backend)
+        const bookings = {
+            '2023-10-15': [
+                { name: 'John Doe', time: '10:00 AM - 12:00 PM' },
+                { name: 'Jane Smith', time: '2:00 PM - 4:00 PM' }
+            ],
+            '2023-10-20': [
+                { name: 'Alice Johnson', time: '9:00 AM - 11:00 AM' }
+            ]
+        };
+
+        function showListView() {
+            // Show list and hide calendar
+            document.querySelector('.schedule-list').style.display = 'block';
+            document.querySelector('.schedule-calendar').style.display = 'none';
+
+            // Add 'active' class to the list button and remove from the calendar button
+            let listButton = document.querySelector('.list-view-button');
+            let calendarButton = document.querySelector('.calendar-view-button');
+
+            listButton.classList.add('active');
+            calendarButton.classList.remove('active');
+        }
+
+        function showCalendarView() {
+            // Hide list and show calendar
+            document.querySelector('.schedule-list').style.display = 'none';
+            document.querySelector('.schedule-calendar').style.display = 'grid';
+
+            // Add 'active' class to the calendar button and remove from the list button
+            let listButton = document.querySelector('.list-view-button');
+            let calendarButton = document.querySelector('.calendar-view-button');
+
+            calendarButton.classList.add('active');
+            listButton.classList.remove('active');
+        }
+
+        function scrollToSchedules() {
+        const schedulesSection = document.getElementById('schedules');
+        schedulesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+
+        function generateCalendar() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth();
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+
+            const calendarContainer = document.querySelector('.schedule-calendar');
+            calendarContainer.innerHTML = '';
+
+            // Add month and year header
+            const monthYearHeader = document.createElement('div');
+            monthYearHeader.classList.add('calendar-header');
+            monthYearHeader.textContent = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(firstDay);
+            calendarContainer.appendChild(monthYearHeader);
+
+            const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            daysOfWeek.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('calendar-day');
+                dayElement.textContent = day;
+                calendarContainer.appendChild(dayElement);
+            });
+
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.classList.add('calendar-day');
+                calendarContainer.appendChild(emptyDay);
+            }
+
+            for (let i = 1; i <= lastDay.getDate(); i++) {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('calendar-day');
+                dayElement.textContent = i;
+
+                const currentDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                if (bookings[currentDate]) {
+                    dayElement.classList.add('booked');
+                    dayElement.addEventListener('click', () => showBookingDetails(currentDate));
+                } else {
+                    dayElement.classList.add('available');
+                }
+
+                if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                    dayElement.classList.add('today');
+                }
+
+                calendarContainer.appendChild(dayElement);
+            }
+        }
+
+        function generateListView() {
+            const listContainer = document.querySelector('.schedule-list');
+            listContainer.innerHTML = '';
+
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth();
+            const lastDay = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 1; i <= lastDay; i++) {
+                const currentDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                const listItem = document.createElement('div');
+                listItem.classList.add('schedule-item');
+
+                const dateSpan = document.createElement('span');
+                dateSpan.textContent = new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).format(new Date(currentDate));
+
+                const statusSpan = document.createElement('span');
+                statusSpan.classList.add('schedule-item-status');
+
+                if (bookings[currentDate]) {
+                    listItem.classList.add('booked');
+                    statusSpan.classList.add('booked');
+                    statusSpan.textContent = 'Booked';
+                    listItem.addEventListener('click', () => showBookingDetails(currentDate));
+                } else {
+                    listItem.classList.add('available');
+                    statusSpan.classList.add('available');
+                    statusSpan.textContent = 'Available';
+                }
+
+                listItem.appendChild(dateSpan);
+                listItem.appendChild(statusSpan);
+                listContainer.appendChild(listItem);
+            }
+        }
+
+        function showBookingDetails(date) {
+            const bookingList = document.getElementById('booking-list');
+            bookingList.innerHTML = '';
+
+            if (bookings[date]) {
+                bookings[date].forEach(booking => {
+                    const li = document.createElement('li');
+                    li.textContent = `${booking.name}: ${booking.time}`;
+                    bookingList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = 'No bookings for this date.';
+                bookingList.appendChild(li);
+            }
+
+            document.querySelector('.booking-details').style.display = 'block';
+        }
+
+        function closeBookingDetails() {
+            document.querySelector('.booking-details').style.display = 'none';
+        }
+
+        // Initialize the calendar and list view
+        generateCalendar();
+        generateListView();
+        showCalendarView();
+    </script>
+</body>
+</html>
