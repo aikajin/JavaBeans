@@ -1,5 +1,7 @@
 package com.accord.Entity;
 
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,7 +9,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "user_table")
 public class User {
@@ -56,7 +66,17 @@ public class User {
 	private String profile_name;
 
 	private String profile_type;
-	private String resetToken;
+	
+    private Boolean isEnable;
+
+    private Boolean accountNonLocked;
+
+    private Integer failedAttempt;
+
+    private Date lockTime;
+
+    private String resetToken;
+
 	public Long getId() {
 		return id;
 	}
@@ -203,9 +223,5 @@ public class User {
 		this.profile_picture = profile_picture;
 		this.profile_name = profile_name;
 		this.profile_type = profile_type;
-	}
-	public User() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 }

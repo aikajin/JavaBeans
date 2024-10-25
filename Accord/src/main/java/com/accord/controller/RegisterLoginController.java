@@ -3,6 +3,7 @@ package com.accord.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import java.util.Optional;
+
 import com.accord.Entity.User;
+import com.accord.Entity.Area;
+import com.accord.service.AreaService;
 import com.accord.service.UserService;
 
 @Controller
@@ -23,7 +26,17 @@ public class RegisterLoginController {
 	
 	@Autowired
 	private UserService userService;
-	
+	@Autowired
+	private AreaService areaService;
+
+	@ModelAttribute
+	public void getUserDetails(Model model, Principal principal) {
+		if(principal != null) {
+			String email = principal.getName();
+			Optional<User> user = userService.findByEmail(email);
+			model.addAttribute("user", user);
+		}
+	}
 	@GetMapping("/")
 	public String index() {
 		return "login_page";
@@ -71,30 +84,7 @@ public class RegisterLoginController {
 	}
 
 	@PostMapping("/login")
-	public String login(@ModelAttribute User user, Model model) {
-		//User authenticatedUser = userService.authenticate(user.getEmail(), user.getPassword());
-		//User role = userSerivce.findByEmail(UserService.getcu)
-		//Admin authenticatedAdmin = adminService.authenticate(admin.getEmail(), admin.getPassword());
-		/*if(authenticatedUser != null) {
-			model.addAttribute("userLogin", authenticatedUser.getEmail());
-			return "dashboard_user";
-		}
-		else if(authenticatedAdmin != null) {
-			model.addAttribute("adminLogin", authenticatedAdmin.getEmail());
-			return "dashboard_admin";
-		}
-		else {
-			model.addAttribute("error", "na error");
-			return "login_page";
-		}*/
-		/*String currentEmail = user.getEmail();
-		User userCurrent = userService.findByEmail(currentEmail);
-		if(userCurrent.getRole().contains("ROLE_USER")) {
-			return "dashboard_user";
-		}
-		else {
-			return "dashboard_admin";
-		}*/
+	public String login(@ModelAttribute User user, Model model, Principal principal) {
 		String currentEmail = user.getEmail();
 		Boolean authenticateUser = userService.authenticateLogin(user.getEmail(), user.getPassword());
 		//User currectUser = userService.findByEmail(currentEmail);
@@ -106,8 +96,10 @@ public class RegisterLoginController {
 			if (optionalUser.isPresent()) {
 				User currectUser = optionalUser.get(); // Get the actual User object
 				if (currectUser.getRole().contains("ROLE_USER")) {
+					model.addAttribute("user", currectUser);
 					return "dashboard_user";
 				} else {
+					model.addAttribute("user", currectUser);
 					return "dashboard_admin";
 				}
 			} else {
@@ -119,7 +111,15 @@ public class RegisterLoginController {
 	}
 
     @GetMapping("/dash_user")
-    public String showDashboard() {
+    public String showDashboard(Optional<User> user, Model model, Principal principal) {
+		//String email = principal.getName();
+		//Optional<User> user = userService.findByEmail(email);
+		//model.addAttribute("user", user);
+		//String currentEmail = user.getEmail();
+		//Optional<User> optionalUser = userService.findByEmail(currentEmail);
+		//model.addAttribute("user", optionalUser);
+		user = getLoginUser(principal);
+		model.addAttribute("user", user);
         return "dashboard_user";
     }
 	@GetMapping("/dash_admin")
@@ -143,8 +143,12 @@ public class RegisterLoginController {
 
 	
 	@GetMapping("/manage-profile")
-	public String manageProfile(Model model) {
-		// Add attributes to the model if needed for profile management
+	public String manageProfile(Optional<User> user, Model model, Principal principal) {
+		//String currentEmail = user.getEmail();
+		//Optional<User> optionalUser = userService.findByEmail(currentEmail);
+		//model.addAttribute("user", optionalUser);
+		user = getLoginUser(principal);
+		model.addAttribute("user", user);
 		return "manage_profile";
 	}
 
@@ -167,8 +171,18 @@ public class RegisterLoginController {
 
 	@GetMapping("/add_area")
 	public String addRecreationalArea(Model model) {
-		// Add attributes to the model if needed for profile management
+		model.addAttribute("areaRequest", new Area());;
 		return "addNewRecreational_area";
+	}
+
+	@PostMapping("/add_area")
+	public String addRecreationalArea(@ModelAttribute Area area, @RequestParam("file") MultipartFile cover_photo, @RequestParam("file2") MultipartFile additional_photo, 
+									Model model) throws IOException {
+		// Add attributes to the model if needed for profile management
+		Area addArea = areaService.addArea(area.getName(), area.getGuidelines(), cover_photo, additional_photo);
+		//Area saveArea = areaService.saveArea(area);
+		model.addAttribute("area", addArea);
+		return "addNewRecreational_area" ;
 	}
 
 	@GetMapping("/modifyrec_admin")
@@ -183,7 +197,7 @@ public class RegisterLoginController {
 
 
 	@PostMapping("/forgotPassword_email")
-public String processForgotPassword(@ModelAttribute("resetRequest") User resetRequest, Model model) {
+	public String processForgotPassword(@ModelAttribute("resetRequest") User resetRequest, Model model) {
     // Retrieve the User object based on the email
     User user = userService.findByEmail(resetRequest.getEmail()).orElse(null);
     
@@ -197,33 +211,39 @@ public String processForgotPassword(@ModelAttribute("resetRequest") User resetRe
         } else {
             model.addAttribute("error", "Failed to send password reset email. Please try again.");
         }
-    } else {
-        model.addAttribute("error", "No user found with the provided email.");
     }
-    
-    return "forgotPassword_page"; // Redirect back to the form in case of an error
-}
-@GetMapping("/forgotPassword_setPass")
-public String showResetPasswordPage(Model model) {
-    // Add any required model attributes for the form, if needed
-    model.addAttribute("loginRequest", new User()); // Assuming User is needed for form binding
-    return "forgotPassword_setPass"; // This must match the name of your HTML file without ".html"
-}
-@PostMapping("/resetpassword")
-public String handlePasswordReset(
-    @RequestParam("token") String token, 
-    @RequestParam("password") String newPassword,
-    Model model) {
-    
-    // Validate the token again and reset the password
-    boolean isPasswordReset = userService.resetPassword(token, newPassword);
-    
-    if (isPasswordReset) {
-        model.addAttribute("message", "Password has been successfully reset.");
-        return "login_page"; // Redirect to login page after success
-    } else {
-        model.addAttribute("error", "Failed to reset password. The token might be invalid or expired.");
-        return "forgotPassword_setPass"; // Stay on the form if there's an error
-    }
-}
+		else {
+			 model.addAttribute("error", "No user found with the provided email.");
+			}
+			return "forgotPassword_page"; // Redirect back to the form in case of an error
+			}
+	@GetMapping("/forgotPassword_setPass")
+	public String showResetPasswordPage(Model model) {
+		// Add any required model attributes for the form, if needed
+		model.addAttribute("loginRequest", new User()); // Assuming User is needed for form binding
+		return "forgotPassword_setPass"; // This must match the name of your HTML file without ".html"
+	}
+	@PostMapping("/resetpassword")
+	public String handlePasswordReset(
+		@RequestParam("token") String token, 
+		@RequestParam("password") String newPassword,
+		Model model) {
+		
+		// Validate the token again and reset the password
+		boolean isPasswordReset = userService.resetPassword(token, newPassword);
+		
+		if (isPasswordReset) {
+			model.addAttribute("message", "Password has been successfully reset.");
+			return "login_page"; // Redirect to login page after success
+		} else {
+			model.addAttribute("error", "Failed to reset password. The token might be invalid or expired.");
+			return "forgotPassword_setPass"; // Stay on the form if there's an error
+		}
+	}
+
+	private Optional<User> getLoginUser(Principal principal) {
+		String email = principal.getName();
+		Optional<User> user = userService.findByEmail(email);
+		return user;
+	}
 }
