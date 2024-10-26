@@ -7,15 +7,13 @@
     <link rel="icon" href="images/logoHead.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    
 </head>
 <body>
     <div class="container">
         <div class="sidebar">
-            <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
-            
+             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
             <div class="nav-items">
-                <a href="/dash_admin" class="nav-item">
+                <a href="/dash_user" class="nav-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="7" height="7"></rect>
                         <rect x="14" y="3" width="7" height="7"></rect>
@@ -77,120 +75,100 @@
                 <p>Book a Facility / List of Recreational Areas</p>
             </header>
             <div class="header-container">
-            <h1 style="margin-bottom: 2rem;">Recreational Areas</h1>
-              </a>
-              
+                <h1 style="margin-bottom: 2rem;">Recreational Areas</h1>
             </div>
             <div class="search-and-view">
-            <input type="text" placeholder="Search Area..." class="controls">
+                <input type="text" id="searchInput" placeholder="Search Area..." class="controls">
 
-            <div class="view-options">
-                <button class="view-option active"data-view="grid">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="3" width="7" height="7"></rect>
-                        <rect x="14" y="3" width="7" height="7"></rect>
-                        <rect x="14" y="14" width="7" height="7"></rect>
-                        <rect x="3" y="14" width="7" height="7"></rect>
-                    </svg>
-                </button>
-                <button class="view-option" data-view="calendar">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                    </svg>
-                </button>
+                <div class="view-options">
+                    <button class="view-option active" data-view="grid">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                    </button>
+                    <button class="view-option" data-view="calendar">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </button>
+                </div>
             </div>
-        </div>
      
-        <div id="view-content"></div>
-        <div class="areas-grid">
-            <div class="area-column">
-                <div class="area-card">
-                    <img src="images/pool 1.png" alt="Swimming Pool Area" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Swimming Pool Area</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <a href="/view-recreational-area-user" class="view-details">View details →</a>
-                        </div>
-                    </div>
-                </div>
-                </div>
+            <div id="view-content"></div>
+            <div class="areas-grid">
+                <!-- Area cards will be dynamically populated here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Sample data for recreational areas
+        const areas = [
+            { name: "Swimming Pool Area", type: "Aquatic", guidelines: "No running, no diving in shallow areas", image: "images/pool 1.png", link: "/view-recreational-area-user" },
+            { name: "Basketball Court", type: "Sports", guidelines: "Proper footwear required", image: "images/basketballcourt.png", link: "/view-recre-area-basketball-user" },
+            { name: "Clubhouse", type: "Social", guidelines: "Reservations required for events", image: "images/clubhouse.jpg", link: "/view-recre-area-clubhouse-user" },
+            { name: "Covered Court", type: "Sports", guidelines: "Multi-purpose area for various activities", image: "images/coveredcourt.png", link: "/view-recre-area-coveredcourt-user" },
+            { name: "Hall", type: "Social", guidelines: "Available for community gatherings", image: "images/hall.png", link: "/view-recre-area-hall-user" },
+            { name: "Tennis Court", type: "Sports", guidelines: "Maximum 4 players per court", image: "images/tenniscourt.jpg", link: "/view-recre-area-tenniscourt-user" }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAreas(areas);
+
+            const searchInput = document.getElementById('searchInput');
+
+            searchInput.addEventListener('input', filterAreas);
+
+            document.querySelectorAll('.view-option').forEach((button) => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.view-option').forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
                 
-                <div class="area-card">
-                    <img src="images/basketballcourt.png" alt="Basketball Court" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Basketball Court</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <a href="/view-recre-area-basketball-user" class="view-details">View details →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="area-card">
-                    <img src="images/clubhouse.jpg" alt="Clubhouse" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Clubhouse</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <a href="/view-recre-area-clubhouse-user" class="view-details">View details →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="area-card">
-                    <img src="images/coveredcourt.png" alt="Covered Court" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Covered Court</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <a href="/view-recre-area-coveredcourt-user" class="view-details">View details →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="area-card">
-                    <img src="images/hall.png" alt="Hall" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Hall</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <a href="/view-recre-area-hall-user" class="view-details">View details →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="area-card">
-                    <img src="images/tenniscourt.jpg" alt="Tennis Court" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Tennis Court</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <a href="/view-recre-area-tenniscourt-user" class="view-details">View details →</a>
-                        </div>
-                    </div>
-                </div>
-                </div>
-
-   <script>
-        document.querySelectorAll('.view-option').forEach((button) => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.view-option').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-            
-                const viewContent = document.getElementById('view-content');
-                if (this.dataset.view === 'grid') {
-                    
-                    document.querySelector('.areas-grid').style.display = 'grid';
-                } else {
-                    
-                    document.querySelector('.areas-grid').style.display = 'none';
-                }
+                    if (this.dataset.view === 'grid') {
+                        document.querySelector('.areas-grid').style.display = 'grid';
+                    } else {
+                        document.querySelector('.areas-grid').style.display = 'none';
+                    }
+                });
             });
         });
+
+        function renderAreas(areas) {
+            const grid = document.querySelector('.areas-grid');
+            grid.innerHTML = '';
+
+            areas.forEach(area => {
+                const areaCard = document.createElement('div');
+                areaCard.className = 'area-card';
+                areaCard.innerHTML = `
+                    <img src="${area.image}" alt="${area.name}" class="area-image">
+                    <div class="area-details">
+                        <h3 class="area-name">${area.name}</h3>
+                        <p class="area-guidelines">Guidelines: ${area.guidelines}</p>
+                        <div class="area-actions">
+                            <a href="${area.link}" class="view-details">View details →</a>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(areaCard);
+            });
+        }
+
+        function filterAreas() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+
+            const filteredAreas = areas.filter(area => {
+                return area.name.toLowerCase().includes(searchValue);
+            });
+
+            renderAreas(filteredAreas);
+        }
     </script>
 </body>
 </html>
