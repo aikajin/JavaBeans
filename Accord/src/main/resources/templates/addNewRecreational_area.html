@@ -96,10 +96,10 @@
                  <h1>Add New Recreational Area</h1>
              </header>
             <div class="form-container">
-                <form method="post" action="/add_area" enctype="multipart/form-data" id="add-area-form" th:object="${areaRequest}">
+                <form id="add-area-form">
                     <div class="form-group">
                         <label for="area-name">Name of Recreational Area</label>
-                        <input type="text" id="name" name="name" required>
+                        <input type="text" id="area-name" name="area-name" required>
                         <div class="error-message" id="area-name-error"></div>
                     </div>
                     <div class="form-group">
@@ -107,12 +107,20 @@
                         <textarea id="guidelines" name="guidelines" required></textarea>
                         <div class="error-message" id="guidelines-error"></div>
                     </div>
-                    <label for="cover-photo">Cover Photo</label>
-                    <input type="file" id="file" name="file" required/><br/>
-                </div>
-                <label for="additional-photos">Additional Photo</label>
-                <input type="file" id="file2" name="file2" required/><br/>
-                    
+                    <div class="form-group">
+                        <label for="cover-photo">Cover Photo</label>
+                        <input type="file" id="cover-photo" name="cover-photo" accept=".png,.jpg,.jpeg" required>
+                        <label for="cover-photo" class="file-upload-label">Choose Cover Photo</label>
+                        <span class="file-name" id="cover-photo-name"></span>
+                        <div class="error-message" id="cover-photo-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="additional-photos">Additional Photos (optional)</label>
+                        <input type="file" id="additional-photos" name="additional-photos" accept=".png,.jpg,.jpeg" multiple>
+                        <label for="additional-photos" class="file-upload-label">Choose Additional Photos</label>
+                        <span class="file-name" id="additional-photos-name"></span>
+                        <div class="error-message" id="additional-photos-error"></div>
+                    </div>
                     <div class="form-group">
                         <label for="schedule">Schedule</label>
                         <textarea id="schedule" name="schedule" placeholder="Enter schedule details here"></textarea>
@@ -129,12 +137,12 @@
         </main>
     </div>
     <script>
-        document.getElementById('cover_photo').addEventListener('change', function(e) {
+        document.getElementById('cover-photo').addEventListener('change', function(e) {
             const fileName = e.target.files[0]?.name || 'No file chosen';
             document.getElementById('cover-photo-name').textContent = fileName;
         });
 
-        document.getElementById('additional_photos').addEventListener('change', function(e) {
+        document.getElementById('additional-photos').addEventListener('change', function(e) {
             const fileCount = e.target.files.length;
             const message = fileCount > 0 ? `${fileCount} file(s) selected` : 'No files chosen';
             document.getElementById('additional-photos-name').textContent = message;
