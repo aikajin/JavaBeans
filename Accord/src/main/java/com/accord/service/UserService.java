@@ -1,26 +1,28 @@
 package com.accord.service;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.accord.Entity.User;
 import com.accord.repository.EmailNotificationRepository;
 import com.accord.repository.UserRepository;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.mail.javamail.JavaMailSender;
+
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService {
@@ -103,7 +105,7 @@ public class UserService {
     // Other service methods you already have
     public boolean sendPasswordResetEmail(User user) {
         String token = UUID.randomUUID().toString();  // Generate unique token
-        String resetLink = "http://localhost:8086/forgotPassword_setPass?token=" + token;
+        String resetLink = "http://localhost:8080/forgotPassword_setPass?token=" + token;
 
         MimeMessage message = mailSender.createMimeMessage();
 
