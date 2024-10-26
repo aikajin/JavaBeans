@@ -1,6 +1,5 @@
 package com.accord.service;
 
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
@@ -9,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.accord.Entity.User;
 import com.accord.repository.EmailNotificationRepository;
 import com.accord.repository.UserRepository;
-import com.accord.util.AppConstant;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
@@ -208,6 +206,19 @@ public class UserService {
         return false;
     }
 
+    public static String getCurrentEmail() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated()) {
+            Object principal = auth.getPrincipal();
+            if (principal instanceof UserDetails) {
+                return ((UserDetails) principal).getUsername();
+            } else {
+                return principal.toString();
+            }
+        }
+        return null;
+    }
+
     public Boolean checkPhone(String contactnumber) {
         return !userRepository.findByContactnumber(contactnumber).isPresent();
     }
@@ -255,54 +266,5 @@ public class UserService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-    }
-
-
-
-
-
-
-    public void increaseFailedAttempt(User user) {
-        int attempt = user.getFailedAttempt() + 1;
-        user.setFailedAttempt(attempt);
-        userRepository.save(user);
-    }
-
-    public void userAccountLock(User user) {
-        user.setAccountNonLocked(false);
-        user.setLockTime(new Date());
-        userRepository.save(user);
-    }
-
-    public boolean unlockAccountTimeExpired(User user) {
-
-        long lockTime = user.getLockTime().getTime();
-        long unLockTime = lockTime + AppConstant.UNLOCK_DURATION_TIME;
-
-        long currentTime = System.currentTimeMillis();
-
-        if (unLockTime < currentTime) {
-            user.setAccountNonLocked(true);
-            user.setFailedAttempt(0);
-            user.setLockTime(null);
-            userRepository.save(user);
-            return true;
-        }
-
-        return false;
-    }
-
-    public void resetAttempt(int userId) {
-
-    }
-
-    public void updateUserResetToken(String email, String resetToken) {
-        User findByEmail = userRepository.findByEmail(email);
-        findByEmail.setResetToken(resetToken);
-        userRepository.save(findByEmail);
-    }
-
-    public Optional<User> getUserByToken(String token) {
-        return userRepository.findByResetToken(token);
     }
 }

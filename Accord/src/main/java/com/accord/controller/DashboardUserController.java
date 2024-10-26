@@ -15,7 +15,7 @@ import com.accord.repository.UserRepository;
 import com.accord.service.UserService;
 
 @Controller
-@RequestMapping("/dashboard_user")
+//@RequestMapping("/dashboard_user")
 public class DashboardUserController {
 	@Autowired
 	private UserService userService;
