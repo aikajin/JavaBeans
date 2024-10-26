@@ -7,7 +7,32 @@
     <link rel="icon" href="images/logoHead.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-
+    <style>
+        .btn-view, .btn-delete {
+            padding: 6px 12px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .btn-view {
+            background-color: #FF5916;
+            color: white;
+            text-decoration: none;
+        }
+        .btn-view:hover {
+            background-color: #e64d14;
+        }
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -152,84 +177,6 @@
         </div>
     </div>
 
-    <!-- <script>
-        const users = [
-            { id: '1', name: 'Vince Pateres', email: 'vince@example.com', propertyStatus: 'Renter', blockNo: '1', lotNo: '1', avatar: '/images/tooltip.png' },
-            { id: '2', name: 'Cristal Quiamco', email: 'cristal@example.com', propertyStatus: 'Homeowner - Assumed', blockNo: '2', lotNo: '2', avatar: '/placeholder.svg?height=32&width=32' },
-            { id: '3', name: 'Raya Lazo', email: 'raya@example.com', propertyStatus: 'Homeowner', blockNo: '3', lotNo: '3', avatar: '/placeholder.svg?height=32&width=32' },
-            { id: '4', name: 'Kurt Layam', email: 'kurt@example.com', propertyStatus: 'Homeowner', blockNo: '4', lotNo: '4', avatar: '/placeholder.svg?height=32&width=32' },
-            { id: '5', name: 'Andrew Sibal', email: 'andrew@example.com', propertyStatus: 'Renter', blockNo: '5', lotNo: '5', avatar: '/placeholder.svg?height=32&width=32' },
-        ];
-
-        function renderUsers(filteredUsers, tableId) {
-            const tableBody = document.querySelector(`#${tableId} tbody`);
-            tableBody.innerHTML = '';
-            filteredUsers.forEach(user => {
-                const row = `
-                    <tr>
-                        <td>
-                            <div style="display: flex; align-items: center;">
-                <img src="${user.avatar}" alt="${user.name}" class="avatar">
-                <div style="margin-left: 10px;">
-                    <div>${user.name}</div>
-                    <small>${user.email}</small>
-                </div>
-            </div>
-                        </td>
-                        <td>${user.propertyStatus}</td>
-                        <td>${user.blockNo}</td>
-                        <td>${user.lotNo}</td>
-                        <td>
-                            <button class="view-button" onclick="viewUser('${user.id}')">view</button></td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
-            });
-        }
-
-        function applyFilters(inputId, selectId, tableId) {
-            const searchTerm = document.getElementById(inputId).value.toLowerCase();
-            const filterValue = document.getElementById(selectId).value;
-            
-            const filteredUsers = users.filter(user => 
-                (user.name.toLowerCase().includes(searchTerm) || user.email.toLowerCase().includes(searchTerm)) &&
-                (filterValue === '' || user.propertyStatus === filterValue)
-            );
-            
-            renderUsers(filteredUsers, tableId);
-        }
-
-        function viewUser(userId) {
-            // Implement view user functionality
-            alert('Viewing user with ID: ' + userId);
-        }
-
-        // Initial render
-        renderUsers(users, 'pendingTable');
-        renderUsers(users, 'usersTable');
-
-        // Add event listeners for real-time filtering
-        document.getElementById('searchInputPending').addEventListener('input', () => applyFilters('searchInputPending', 'filterSelectPending', 'pendingTable'));
-        document.getElementById('filterSelectPending').addEventListener('change', () => applyFilters('searchInputPending', 'filterSelectPending', 'pendingTable'));
-        document.getElementById('searchInputUsers').addEventListener('input', () => applyFilters('searchInputUsers', 'filterSelectUsers', 'usersTable'));
-        document.getElementById('filterSelectUsers').addEventListener('change', () => applyFilters('searchInputUsers', 'filterSelectUsers', 'usersTable'));
-
-       // Add event listeners for sidebar navigation
-       document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function(e) {
-            document.querySelector('.nav-item.active')?.classList.remove('active');
-            if (!this.classList.contains('logout')) {
-                this.classList.add('active');
-            }
-        });
-    });
-
-            // Separate event listener for the logout button
-            document.querySelector('.logout').addEventListener('click', function(e) {
-                // Redirect to login page
-            window.location.href = this.getAttribute('href');
-    });
-    </script> -->
     <script>
         // Fetch and display users once the DOM is fully loaded
         document.addEventListener('DOMContentLoaded', function() {
@@ -267,11 +214,8 @@
                     <td>${user.block_num}</td>
                     <td>${user.lot_num}</td>
                     <td>
-                        
                         <a href="/users/view/${user.id}" class="btn-view">View</a>
-
-                        
-                        <button onclick="deleteUser(${user.id})">Delete</button>
+                        <button onclick="deleteUser(${user.id})" class="btn-delete">Delete</button>
                     </td>
                 `;
 

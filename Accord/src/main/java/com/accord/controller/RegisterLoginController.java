@@ -1,8 +1,8 @@
 package com.accord.controller;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import java.util.Optional;
+
 import com.accord.Entity.User;
 import com.accord.service.UserService;
 
@@ -159,6 +159,37 @@ public class RegisterLoginController {
 		// Add attributes to the model if needed for profile management
 		return "view_recreational_area";
 	}
+
+	@GetMapping("/view-recre-area-basketball")
+	public String viewRecreAreaBasketball(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "view_recre_area_basketball";
+	}
+
+	@GetMapping("/view-recre-area-clubhouse")
+	public String viewRecreAreaClubhouse(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "view_recre_area_clubhouse";
+	}
+
+	@GetMapping("/view-recre-area-coveredcourt")
+	public String viewRecreAreaCoveredCourt(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "view_recre_area_coveredcourt";
+	}
+
+	@GetMapping("/view-recre-area-hall")
+	public String viewRecreAreaHall(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "view_recre_area_hall";
+	}
+
+	@GetMapping("/view-recre-area-tenniscourt")
+	public String viewRecreAreaTennisCourt(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "view_recre_area_tenniscourt";
+	}
+
 	@GetMapping("/useracc_admin")
 	public String UserAccountsAdmin(Model model) {
 		// Add attributes to the model if needed for profile management
