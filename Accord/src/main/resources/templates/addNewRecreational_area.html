@@ -8,8 +8,65 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
-
-        
+        /* New styles for the schedule interface */
+        .schedule-interface {
+            font-family: 'Lexend', sans-serif;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 24px;
+            max-width: 600px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .schedule-header {
+            margin-bottom: 20px;
+        }
+        .schedule-header h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .schedule-header p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .schedule-form {
+            display: grid;
+            gap: 16px;
+        }
+        .schedule-form .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .schedule-form .form-group label {
+            font-size: 14px;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        .schedule-form .form-group input,
+        .schedule-form .form-group select {
+            font-family: 'Lexend', sans-serif;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            font-size: 14px;
+            color: #495057;
+        }
+        .form-group-inline {
+            display: flex;
+            gap: 16px;
+        }
+        .form-group-inline > * {
+            flex: 1;
+        }
+        .schedule-options {
+            display: flex;
+            align-items: center;
+        }
+        .schedule-options label {
+            font-size: 14px;
+            color: #495057;
+        }
     </style>
 </head>
 <body>
@@ -123,7 +180,44 @@
                     </div>
                     <div class="form-group">
                         <label for="schedule">Schedule</label>
-                        <textarea id="schedule" name="schedule" placeholder="Enter schedule details here"></textarea>
+                        <div class="schedule-interface">
+                            <div class="schedule-header">
+                                <h3><strong>Set the schedule for this new recreational area.</strong></h3>
+                            </div>
+                            <div class="schedule-form">
+                                <div class="form-group-inline">
+                                    <div class="form-group">
+                                        <label for="schedule-start-date">Start Date</label>
+                                        <input type="date" id="schedule-start-date" name="schedule-start-date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="schedule-end-date">End Date</label>
+                                        <input type="date" id="schedule-end-date" name="schedule-end-date" required>
+                                    </div>
+                                </div>
+                                <div class="form-group-inline">
+                                    <div class="form-group">
+                                        <label for="schedule-start-time">Opening Time</label>
+                                        <input type="time" id="schedule-start-time" name="schedule-start-time" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="schedule-end-time">Closing Time</label>
+                                        <input type="time" id="schedule-end-time" name="schedule-end-time" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="schedule-recurrence">Recurrence</label>
+                                    <select id="schedule-recurrence" name="schedule-recurrence" required>
+                                        <option value="daily">Daily</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+                                </div>
+                                <div class="schedule-options">
+                                </div>
+                            </div>
+                        </div>
                         <div class="error-message" id="schedule-error"></div>
                     </div>
                     <div class="button-container">
@@ -182,6 +276,7 @@
             }
 
             // Validate additional photos
+            
             const additionalPhotos = document.getElementById('additional-photos').files;
             for (let i = 0; i < additionalPhotos.length; i++) {
                 if (additionalPhotos[i].size > 2 * 1024 * 1024) {

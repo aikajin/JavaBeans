@@ -14,7 +14,7 @@
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
             
             <div class="nav-items">
-                <a href="/dash_admin" class="nav-item">
+                <a href="/dash_user" class="nav-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="7" height="7"></rect>
                         <rect x="14" y="3" width="7" height="7"></rect>
@@ -29,7 +29,7 @@
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                         <circle cx="12" cy="10" r="3"></circle>
                     </svg>
-                    <div>Areas Management</div>
+                    <div>Book a Facility</div>
                 </a>
                 
                 <a href="#" class="nav-item">
@@ -42,28 +42,12 @@
                     <div>Manage Bookings</div>
                 </a>
                 
-                <a href="/useracc_admin" class="nav-item">
+                <a href="/manage-profile" class="nav-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="17.44" height="17.04" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
-                    <div>User Accounts</div>
-                </a>
-
-                <a href="#" class="nav-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="20" x2="18" y2="10"></line>
-                        <line x1="12" y1="20" x2="12" y2="4"></line>
-                        <line x1="6" y1="20" x2="6" y2="14"></line>
-                    </svg>
-                    <div>Analytics</div>
-                </a>
-
-                <a href="#" class="nav-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    <div>Feedback</div>
+                    <div>Manage Profile</div>
                 </a>
                 
                 <div class="nav-divider"></div>
@@ -89,15 +73,15 @@
 
         <main class="main-content">
             <header class="header">
-                <p><a href="/recreational-areas-list"style="text-decoration: none; font-weight:bold;">Areas Management </a>/ View Recreational Area Details</p>
+                <p><a href="/recreationalAreasList-user"style="text-decoration: none; font-weight:bold;">Book a Facility </a>/ View Recreational Area Details</p>
             </header>
-            <h1 style="margin-bottom: 2rem;">Clubhouse</h1>
+            <h1 style="margin-bottom: 2rem;">Swimming Pool Area</h1>
             
             <section class="area-photos">
-                <img src="https://i.pinimg.com/736x/7e/ba/47/7eba4729dbca24a1378902ac01d93923.jpg" alt="Clubhouse" class="area-photo">
-                <img src="https://www.shutterstock.com/image-photo/orange-park-florida-usa-february-600nw-1649878960.jpg" alt="Clubhouse" class="area-photo">
-                <img src="https://st.hzcdn.com/simgs/pictures/family-rooms/clubhouse-design-designer-interiors-by-mary-olk-img~b811ccc9056b62eb_14-4052-1-91a464d.jpg" alt="Clubhouse" class="area-photo">
-                <img src="https://www.inidesignstudio.com/wp-content/uploads/2020/11/final-new-club-house-scaled.jpg" alt="Clubhouse" class="area-photo">
+                <img src="https://www.manilasouthwoods.com/images/lap.jpg" alt="Swimming Pool" class="area-photo">
+                <img src="https://media.istockphoto.com/id/157436924/photo/pool-with-a-view.jpg?s=612x612&w=0&k=20&c=V_3s6C-O0dPJvpDlwJgTa6_OsrY5kkH2oCTebpLPYf4=" alt="Swimming Pool" class="area-photo">
+                <img src="https://st.hzcdn.com/simgs/pictures/pools/the-community-pool-and-club-house-at-the-cottages-at-southport-nc-the-cottage-building-company-img~56e1ec1c04089dd2_4-7031-1-30483d3.jpg" alt="Swimming Pool" class="area-photo">
+                <img src="https://fosheearchitecture.com/wp-content/uploads/2017/06/The-Morgan-Amenity-Center-Pool-Looking-In.jpg" alt="Swimming Pool" class="area-photo">
             </section>
             <section class="area-guidelines2">
                 <h2>Guidelines</h2>
@@ -279,9 +263,7 @@
         }
 
         function showBookingDetails(date) {
-            const bookingList = 
-
- document.getElementById('booking-list');
+            const bookingList = document.getElementById('booking-list');
             bookingList.innerHTML = '';
 
             if (bookings[date]) {
