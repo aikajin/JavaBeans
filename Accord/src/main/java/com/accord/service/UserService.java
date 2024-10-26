@@ -97,16 +97,13 @@ public class UserService {
      * @param id - User ID
      */
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);  // Delete the user by ID from the repository
+        userRepository.deleteById(id);  
     }
-
-    // ================== END OF CRUD METHODS ==================
-
-    // Other service methods you already have
     public boolean sendPasswordResetEmail(User user) {
         String token = UUID.randomUUID().toString();  // Generate unique token
         String resetLink = "http://localhost:8080/forgotPassword_setPass?token=" + token;
-
+        user.setResetToken(token);  
+        userRepository.save(user);  
         MimeMessage message = mailSender.createMimeMessage();
 
         try {
@@ -138,15 +135,30 @@ public class UserService {
 
     public boolean resetPassword(String token, String newPassword) {
         Optional<User> userOptional = userRepository.findByResetToken(token);
-
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            user.setPassword(passwordEncoder.encode(newPassword));  // Update password
-            userRepository.save(user);  // Save the updated user
-            return true;  // Password reset successful
+        
+            user.setPassword(passwordEncoder.encode(newPassword));
+            user.setResetToken(null); // Clear the reset token after use
+            userRepository.save(user); 
+            return true; 
         }
+        return false; 
+    }
 
-        return false;  // Token is invalid or user not found
+    public Optional<User> findByResetToken(String resetToken) {
+        return userRepository.findByResetToken(resetToken);
+    }
+
+    public boolean checkPassword(User user, String password) {
+        return passwordEncoder.matches(password, user.getPassword());
+    }
+
+    public void updatePassword(User user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
+        // Save the user with the new password
+        // Assuming you have a UserRepository to save the updated user
+        userRepository.save(user);
     }
 
     public User registerUser(String name, String password, String email, String contactnumber, int block_num, int lot_num, String property_status,
