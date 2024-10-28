@@ -81,7 +81,7 @@ public class UserController {
 
     // View user details
     // View user details
-    @GetMapping("/view/{id}")
+    /*@GetMapping("/view/{id}")
     public String viewUserDetails(@PathVariable Long id, Model model) {
         Optional<User> userOptional = userService.getUserById(id);
         if (userOptional.isPresent()) {
@@ -97,7 +97,7 @@ public class UserController {
         } else {
             throw new RuntimeException("User not found");
         }
-    }
+    }*/
     
     private String formatBytes(long bytes) {
         if (bytes < 1024) return bytes + " B";

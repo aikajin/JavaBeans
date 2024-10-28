@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.accord.Entity.Area;
 import com.accord.Entity.User;
+import com.accord.service.AreaService;
 import com.accord.service.UserService;
 
 @Controller
@@ -24,6 +26,9 @@ public class RegisterLoginController {
 	
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private AreaService areaService;
 	
 	@GetMapping("/")
 	public String index() {
@@ -152,12 +157,16 @@ public class RegisterLoginController {
 	@GetMapping("/recreational-areas-list")
 	public String recreationalAreasList(Model model) {
 		// Add attributes to the model if needed for profile management
+		List<Area> areaList = areaService.getAllAreas();
+		model.addAttribute("areaList", areaList);
 		return "am_recreationalAreasList";
 	}
 
 	@GetMapping("/recreationalAreasList-user")
 	public String recreationalAreasListUser(Model model) {
 		// Add attributes to the model if needed for profile management
+		List<Area> areaList = areaService.getAllAreas();
+		model.addAttribute("areaList", areaList);
 		return "am_recreationalAreasList_user";
 	}
 
@@ -194,6 +203,8 @@ public class RegisterLoginController {
 	@GetMapping("/view-recreational-area-user")
 	public String recreationalSwmmingPoolUser(Model model) {
 		// Add attributes to the model if needed for profile management
+		List<Area> areaList = areaService.getAllAreas();
+		model.addAttribute("areaList", areaList);
 		return "view_recreational_area_user";
 	}
 
@@ -242,8 +253,16 @@ public class RegisterLoginController {
 	@GetMapping("/add_area")
 	public String addRecreationalArea(Model model) {
 		// Add attributes to the model if needed for profile management
+		model.addAttribute("area", new Area());
+		//areaService.createArea(area);
 		return "addNewRecreational_area";
 	}
+	
+	@PostMapping("/add-area")
+    public String addArea(Area area, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add) {
+        areaService.createArea(area, cover, add);
+        return "view_recreational_area";
+    }
 
 	@GetMapping("/modifyrec_admin")
 	public String modifyRecreationalArea(Model model) {

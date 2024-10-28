@@ -102,6 +102,22 @@
      
             <div id="view-content"></div>
             <div class="areas-grid">
+                <div class="area-column">
+                    <div th:each="area :${areaList}">
+                    <div class="area-card">
+                        <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
+                        <div class="area-details">
+                            <div class="area-name">
+                                <h3>[[${area.name}]]</h3>
+                            </div>
+                            <p class="area-guidelines">[[${area.guidelines}]]</p>
+                            <div class="area-actions">
+                                <a href="/view-recreational-area" class="view-details">View details →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
                 <!-- Area cards will be dynamically populated here -->
             </div>
         </main>
@@ -109,14 +125,7 @@
 
     <script>
         // Sample data for recreational areas
-        const areas = [
-            { name: "Swimming Pool Area", type: "Aquatic", guidelines: "No running, no diving in shallow areas", image: "images/pool 1.png", link: "/view-recreational-area-user" },
-            { name: "Basketball Court", type: "Sports", guidelines: "Proper footwear required", image: "images/basketballcourt.png", link: "/view-recre-area-basketball-user" },
-            { name: "Clubhouse", type: "Social", guidelines: "Reservations required for events", image: "images/clubhouse.jpg", link: "/view-recre-area-clubhouse-user" },
-            { name: "Covered Court", type: "Sports", guidelines: "Multi-purpose area for various activities", image: "images/coveredcourt.png", link: "/view-recre-area-coveredcourt-user" },
-            { name: "Hall", type: "Social", guidelines: "Available for community gatherings", image: "images/hall.png", link: "/view-recre-area-hall-user" },
-            { name: "Tennis Court", type: "Sports", guidelines: "Maximum 4 players per court", image: "images/tenniscourt.jpg", link: "/view-recre-area-tenniscourt-user" }
-        ];
+
 
         document.addEventListener('DOMContentLoaded', function() {
             renderAreas(areas);
