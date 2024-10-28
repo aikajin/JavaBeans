@@ -1,6 +1,7 @@
 package com.accord.controller;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,13 +10,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.accord.Entity.Area;
 import com.accord.Entity.User;
+import com.accord.service.AreaService;
 import com.accord.service.UserService;
 
 @Controller
@@ -24,6 +28,9 @@ public class RegisterLoginController {
 	
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private AreaService areaService;
 	
 	@GetMapping("/")
 	public String index() {
@@ -152,12 +159,16 @@ public class RegisterLoginController {
 	@GetMapping("/recreational-areas-list")
 	public String recreationalAreasList(Model model) {
 		// Add attributes to the model if needed for profile management
+		List<Area> areaList = areaService.getAllAreas();
+		model.addAttribute("areaList", areaList);
 		return "am_recreationalAreasList";
 	}
 
 	@GetMapping("/recreationalAreasList-user")
 	public String recreationalAreasListUser(Model model) {
 		// Add attributes to the model if needed for profile management
+		List<Area> areaList = areaService.getAllAreas();
+		model.addAttribute("areaList", areaList);
 		return "am_recreationalAreasList_user";
 	}
 
@@ -194,12 +205,16 @@ public class RegisterLoginController {
 	@GetMapping("/view-recreational-area-user")
 	public String recreationalSwmmingPoolUser(Model model) {
 		// Add attributes to the model if needed for profile management
+		List<Area> areaList = areaService.getAllAreas();
+		model.addAttribute("areaList", areaList);
 		return "view_recreational_area_user";
 	}
 
-	@GetMapping("/view-recreational-area")
-	public String viewRecreationalArea(Model model) {
+	@GetMapping("/view-recreational-area/{id}")
+	public String viewRecreationalArea(@PathVariable Long id, Model model) {
 		// Add attributes to the model if needed for profile management
+		Area area = areaService.getAreaById(id);
+		model.addAttribute("area", area);
 		return "view_recreational_area";
 	}
 
@@ -242,14 +257,38 @@ public class RegisterLoginController {
 	@GetMapping("/add_area")
 	public String addRecreationalArea(Model model) {
 		// Add attributes to the model if needed for profile management
+		model.addAttribute("area", new Area());
+		//areaService.createArea(area);
 		return "addNewRecreational_area";
 	}
+	
+	@PostMapping("/add-area")
+    public String addArea(Area area, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add) {
+        areaService.createArea(area, cover, add);
+        return "view_recreational_area";
+    }
 
-	@GetMapping("/modifyrec_admin")
-	public String modifyRecreationalArea(Model model) {
+	@GetMapping("/modifyrec_admin/{id}")
+	public String showModify(@PathVariable Long id, Model model) {
+		Area area = areaService.getAreaById(id);
+		model.addAttribute("area", area);
 		return "modifyDelete_area";
 	}
+	
+	@PostMapping("/modifyrec_admin/{id}")
+	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add, Model model) throws IOException {
+		//Area areaEdit = areaService.getAreaById(id);
+		areaService.createArea(area, cover, add);
+		model.addAttribute("area", area);
+		return "am_recreationalAreasList";
+	}
 
+	@GetMapping("/deletekungnaaymap/{id}")
+	public String deleteArea(@PathVariable Long id) {
+		areaService.deleteArea(id);
+		return "am_recreationalAreasList";
+	}
+	
 	// @GetMapping("/details")
 	// public String UserAcc_VIewDetails(Model model) {
 	// 	return "UserAccounts_viewDetails";

@@ -124,20 +124,24 @@
         </div>
      
         <div id="view-content"></div>
-        <div class="areas-grid">
+        <div class="areas-grid" >
             <div class="area-column">
+                <div th:each="area :${areaList}">
                 <div class="area-card">
-                    <img src="images/pool 1.png" alt="Swimming Pool Area" class="area-image">
+                    <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
                     <div class="area-details">
-                        <h3 class="area-name">Swimming Pool Area</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
+                        <div class="area-name">
+                            <h3>[[${area.name}]]</h3>
+                        </div>
+                        <p class="area-guidelines">[[${area.guidelines}]]</p>
                         <div class="area-actions">
-                            <a href="/modifyrec_admin" class="edit-btn">Edit</a>
-                            <a href="/view-recreational-area" class="view-details">View details →</a>
+                            <a th:href="@{/modifyrec_admin/{id}(id=${area.id})}" class="edit-btn">Edit</a>
+                            <a th:href="@{/view-recreational-area/{id}(id=${area.id})}" class="view-details">View details →</a>
                         </div>
                     </div>
                 </div>
-                </div>
+            </div>
+        </div>
                 
                 <div class="area-card">
                     <img src="images/basketballcourt.png" alt="Basketball Court" class="area-image">
@@ -198,8 +202,6 @@
                         </div>
                     </div>
                 </div>
-                </div>
-
    <script>
         document.querySelectorAll('.view-option').forEach((button) => {
             button.addEventListener('click', function() {

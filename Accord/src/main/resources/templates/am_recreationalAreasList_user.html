@@ -102,6 +102,22 @@
      
             <div id="view-content"></div>
             <div class="areas-grid">
+                <div class="area-column">
+                    <div th:each="area :${areaList}">
+                    <div class="area-card">
+                        <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
+                        <div class="area-details">
+                            <div class="area-name">
+                                <h3>[[${area.name}]]</h3>
+                            </div>
+                            <p class="area-guidelines">[[${area.guidelines}]]</p>
+                            <div class="area-actions">
+                                <a href="/view-recreational-area" class="view-details">View details →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
                 <!-- Area cards will be dynamically populated here -->
             </div>
         </main>
