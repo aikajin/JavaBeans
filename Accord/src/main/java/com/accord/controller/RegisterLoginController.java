@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.accord.Entity.User;
 import com.accord.service.UserService;
@@ -118,15 +119,15 @@ public class RegisterLoginController {
 		return "login_page"; // Return to login page if authentication fails
 	}
 
-    @GetMapping("/dash_user")
-    public String showDashboard() {
-        return "dashboard_user";
-    }
+	@GetMapping("/dash_user")
+	public String showDashboard() {
+		return "dashboard_user";
+	}
 	@GetMapping("/dash_admin")
-    public String showDashboardAdmin() {
-        return "dashboard_admin";
-    }
-    
+	public String showDashboardAdmin() {
+		return "dashboard_admin";
+	}
+	
 	@GetMapping("/dashboard_admin")
 	public String allUsers(@ModelAttribute("form") User form, Model model) {
 		List<User> users = userService.getAllUser();
@@ -135,11 +136,11 @@ public class RegisterLoginController {
 	}
 
 	@GetMapping("/forgotPassword_page")
-    public String showForgotPasswordPage(Model model) {
-        // Add "resetRequest" to the model for form binding
-        model.addAttribute("resetRequest", new User());
-        return "forgotPassword_page";
-    }
+	public String showForgotPasswordPage(Model model) {
+		// Add "resetRequest" to the model for form binding
+		model.addAttribute("resetRequest", new User());
+		return "forgotPassword_page";
+	}
 
 	
 	@GetMapping("/manage-profile")
@@ -257,46 +258,47 @@ public class RegisterLoginController {
 
 	@PostMapping("/forgotPassword_email")
 public String processForgotPassword(@ModelAttribute("resetRequest") User resetRequest, Model model) {
-    // Retrieve the User object based on the email
-    User user = userService.findByEmail(resetRequest.getEmail()).orElse(null);
-    
-    if (user != null) {
-        // Now pass the User object to sendPasswordResetEmail
-        boolean isEmailSent = userService.sendPasswordResetEmail(user);
-        
-        if (isEmailSent) {
-            model.addAttribute("message", "Password reset email sent successfully.");
-            return "forgotPassword_email";
-        } else {
-            model.addAttribute("error", "Failed to send password reset email. Please try again.");
-        }
-    } else {
-        model.addAttribute("error", "No user found with the provided email.");
-    }
-    
-    return "forgotPassword_page"; // Redirect back to the form in case of an error
+	// Retrieve the User object based on the email
+	User user = userService.findByEmail(resetRequest.getEmail()).orElse(null);
+	
+	if (user != null) {
+		// Now pass the User object to sendPasswordResetEmail
+		boolean isEmailSent = userService.sendPasswordResetEmail(user);
+		
+		if (isEmailSent) {
+			model.addAttribute("message", "Password reset email sent successfully.");
+			return "forgotPassword_email";
+		} else {
+			model.addAttribute("error", "Failed to send password reset email. Please try again.");
+		}
+	} else {
+		model.addAttribute("error", "No user found with the provided email.");
+	}
+	
+	return "forgotPassword_page"; // Redirect back to the form in case of an error
 }
 @GetMapping("/forgotPassword_setPass")
-public String showResetPasswordPage(Model model) {
-    // Add any required model attributes for the form, if needed
-    model.addAttribute("loginRequest", new User()); // Assuming User is needed for form binding
-    return "forgotPassword_setPass"; // This must match the name of your HTML file without ".html"
+public String showResetPasswordPage(@RequestParam("token") String token, Model model) {
+model.addAttribute("loginRequest", new User());
+model.addAttribute("token", token); // Add token to the model
+return "forgotPassword_setPass";
 }
-@PostMapping("/resetpassword")
-public String handlePasswordReset(
-    @RequestParam("token") String token, 
-    @RequestParam("password") String newPassword,
-    Model model) {
-    
-    // Validate the token again and reset the password
-    boolean isPasswordReset = userService.resetPassword(token, newPassword);
-    
-    if (isPasswordReset) {
-        model.addAttribute("message", "Password has been successfully reset.");
-        return "login_page"; // Redirect to login page after success
-    } else {
-        model.addAttribute("error", "Failed to reset password. The token might be invalid or expired.");
-        return "forgotPassword_setPass"; // Stay on the form if there's an error
-    }
+@PostMapping("/forgotPassword_setPass")
+public String setPassword(@RequestParam("token") String token,
+					  @RequestParam("newPassword") String newPassword,
+					  @RequestParam("confirmPassword") String confirmPassword,
+					  Model model) {
+if (!newPassword.equals(confirmPassword)) {
+	model.addAttribute("error", "Passwords do not match.");
+	return "forgotPassword_setPass"; 
+}
+
+boolean success = userService.resetPassword(token, newPassword);
+if (success) {
+	return "redirect:/?resetSuccess=true"; // Redirect to login page on success
+} else {
+	model.addAttribute("error", "An error occurred. Please try again.");
+	return "forgotPassword_setPass"; 
+}
 }
 }
