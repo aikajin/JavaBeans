@@ -135,13 +135,13 @@
                         </div>
                         <p class="area-guidelines">[[${area.guidelines}]]</p>
                         <div class="area-actions">
-                            <a href="/modifyrec_admin" class="edit-btn">Edit</a>
-                            <a href="/view-recreational-area" class="view-details">View details →</a>
+                            <a th:href="@{/modifyrec_admin/{id}(id=${area.id})}" class="edit-btn">Edit</a>
+                            <a th:href="@{/view-recreational-area/{id}(id=${area.id})}" class="view-details">View details →</a>
                         </div>
                     </div>
                 </div>
             </div>
-                </div>
+        </div>
                 
                 <div class="area-card">
                     <img src="images/basketballcourt.png" alt="Basketball Court" class="area-image">

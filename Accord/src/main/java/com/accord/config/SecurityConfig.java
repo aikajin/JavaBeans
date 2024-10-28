@@ -23,6 +23,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .cors(cors -> cors.disable())
             .authorizeRequests(req -> req
+                .requestMatchers("/css/**", "/images/**").permitAll()
                 .requestMatchers("/dashboard_user").hasRole("USER")
                 .requestMatchers("/dashboard_admin").hasRole("ADMIN")
                 .requestMatchers("/").permitAll())

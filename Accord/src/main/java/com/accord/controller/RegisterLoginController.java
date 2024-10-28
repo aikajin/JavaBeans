@@ -1,6 +1,7 @@
 package com.accord.controller;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -208,9 +210,11 @@ public class RegisterLoginController {
 		return "view_recreational_area_user";
 	}
 
-	@GetMapping("/view-recreational-area")
-	public String viewRecreationalArea(Model model) {
+	@GetMapping("/view-recreational-area/{id}")
+	public String viewRecreationalArea(@PathVariable Long id, Model model) {
 		// Add attributes to the model if needed for profile management
+		Area area = areaService.getAreaById(id);
+		model.addAttribute("area", area);
 		return "view_recreational_area";
 	}
 
@@ -264,11 +268,27 @@ public class RegisterLoginController {
         return "view_recreational_area";
     }
 
-	@GetMapping("/modifyrec_admin")
-	public String modifyRecreationalArea(Model model) {
+	@GetMapping("/modifyrec_admin/{id}")
+	public String showModify(@PathVariable Long id, Model model) {
+		Area area = areaService.getAreaById(id);
+		model.addAttribute("area", area);
 		return "modifyDelete_area";
 	}
+	
+	@PostMapping("/modifyrec_admin/{id}")
+	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add, Model model) throws IOException {
+		//Area areaEdit = areaService.getAreaById(id);
+		areaService.createArea(area, cover, add);
+		model.addAttribute("area", area);
+		return "am_recreationalAreasList";
+	}
 
+	@GetMapping("/deletekungnaaymap/{id}")
+	public String deleteArea(@PathVariable Long id) {
+		areaService.deleteArea(id);
+		return "am_recreationalAreasList";
+	}
+	
 	// @GetMapping("/details")
 	// public String UserAcc_VIewDetails(Model model) {
 	// 	return "UserAccounts_viewDetails";

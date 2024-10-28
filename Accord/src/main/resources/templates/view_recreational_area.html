@@ -86,28 +86,19 @@
                 </div>
             </div>
         </div>
-
         <main class="main-content">
+            <form th:action="@{/view-recreational-area/{id}(id=${area.id})}" method="get">
             <header class="header">
-                <p><a href="/recreational-areas-list"style="text-decoration: none; font-weight:bold;">Areas Management </a>/ View Recreational Area Details</p>
+                <p><a th:href="@{/recreational-areas-list}" style="text-decoration: none; font-weight:bold;">Areas Management </a>/ View Recreational Area Details</p>
             </header>
-            <h1 style="margin-bottom: 2rem;">Swimming Pool Area</h1>
+            <h1 style="margin-bottom: 2rem;" th:text="${area.name}"></h1>
             
             <section class="area-photos">
-                <img src="images/swim1.jpg" alt="Swimming Pool" class="area-photo">
-                <img src="images/swim2.jpg" alt="Swimming Pool" class="area-photo">
-                <img src="images/swim3.jpg" alt="Swimming Pool" class="area-photo">
-                <img src="images/swim4.jpg" alt="Swimming Pool" class="area-photo">
+                <img th:src="@{'data:image/*;base64,'+ ${area.generateBase64Cover()}}" alt="area" width="500" height="500" class="area-photo">
             </section>
             <section class="area-guidelines2">
                 <h2>Guidelines</h2>
-                <ul>
-                    <li>No running around the pool area</li>
-                    <li>No diving in shallow areas</li>
-                    <li>Children under 12 must be accompanied by an adult</li>
-                    <li>No food or drinks allowed in the pool</li>
-                    <li>Shower before entering the pool</li>
-                </ul>
+                <span th:text="${area.guidelines}"></span>
             </section>
             <div class="schedule-header" id="schedules">
             <h1 style="margin-bottom: 2rem;">Schedules</h1>
@@ -145,6 +136,7 @@
         <h3>Booking Details</h3>
         <ul id="booking-list"></ul>
     </div>
+</form>
     <script>
         // Sample booking data (replace with actual data from your backend)
         const bookings = {

@@ -71,6 +71,7 @@
 </head>
 <body>
     <div class="container">
+        <form th:action="@{/modifyrec_admin/{id}(id=${area.id})}" enctype="multipart/form-data" method="post" th:object="${area}">
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
             
@@ -156,24 +157,24 @@
                 <form id="add-area-form">
                     <div class="form-group">
                         <label for="area-name">Name of Recreational Area</label>
-                        <input type="text" id="area-name" name="area-name" required>
+                        <input type="text" id="area-name" name="area-name" th:field="*{name}" required>
                         <div class="error-message" id="area-name-error"></div>
                     </div>
                     <div class="form-group">
                         <label for="guidelines">Guidelines</label>
-                        <textarea id="guidelines" name="guidelines" required></textarea>
+                        <textarea id="guidelines" name="guidelines" th:field="*{guidelines}" required></textarea>
                         <div class="error-message" id="guidelines-error"></div>
                     </div>
                     <div class="form-group">
                         <label for="cover-photo">Cover Photo</label>
-                        <input type="file" id="cover-photo" name="cover-photo" accept=".png,.jpg,.jpeg" required>
+                        <input type="file" id="cover-photo" name="fileCover" accept=".png,.jpg,.jpeg" required>
                         <label for="cover-photo" class="file-upload-label">Choose Cover Photo</label>
                         <span class="file-name" id="cover-photo-name"></span>
                         <div class="error-message" id="cover-photo-error"></div>
                     </div>
                     <div class="form-group">
                         <label for="additional-photos">Additional Photos (optional)</label>
-                        <input type="file" id="additional-photos" name="additional-photos" accept=".png,.jpg,.jpeg" multiple>
+                        <input type="file" id="additional-photos" name="fileAdd" accept=".png,.jpg,.jpeg" multiple>
                         <label for="additional-photos" class="file-upload-label">Choose Additional Photos</label>
                         <span class="file-name" id="additional-photos-name"></span>
                         <div class="error-message" id="additional-photos-error"></div>
@@ -187,21 +188,21 @@
                                 <div class="form-group-inline">
                                     <div class="form-group">
                                         <label for="schedule-start-date">Start Date</label>
-                                        <input type="date" id="schedule-start-date" name="schedule-start-date" required>
+                                        <input type="date" id="schedule-start-date" name="schedule-start-date" th:field="*{startDate}" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="schedule-end-date">End Date</label>
-                                        <input type="date" id="schedule-end-date" name="schedule-end-date" required>
+                                        <input type="date" id="schedule-end-date" name="schedule-end-date" th:field="*{endDate}" required>
                                     </div>
                                 </div>
                                 <div class="form-group-inline">
                                     <div class="form-group">
                                         <label for="schedule-start-time">Opening Time</label>
-                                        <input type="time" id="schedule-start-time" name="schedule-start-time" required>
+                                        <input type="time" id="schedule-start-time" name="schedule-start-time" th:field="*{startTime}" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="schedule-end-time">Closing Time</label>
-                                        <input type="time" id="schedule-end-time" name="schedule-end-time" required>
+                                        <input type="time" id="schedule-end-time" name="schedule-end-time" th:field="*{endTime}" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -299,5 +300,6 @@
             document.getElementById('additional-photos-name').textContent = '';
         });
     </script>
+    </form>
 </body>
 </html>

@@ -2,8 +2,10 @@ package com.accord.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,9 +32,14 @@ public class AreaService {
         return areaRepository.save(area);
     }
 
+    public void deleteArea(Long id) {
+        areaRepository.deleteById(id);
+    }
     public List<Area> getAllAreas() {
-        return areaRepository.findAll();
+        return areaRepository.findAll(Sort.by("id").ascending());
     }
 
-
+    public Area getAreaById(Long id) {
+        return areaRepository.findById(id).orElse(null);
+    }
 }
