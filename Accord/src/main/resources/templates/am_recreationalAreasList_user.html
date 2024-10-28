@@ -102,7 +102,7 @@
      
             <div id="view-content"></div>
             <div class="areas-grid">
-                <div class="area-column">
+                
                     <div th:each="area :${areaList}">
                     <div class="area-card">
                         <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
@@ -112,79 +112,67 @@
                             </div>
                             <p class="area-guidelines">[[${area.guidelines}]]</p>
                             <div class="area-actions">
-                                <a href="/view-recreational-area" class="view-details">View details →</a>
+                                <a href="/view-recreational-area" class="view-detailsUser">View details →</a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            
                 <!-- Area cards will be dynamically populated here -->
             </div>
         </main>
     </div>
 
     <script>
-        // Sample data for recreational areas
-        const areas = [
-            { name: "Swimming Pool Area", type: "Aquatic", guidelines: "No running, no diving in shallow areas", image: "images/pool 1.png", link: "/view-recreational-area-user" },
-            { name: "Basketball Court", type: "Sports", guidelines: "Proper footwear required", image: "images/basketballcourt.png", link: "/view-recre-area-basketball-user" },
-            { name: "Clubhouse", type: "Social", guidelines: "Reservations required for events", image: "images/clubhouse.jpg", link: "/view-recre-area-clubhouse-user" },
-            { name: "Covered Court", type: "Sports", guidelines: "Multi-purpose area for various activities", image: "images/coveredcourt.png", link: "/view-recre-area-coveredcourt-user" },
-            { name: "Hall", type: "Social", guidelines: "Available for community gatherings", image: "images/hall.png", link: "/view-recre-area-hall-user" },
-            { name: "Tennis Court", type: "Sports", guidelines: "Maximum 4 players per court", image: "images/tenniscourt.jpg", link: "/view-recre-area-tenniscourt-user" }
-        ];
-
         document.addEventListener('DOMContentLoaded', function() {
-            renderAreas(areas);
-
             const searchInput = document.getElementById('searchInput');
-
-            searchInput.addEventListener('input', filterAreas);
-
+            const areasGrid = document.querySelector('.areas-grid');
+            const originalOrder = Array.from(document.querySelectorAll('.area-card'));
+            
+            searchInput.addEventListener('input', function() {
+                filterAreas(this.value.toLowerCase(), originalOrder, areasGrid);
+            });
+        
             document.querySelectorAll('.view-option').forEach((button) => {
                 button.addEventListener('click', function() {
                     document.querySelectorAll('.view-option').forEach(btn => btn.classList.remove('active'));
                     this.classList.add('active');
                 
                     if (this.dataset.view === 'grid') {
-                        document.querySelector('.areas-grid').style.display = 'grid';
+                        areasGrid.style.display = 'grid';
                     } else {
-                        document.querySelector('.areas-grid').style.display = 'none';
+                        areasGrid.style.display = 'none';
                     }
                 });
             });
         });
-
-        function renderAreas(areas) {
-            const grid = document.querySelector('.areas-grid');
-            grid.innerHTML = '';
-
-            areas.forEach(area => {
-                const areaCard = document.createElement('div');
-                areaCard.className = 'area-card';
-                areaCard.innerHTML = `
-                    <img src="${area.image}" alt="${area.name}" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">${area.name}</h3>
-                        <p class="area-guidelines">Guidelines: ${area.guidelines}</p>
-                        <div class="area-actions">
-                            <a href="${area.link}" class="view-details">View details →</a>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(areaCard);
+        
+        function filterAreas(searchValue, originalOrder, areasGrid) {
+            // Clear the grid
+            areasGrid.innerHTML = '';
+        
+            const matchingCards = originalOrder.filter(card => {
+                const areaName = card.querySelector('.area-name').textContent.toLowerCase();
+                return areaName.includes(searchValue);
             });
+        
+            if (matchingCards.length > 0) {
+                // Append matching cards back to the grid
+                matchingCards.forEach(card => {
+                    areasGrid.appendChild(card);
+                });
+            } else {
+                // Display a "No results found" message
+                const noResultsMessage = document.createElement('div');
+                noResultsMessage.textContent = 'No results found';
+                noResultsMessage.className = 'no-results-message';
+                areasGrid.appendChild(noResultsMessage);
+            }
+            // Update grid display
+            areasGrid.style.display = 'grid';
         }
-
-        function filterAreas() {
-            const searchValue = document.getElementById('searchInput').value.toLowerCase();
-
-            const filteredAreas = areas.filter(area => {
-                return area.name.toLowerCase().includes(searchValue);
-            });
-
-            renderAreas(filteredAreas);
-        }
-    </script>
+        </script>
+        
+              
 </body>
 </html>

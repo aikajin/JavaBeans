@@ -101,7 +101,7 @@
               
             </div>
             <div class="search-and-view">
-            <input type="text" placeholder="Search Area..." class="controls">
+                <input type="text" id="searchInput" placeholder="Search Area..." class="controls">
 
             <div class="view-options">
                 <button class="view-option active"data-view="grid">
@@ -125,7 +125,6 @@
      
         <div id="view-content"></div>
         <div class="areas-grid" >
-            <div class="area-column">
                 <div th:each="area :${areaList}">
                 <div class="area-card">
                     <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
@@ -141,83 +140,56 @@
                     </div>
                 </div>
             </div>
-        </div>
                 
-                <div class="area-card">
-                    <img src="images/basketballcourt.png" alt="Basketball Court" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Basketball Court</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <a href="/modifyrec_admin" class="edit-btn">Edit</a>
-                            <a href="/view-recre-area-basketball" class="view-details">View details →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="area-card">
-                    <img src="images/clubhouse.jpg" alt="Clubhouse" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Clubhouse</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <a href="/modifyrec_admin" class="edit-btn">Edit</a>
-                            <a href="/view-recre-area-clubhouse" class="view-details">View details →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="area-card">
-                    <img src="images/coveredcourt.png" alt="Covered Court" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Covered Court</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <a href="/modifyrec_admin" class="edit-btn">Edit</a>
-                            <a href="/view-recre-area-coveredcourt" class="view-details">View details →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="area-card">
-                    <img src="images/hall.png" alt="Hall" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Hall</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <a href="/modifyrec_admin" class="edit-btn">Edit</a>
-                            <a href="/view-recre-area-hall" class="view-details">View details →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="area-card">
-                    <img src="images/tenniscourt.jpg" alt="Tennis Court" class="area-image">
-                    <div class="area-details">
-                        <h3 class="area-name">Tennis Court</h3>
-                        <p class="area-guidelines">Guidelines: lorem ipsum lorem ipsum lorem ipsum</p>
-                        <div class="area-actions">
-                            <a href="/modifyrec_admin" class="edit-btn">Edit</a>
-                            <a href="/view-recre-area-tenniscourt" class="view-details">View details →</a>
-                        </div>
-                    </div>
-                </div>
-   <script>
-        document.querySelectorAll('.view-option').forEach((button) => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.view-option').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const searchInput = document.getElementById('searchInput');
+                    const areasGrid = document.querySelector('.areas-grid');
+                    const originalOrder = Array.from(document.querySelectorAll('.area-card'));
+                    
+                    searchInput.addEventListener('input', function() {
+                        filterAreas(this.value.toLowerCase(), originalOrder, areasGrid);
+                    });
             
-                const viewContent = document.getElementById('view-content');
-                if (this.dataset.view === 'grid') {
-                    
-                    document.querySelector('.areas-grid').style.display = 'grid';
-                } else {
-                    
-                    document.querySelector('.areas-grid').style.display = 'none';
-                }
-            });
-        });
-    </script>
+                    document.querySelectorAll('.view-option').forEach((button) => {
+                        button.addEventListener('click', function() {
+                            document.querySelectorAll('.view-option').forEach(btn => btn.classList.remove('active'));
+                            this.classList.add('active');
+                        
+                            if (this.dataset.view === 'grid') {
+                                areasGrid.style.display = 'grid';
+                            } else {
+                                areasGrid.style.display = 'none';
+                            }
+                        });
+                    });
+            
+                    function filterAreas(searchValue, originalOrder, areasGrid) {
+                        // Clear the grid
+                        areasGrid.innerHTML = '';
+            
+                        const matchingCards = originalOrder.filter(card => {
+                            const areaName = card.querySelector('.area-name').textContent.toLowerCase();
+                            return areaName.includes(searchValue);
+                        });
+            
+                        if (matchingCards.length > 0) {
+                            // Append matching cards back to the grid
+                            matchingCards.forEach(card => {
+                                areasGrid.appendChild(card);
+                            });
+                        } else {
+                            // Display a "No results found" message
+                            const noResultsMessage = document.createElement('div');
+                            noResultsMessage.textContent = 'No results found';
+                            noResultsMessage.className = 'no-results-message';
+                            areasGrid.appendChild(noResultsMessage);
+                        }
+            
+                        // Update grid display
+                        areasGrid.style.display = 'grid';
+                    }
+                });
+                </script>
 </body>
 </html>
