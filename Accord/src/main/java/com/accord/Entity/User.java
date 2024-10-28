@@ -1,5 +1,7 @@
 package com.accord.Entity;
 
+import org.apache.tomcat.util.codec.binary.Base64;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -45,25 +47,32 @@ public class User {
 
 	private String tenancy_type;
 	@Lob
-	@Column(length = 1999999999)
+	@Column(length = 2139999999)
 	private byte[] tenancy_document;
 
 	private String id_name;
 
 	private String id_type;
 	@Lob
-	@Column(length = 1999999999)
+	@Column(length = 2139999999)
 	private byte[] id_document;
 
 	private String role;
 
 	@Lob
-	@Column(length = 1999999999)
+	@Column(length = 2139999999)
 	private byte[] profile_picture;
 
 	private String profile_name;
 
 	private String profile_type;
+
 	private String resetToken;
 	
+	public String generateBase64Tenancy() {
+		return Base64.encodeBase64String(this.tenancy_document);
+	}
+	public String generateBase64ValidId() {
+		return Base64.encodeBase64String(this.id_document);
+	}
 }
