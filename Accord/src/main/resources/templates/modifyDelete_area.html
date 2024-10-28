@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modify Recreational Area</title>
-    <link rel="icon" href="images/logoHead.png" type="image/png">
+    <link rel="icon" href="/images/logoHead.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <style>
         .schedule-interface {
             font-family: 'Lexend', sans-serif;
@@ -71,9 +71,9 @@
 </head>
 <body>
     <div class="container">
-        <form th:action="@{/modifyrec_admin/{id}(id=${area.id})}" enctype="multipart/form-data" method="post" th:object="${area}">
+        <form th:action="@{/modifyrec_admin/{id}(id=${area.id})}" enctype="multipart/form-data" method="post" th:object="${area}" style="display: flex; height: 100vh; width: 100vw;">
         <div class="sidebar">
-            <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
+            <img class="logo" style="width: 262px; height: 56px;" src="/images/logo.png" alt="Logo" />
             
             <div class="nav-items">
                 <a href="/dash_admin" class="nav-item">
@@ -211,7 +211,6 @@
                                         <option value="daily">Daily</option>
                                         <option value="weekly">Weekly</option>
                                         <option value="monthly">Monthly</option>
-                                        <option value="custom">Custom</option>
                                     </select>
                                 </div>
                                 <div class="schedule-options">
@@ -222,7 +221,8 @@
                     </div>
                     <div class="button-container">
                     <div class="button-group">
-                    <button type="submit" class="submit-btn">Add Recreational Area</button>
+                    <button type="submit" class="submit-btn">Modify</button>
+                    <button type="delete" class="delete-btn2">Delete</button>
                     </div>
                     </div>
                 </form>
