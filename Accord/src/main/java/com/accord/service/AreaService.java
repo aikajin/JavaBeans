@@ -31,7 +31,16 @@ public class AreaService {
         }
         return areaRepository.save(area);
     }
-
+    public Area createArea2(Area area, MultipartFile cover) {
+        try {
+            area.setCoverDocument(cover.getBytes());
+            area.setCoverName(cover.getOriginalFilename());
+            area.setCoverType(cover.getContentType());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return areaRepository.save(area);
+    }
     public void deleteArea(Long id) {
         areaRepository.deleteById(id);
     }

@@ -188,7 +188,7 @@
                                 <div class="form-group-inline">
                                     <div class="form-group">
                                         <label for="schedule-start-date">Start Date</label>
-                                        <input type="date" id="schedule-start-date" name="schedule-start-date" th:field="*{startDate}" required>
+                                        <input type="date" id="schedule-start-date" name="schedule-start-date" th:placeholder="${area.startDate}" th:field="*{startDate}" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="schedule-end-date">End Date</label>
@@ -198,7 +198,7 @@
                                 <div class="form-group-inline">
                                     <div class="form-group">
                                         <label for="schedule-start-time">Opening Time</label>
-                                        <input type="time" id="schedule-start-time" name="schedule-start-time" th:field="*{startTime}" required>
+                                        <input type="time" id="schedule-start-time" name="schedule-start-time"  th:field="*{startTime}" value ="area.startTime" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="schedule-end-time">Closing Time</label>
@@ -222,7 +222,7 @@
                     <div class="button-container">
                     <div class="button-group">
                     <button type="submit" class="submit-btn">Modify</button>
-                    <button type="delete" class="delete-btn2">Delete</button>
+                    <a th:href="@{/deleteArea/{id}(id=${area.id})}"class="delete-btn2">Delete</a>
                     </div>
                     </div>
                 </form>
@@ -230,76 +230,30 @@
             </div>
         </main>
     </div>
-    <script>
-        document.getElementById('cover-photo').addEventListener('change', function(e) {
-            const fileName = e.target.files[0]?.name || 'No file chosen';
-            document.getElementById('cover-photo-name').textContent = fileName;
-        });
-
-        document.getElementById('additional-photos').addEventListener('change', function(e) {
-            const fileCount = e.target.files.length;
-            const message = fileCount > 0 ? `${fileCount} file(s) selected` : 'No files chosen';
-            document.getElementById('additional-photos-name').textContent = message;
-        });
-
-        document.getElementById('add-area-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Reset error messages
-            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-            
-            
-            let hasError = false;
-
-            // Validate area name
-            const areaName = document.getElementById('area-name').value.trim();
-            if (!areaName) {
-                document.getElementById('area-name-error').textContent = 'Area name is required';
-                hasError = true;
-            }
-
-            // Validate guidelines
-            const guidelines = document.getElementById('guidelines').value.trim();
-            if (!guidelines) {
-                document.getElementById('guidelines-error').textContent = 'Guidelines are required';
-                hasError = true;
-            }
-
-            // Validate cover photo
-            const coverPhoto = document.getElementById('cover-photo').files[0];
-            if (!coverPhoto) {
-                document.getElementById('cover-photo-error').textContent = 'Cover photo is required';
-                hasError = true;
-            } else if (coverPhoto.size > 2 * 1024 * 1024) {
-                document.getElementById('cover-photo-error').textContent = 'Cover photo must be less than 2MB';
-                hasError = true;
-            }
-
-            // Validate additional photos
-            
-            const additionalPhotos = document.getElementById('additional-photos').files;
-            for (let i = 0; i < additionalPhotos.length; i++) {
-                if (additionalPhotos[i].size > 2 * 1024 * 1024) {
-                    document.getElementById('additional-photos-error').textContent = 'Each additional photo must be less than 2MB';
-                    hasError = true;
-                    break;
-                }
-            }
-
-            if (hasError) {
-                return;
-            }
-
-            // If all validations pass, you would typically send this data to a server
-            // For this example, we'll just show a success message
-            document.getElementById('success-message').textContent = 'Recreational area added successfully!';
-
-            // Reset the form
-            e.target.reset();
-            document.getElementById('cover-photo-name').textContent = '';
-            document.getElementById('additional-photos-name').textContent = '';
-        });
-    </script>
+    <div id="deleteModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Confirm Deletion</h2>
+            <p>Are you sure you want to delete this recreational area? This action cannot be undone.</p>
+            <button id="confirmDelete"><a th:href="@{/deleteArea/{id}(id=${area.id})}"></a>Yes, Delete</button>
+            <button id="cancelDelete">Cancel</button>
+        </div>
+    </div>
     </form>
+    <script>
+
+function fetchAreas() {
+    fetch('/areas/list')  // Ensure this endpoint returns areas in JSON format
+        .then(response => response.json())
+        .then(areas => {
+            renderAreas(areas);
+        })
+        .catch(error => console.error('Error fetching areas:', error));
+}
+
+    function deleteArea(userId) {
+        if (confirm('Are you sure you want to delete this area?')) {
+            window.location.href = `/areas/delete/${userId}`;
+        }
+    }</script>
 </body>
 </html>

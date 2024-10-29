@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.accord.Entity.Area;
 import com.accord.Entity.User;
@@ -278,16 +279,30 @@ public class RegisterLoginController {
 	@PostMapping("/modifyrec_admin/{id}")
 	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add, Model model) throws IOException {
 		//Area areaEdit = areaService.getAreaById(id);
-		areaService.createArea(area, cover, add);
+		if(add.isEmpty()) {
+			areaService.createArea(area, cover, add);
+		}
+		else {
+			areaService.createArea2(area, cover);
+		}
 		model.addAttribute("area", area);
 		return "am_recreationalAreasList";
 	}
 
-	@GetMapping("/deletekungnaaymap/{id}")
-	public String deleteArea(@PathVariable Long id) {
+	/*@GetMapping("/deleteArea/{id}")
+	public String deleteArea(@PathVariable Long id, Model model) {
+		model.addAttribute("delete", "Are you sure you would like to delete this area?");
 		areaService.deleteArea(id);
+		
 		return "am_recreationalAreasList";
-	}
+	}*/
+
+	@GetMapping("/deleteArea/{id}")
+    public RedirectView deleteArea(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        areaService.deleteArea(id);
+        redirectAttributes.addFlashAttribute("message", "Area deleted successfully");
+        return new RedirectView("/recreational-areas-list", true);
+    }
 	
 	// @GetMapping("/details")
 	// public String UserAcc_VIewDetails(Model model) {
