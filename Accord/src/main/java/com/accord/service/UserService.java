@@ -99,6 +99,11 @@ public class UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);  
     }
+
+    public void deleteArea(Long id) {
+        userRepository.deleteById(id);  
+    }
+
     public boolean sendPasswordResetEmail(User user) {
         String token = UUID.randomUUID().toString();  // Generate unique token
         String resetLink = "http://localhost:8080/forgotPassword_setPass?token=" + token;
