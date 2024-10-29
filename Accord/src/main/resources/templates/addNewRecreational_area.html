@@ -6,72 +6,11 @@
     <title>Add New Recreational Area</title>
     <link rel="icon" href="images/logoHead.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* New styles for the schedule interface */
-        .schedule-interface {
-            font-family: 'Lexend', sans-serif;
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 24px;
-            max-width: 600px;
-            margin: 20px 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .schedule-header {
-            margin-bottom: 20px;
-        }
-        .schedule-header h2 {
-            font-size: 1.5rem;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .schedule-header p {
-            font-size: 0.9rem;
-            color: #666;
-        }
-        .schedule-form {
-            display: grid;
-            gap: 16px;
-        }
-        .schedule-form .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .schedule-form .form-group label {
-            font-size: 14px;
-            color: #495057;
-            margin-bottom: 5px;
-        }
-        .schedule-form .form-group input,
-        .schedule-form .form-group select {
-            font-family: 'Lexend', sans-serif;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ced4da;
-            font-size: 14px;
-            color: #495057;
-        }
-        .form-group-inline {
-            display: flex;
-            gap: 16px;
-        }
-        .form-group-inline > * {
-            flex: 1;
-        }
-        .schedule-options {
-            display: flex;
-            align-items: center;
-        }
-        .schedule-options label {
-            font-size: 14px;
-            color: #495057;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <div class="container">
-        <form method="post" enctype="multipart/form-data" action="/add-area" th:object="${area}">
+        <form method="post" enctype="multipart/form-data" action="/add-area" th:object="${area}"style="display: flex; height: 100vh; width: 100vw;">
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
             
@@ -169,22 +108,19 @@
                         <label for="cover-photo">Cover Photo</label>
                         <input type="file" id="cover-photo" name="fileCover" accept=".png,.jpg,.jpeg" required>
                         <label for="cover-photo" class="file-upload-label">Choose Cover Photo</label>
-                        <span class="file-name" id="cover-photo-name"></span>
+                        <span class="file-name" id="cover-photo-name" style="color: #646464;"></span>
                         <div class="error-message" id="cover-photo-error"></div>
                     </div>
                     <div class="form-group">
                         <label for="additional-photos">Additional Photos (optional)</label>
                         <input type="file" id="additional-photos" name="fileAdd" accept=".png,.jpg,.jpeg" multiple>
                         <label for="additional-photos" class="file-upload-label">Choose Additional Photos</label>
-                        <span class="file-name" id="additional-photos-name"></span>
+                        <span class="file-name" id="additional-photos-name" style="color: #646464;"></span>
                         <div class="error-message" id="additional-photos-error"></div>
                     </div>
                     <div class="form-group">
-                        <label for="schedule">Schedule</label>
+                        <label for="schedule">Set Available Schedule</label>
                         <div class="schedule-interface">
-                            <div class="schedule-header">
-                                <h3><strong>Set the schedule for this new recreational area.</strong></h3>
-                            </div>
                             <div class="schedule-form">
                                 <div class="form-group-inline">
                                     <div class="form-group">
@@ -212,7 +148,6 @@
                                         <option value="daily">Daily</option>
                                         <option value="weekly">Weekly</option>
                                         <option value="monthly">Monthly</option>
-                                        <option value="custom">Custom</option>
                                     </select>
                                 </div>
                                 <div class="schedule-options">
