@@ -157,6 +157,18 @@ public class RegisterLoginController {
 		return "manage_profile";
 	}
 
+	@GetMapping("/manage-bookings")
+	public String manageBookingsUser(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "managebookingsUser";
+	}
+
+	@GetMapping("/view-booking-details")
+	public String viewBookingsDetails(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "viewbookingdetails_user";
+	}
+
 	@GetMapping("/recreational-areas-list")
 	public String recreationalAreasList(Model model) {
 		// Add attributes to the model if needed for profile management
