@@ -163,6 +163,12 @@ public class RegisterLoginController {
 		return "managebookingsUser";
 	}
 
+	@GetMapping("/manage-bookings-admin")
+	public String manageBookingsAdmin(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "managebookingsAdmin";
+	}
+
 	@GetMapping("/view-booking-details")
 	public String viewBookingsDetails(Model model) {
 		// Add attributes to the model if needed for profile management
