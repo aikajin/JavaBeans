@@ -30,7 +30,8 @@ public class Area {
     private Long id;
 
     private String name;
-
+    @Lob
+    @Column(length = 16777215)
     private String guidelines;
 
     private LocalDate startDate;
