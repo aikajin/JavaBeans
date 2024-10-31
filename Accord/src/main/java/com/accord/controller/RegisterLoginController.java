@@ -151,31 +151,31 @@ public class RegisterLoginController {
 	}
 
 	
-	@GetMapping("/manage-profile")
+	@GetMapping("/profile")
 	public String manageProfile(Model model) {
 		// Add attributes to the model if needed for profile management
 		return "manage_profile";
 	}
 
-	@GetMapping("/manage-bookings")
+	@GetMapping("/mb-user")
 	public String manageBookingsUser(Model model) {
 		// Add attributes to the model if needed for profile management
 		return "managebookingsUser";
 	}
 
-	@GetMapping("/manage-bookings-admin")
+	@GetMapping("/mb-admin")
 	public String manageBookingsAdmin(Model model) {
 		// Add attributes to the model if needed for profile management
 		return "managebookingsAdmin";
 	}
 
-	@GetMapping("/view-booking-details")
+	@GetMapping("/bookings")
 	public String viewBookingsDetails(Model model) {
 		// Add attributes to the model if needed for profile management
 		return "viewbookingdetails_user";
 	}
 
-	@GetMapping("/recreational-areas-list")
+	@GetMapping("/areas-admin")
 	public String recreationalAreasList(Model model) {
 		// Add attributes to the model if needed for profile management
 		List<Area> areaList = areaService.getAllAreas();
@@ -183,7 +183,7 @@ public class RegisterLoginController {
 		return "am_recreationalAreasList";
 	}
 
-	@GetMapping("/recreationalAreasList-user")
+	@GetMapping("/areas-user")
 	public String recreationalAreasListUser(Model model) {
 		// Add attributes to the model if needed for profile management
 		List<Area> areaList = areaService.getAllAreas();
@@ -267,7 +267,7 @@ public class RegisterLoginController {
 		return "view_recre_area_tenniscourt";
 	}
 
-	@GetMapping("/useracc_admin")
+	@GetMapping("/accounts")
 	public String UserAccountsAdmin(Model model) {
 		// Add attributes to the model if needed for profile management
 		return "UserAccounts_page";
