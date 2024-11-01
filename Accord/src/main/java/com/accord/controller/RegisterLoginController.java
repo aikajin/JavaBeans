@@ -1,7 +1,6 @@
 package com.accord.controller;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -215,13 +214,14 @@ public class RegisterLoginController {
 		return "view_recre_area_tenniscourt_user";
 	}
 
-	@GetMapping("/view-recreational-area-user")
-	public String recreationalSwmmingPoolUser(Model model) {
-		// Add attributes to the model if needed for profile management
-		List<Area> areaList = areaService.getAllAreas();
-		model.addAttribute("areaList", areaList);
-		return "view_recreational_area_user";
-	}
+	@GetMapping("/view-recreational-area-user/{id}")
+public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model model) {
+    // Add attributes to the model for profile management
+    Area area = areaService.getAreaById(id);
+    model.addAttribute("area", area);
+    return "view_recreational_area_user";
+}
+
 
 	@GetMapping("/view-recreational-area/{id}")
 	public String viewRecreationalArea(@PathVariable Long id, Model model) {
