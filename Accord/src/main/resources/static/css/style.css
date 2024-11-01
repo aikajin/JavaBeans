@@ -874,6 +874,15 @@ h1 {
   border-radius: 5px;
 }
 
+.schedule-item span:first-child {
+  color: #333;
+  font-size: 14px;
+}
+
+.schedule-item.not-available {
+  background-color: #FFEEEE; /* Light red background for the entire row */
+}
+
 .schedule-item.available {
   background-color: rgba(76, 175, 80, 0.1);
   border: 1px solid var(--available-color);
@@ -892,8 +901,26 @@ h1 {
 }
 
 .schedule-item-status.available {
-  background-color: var(--available-color);
-  color: rgb(6, 108, 21);
+  background-color: #4CAF50; /* Darker green background */
+  color: white; /* White text */
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.schedule-item-status.available:hover {
+  background-color: #45a049; /* Slightly darker green on hover */
+}
+
+.schedule-item-status.not-available {
+  background-color: transparent; /* Remove background color */
+  color: #FF0000; /* Red text color */
+  padding: 4px 0; /* Remove horizontal padding */
+  border-radius: 0; /* Remove border radius */
+  font-size: 14px;
+  font-weight: normal; /* Remove bold font weight */
 }
 
 .schedule-item-status.booked {
@@ -914,15 +941,22 @@ h1 {
   margin-bottom: 1rem;
 }
 
+.day-of-week {
+  font-weight: bold;
+  background-color: #f8f8f8;
+  border: none;
+}
+
 .calendar-day {
   aspect-ratio: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border-color);
+  font-size: 0.9em;
+  border: 1px solid #e0e0e0;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .calendar-day.available {
@@ -938,8 +972,9 @@ h1 {
 }
 
 .calendar-day.today {
+  background-color: #FF5916;
+  color: white;
   font-weight: bold;
-  border: 2px solid var(--primary-color);
 }
 
 .booking-details {
