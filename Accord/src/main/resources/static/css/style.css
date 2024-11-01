@@ -100,6 +100,32 @@ body.recreational-areas-list {
   border: 2px solid #FF5916;
 }
 
+.btn-view, .btn-delete {
+  padding: 6px 12px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.btn-view {
+  background-color: #FF5916;
+  color: white;
+  text-decoration: none;
+}
+.btn-view:hover {
+  background-color: #e64d14;
+}
+.btn-delete {
+  background-color: #e74c3c;
+  color: white;
+}
+.btn-delete:hover {
+  background-color: #c0392b;
+}
+
 input::placeholder {
   font-weight: 300;
   color: #aaaeb3;
