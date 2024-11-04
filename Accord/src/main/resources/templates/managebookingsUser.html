@@ -23,7 +23,7 @@
                     <div>Dashboard</div>
                 </a>
                 
-                <a href="/recreationalAreasList-user" class="nav-item">
+                <a href="/areas-user" class="nav-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                         <circle cx="12" cy="10" r="3"></circle>
@@ -41,7 +41,7 @@
                     <div>Manage Bookings</div>
                 </a>
                 
-                <a href="/manage-profile" class="nav-item">
+                <a href="/profile" class="nav-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="17.44" height="17.04" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
@@ -77,11 +77,26 @@
             <p class="subtitle">Track your bookings and explore available amenities.</p>
         </div>
         <div class="controls">
-            <div class="search-bar">
-                <input type="text" placeholder="Search bookings..." style="width: 300px;">
-            </div>
+            
         </div>
         <div class="table-container">
+            <h2>Active bookings</h2>
+            <div class="search-and-view">
+            <div class="search-bar2"><input type="text" placeholder="Search bookings..." style="width: 300px;"> </div>
+            
+                <div class="filter-controls">
+                    <select class="filter-select">
+                        <option value="">Filter by Status</option>
+                        <option value="completed">Completed</option>
+                        <option value="canceled">Canceled</option>
+                    </select>
+                    <select class="filter-select">
+                        <option value="">Sort by Date</option>
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                    </select>
+                    </div>
+                    </div>
             <table class="activities-table">
                 <thead>
                     <tr>
@@ -109,8 +124,61 @@
                         </td>
                     </tr>
                 </tbody>
-            </table>
-        </div>
+                </table>
+                </div>
+                <div class="table-container">
+                    
+                        <div class="search-and-view"><h2>Booking History</h2>
+                        <div class="filter-controls">
+                            <select class="filter-select">
+                                <option value="">Filter by Status</option>
+                                <option value="completed">Completed</option>
+                                <option value="canceled">Canceled</option>
+                            </select>
+                            <select class="filter-select">
+                                <option value="">Sort by Date</option>
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                            </select>
+                            </div>
+                        
+                    </div>
+                    <table class="activities-table">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Area</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ACR-223390</td>
+                                <td>
+                                    <div class="avatar-container">
+                                        Swimming Pool
+                                    </div>
+                                </td>
+                                <td>Oct 25, 2023</td>
+                                <td>10:00 AM - 11:00 AM</td>
+                                <td><span class="status-badge completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>ACR-223385</td>
+                                <td>
+                                    <div class="avatar-container">
+                                        Tennis Court B
+                                    </div>
+                                </td>
+                                <td>Oct 20, 2023</td>
+                                <td>2:00 PM - 4:00 PM</td>
+                                <td><span class="status-badge canceled">Canceled</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
         <div class="pagination">
             <button disabled>&lt; Previous</button>
             <button class="active">1</button>
