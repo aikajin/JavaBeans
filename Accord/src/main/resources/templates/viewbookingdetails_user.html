@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Booking Details</title>
+    <link rel="icon" href="images/logoHead.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
+            <div class="nav-items">
+                <a href="/dash_user" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <div>Dashboard</div>
+                </a>
+                
+                <a href="/recreationalAreasList-user" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <div>Book a Facility</div>
+                </a>
+                
+                <a href="#" class="nav-item active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <div>Manage Bookings</div>
+                </a>
+                
+                <a href="/manage-profile" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.44" height="17.04" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <div>Manage Profile</div>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="/" class="logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <div>Log out</div>
+                </a> 
+            </div>
+            
+            <div class="profile">
+                <div class="profile-pic">JD</div>
+                <div class="profile-info">
+                    <div class="profile-name">John Doe</div>
+                    <div class="profile-role">Homeowner</div>
+                </div>
+            </div>
+        </div>
+        <main class="main-content">
+            <header class="header">
+                <p><a th:href="@{/manage-bookings}" style="text-decoration: none; font-weight:bold;">Manage Bookings</a>/ View Booking Details</p>
+            </header>    
+        <div class="user-details">
+            <div class="area-photos-container">
+                <div class="area-photos">
+                    <img src="/images/hall.png" alt="Tennis Court Exterior" class="area-photos active">
+                    <img src="/images/clubhouse.jpg" alt="Tennis Court Interior" class="area-photo2">
+                    <img src="/images/pool 1.png" alt="Tennis Court Facilities" class="area-photo2">
+                </div>
+                <button class="nav-button prev" onclick="changeImage(-1)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <button class="nav-button next" onclick="changeImage(1)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+                <div class="image-dots"></div>
+            </div>
+
+            <div class="info-section">
+                <h1>Tennis Court A</h1>
+                <div class="info-grid">
+                    <div>
+                        <p><strong>Date:</strong> November 1, 2024</p>
+                        <p><strong>Time:</strong> 2:00 PM - 4:00 PM</p>
+                    </div>
+                    <div>
+                        <p><strong>Booking ID:</strong> ACR-223398</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="area-guidelines2">
+                <h3>Guidelines</h3>
+                <ul>
+                    <li>Please arrive 10 minutes before your scheduled time</li>
+                    <li>Proper tennis attire is required</li>
+                    <li>Bring your own racket and tennis balls</li>
+                    <li>Maximum of 4 players allowed per court</li>
+                    <li>Please maintain cleanliness of the court</li>
+                </ul>
+            </div>
+
+            <div class="button-container">
+                <button class="delete-btn2" onclick="showDeleteConfirmation()">
+                    Cancel Booking
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h2>Delete Booking</h2>
+        <p>Are you sure you want to delete this booking? This action cannot be undone.</p>
+        <div class="modal-buttons">
+            <button id="confirmDelete" class="modal-button">Yes, Delete</button>
+            <button id="cancelDelete" class="modal-button" onclick="hideDeleteConfirmation()">No, Keep</button>
+        </div>
+    </div>
+        </div>
+
+        <script>
+        let currentImageIndex = 0;
+        const images = document.querySelectorAll('.area-photo');
+        const dotsContainer = document.querySelector('.image-dots');
+
+        // Create dots based on the number of images
+        images.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            dot.onclick = () => showImage(index);
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function showImage(index) {
+            if (index >= images.length) {
+                currentImageIndex = 0;
+            } else if (index < 0) {
+                currentImageIndex = images.length - 1;
+            } else {
+                currentImageIndex = index;
+            }
+
+            images.forEach((img, i) => {
+                img.classList.toggle('active', i === currentImageIndex);
+            });
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentImageIndex);
+            });
+        }
+
+        function changeImage(direction) {
+            showImage(currentImageIndex + direction);
+        }
+
+        // Initialize the first image and dot
+        showImage(0);
+    </script>
+</body>
+</html>

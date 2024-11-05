@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Bookings</title>
+    <link rel="icon" href="images/logoHead.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
+            <div class="nav-items">
+                <a href="/dash_user" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <div>Dashboard</div>
+                </a>
+                
+                <a href="/areas-user" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <div>Book a Facility</div>
+                </a>
+                
+                <a href="#" class="nav-item active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <div>Manage Bookings</div>
+                </a>
+                
+                <a href="/profile" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.44" height="17.04" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <div>Manage Profile</div>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="/" class="logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <div>Log out</div>
+                </a> 
+            </div>
+            
+            <div class="profile">
+                <div class="profile-pic">JD</div>
+                <div class="profile-info">
+                    <div class="profile-name">John Doe</div>
+                    <div class="profile-role">Homeowner</div>
+                </div>
+            </div>
+        </div>
+        
+    <div class="main-content">
+            
+        <div class="header">
+            <h1>My Bookings</h1>
+            <p class="subtitle">Track your bookings and explore available amenities.</p>
+        </div>
+        <div class="controls">
+            
+        </div>
+        <div class="table-container">
+            <h2>Active bookings</h2>
+            <div class="search-and-view">
+            <div class="search-bar2"><input type="text" placeholder="Search bookings..." style="width: 300px;"> </div>
+            
+                <div class="filter-controls">
+                    <select class="filter-select">
+                        <option value="">Filter by Status</option>
+                        <option value="completed">Completed</option>
+                        <option value="canceled">Canceled</option>
+                    </select>
+                    <select class="filter-select">
+                        <option value="">Sort by Date</option>
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                    </select>
+                    </div>
+                    </div>
+            <table class="activities-table">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Area</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            ACR-223398
+                        </td>
+                        <td>
+                            <div class="avatar-container">
+                                Tennis Court A
+                            </div>
+                        </td>
+                        <td>Nov 1, 2024</td>
+                        <td>2:00 PM - 4:00 PM</td>
+                        <td>
+                            <a href="/view-booking-details" class="view-button">View</a>
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+                </div>
+                <div class="table-container">
+                    
+                        <div class="search-and-view"><h2>Booking History</h2>
+                        <div class="filter-controls">
+                            <select class="filter-select">
+                                <option value="">Filter by Status</option>
+                                <option value="completed">Completed</option>
+                                <option value="canceled">Canceled</option>
+                            </select>
+                            <select class="filter-select">
+                                <option value="">Sort by Date</option>
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                            </select>
+                            </div>
+                        
+                    </div>
+                    <table class="activities-table">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Area</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ACR-223390</td>
+                                <td>
+                                    <div class="avatar-container">
+                                        Swimming Pool
+                                    </div>
+                                </td>
+                                <td>Oct 25, 2023</td>
+                                <td>10:00 AM - 11:00 AM</td>
+                                <td><span class="status-badge completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>ACR-223385</td>
+                                <td>
+                                    <div class="avatar-container">
+                                        Tennis Court B
+                                    </div>
+                                </td>
+                                <td>Oct 20, 2023</td>
+                                <td>2:00 PM - 4:00 PM</td>
+                                <td><span class="status-badge canceled">Canceled</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        <div class="pagination">
+            <button disabled>&lt; Previous</button>
+            <button class="active">1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>Next &gt;</button>
+        </div>
+    
+
+<div id="bookingModal" class="modal">
+    <div class="modal-content">
+        <h2>Booking Details</h2>
+        <p>Are you sure you want to cancel this booking?</p>
+        <div class="modal-buttons">
+            <button id="confirmCancel" class="modal-button">Yes, Cancel</button>
+            <button id="closeModal" class="modal-button">No, Keep</button>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+              
+</body>
+</html>

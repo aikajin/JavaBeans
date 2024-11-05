@@ -103,6 +103,16 @@ public class UserController {
         return "redirect:/users";
     }
 
+    
+
+     // Delete area
+     /*  @GetMapping("/delete/{id}")
+     public String deleteArea(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+         userService.deleteArea(id);
+         redirectAttributes.addFlashAttribute("message", "Area deleted successfully!");
+         return "redirect:/area";
+     }*/
+
     // View user details
     // View user details
     @GetMapping("/view/{id}")

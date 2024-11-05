@@ -1,8 +1,10 @@
 package com.accord.controller;
 
 import java.io.IOException;
+
 import java.net.URI;
 import java.util.Base64;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -229,7 +232,8 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 	}
 
 	
-	@GetMapping("/manage-profile")
+
+	@GetMapping("/profile")
 	public String manageProfile(Model model, HttpSession session) {
     Long userId = (Long) session.getAttribute("userId");
     if (userId != null) {
@@ -246,7 +250,26 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 }
 
 
-	@GetMapping("/recreational-areas-list")
+
+	@GetMapping("/mb-user")
+	public String manageBookingsUser(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "managebookingsUser";
+	}
+
+	@GetMapping("/mb-admin")
+	public String manageBookingsAdmin(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "managebookingsAdmin";
+	}
+
+	@GetMapping("/bookings")
+	public String viewBookingsDetails(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "viewbookingdetails_user";
+	}
+
+	@GetMapping("/areas-admin")
 	public String recreationalAreasList(Model model) {
 		// Add attributes to the model if needed for profile management
 		List<Area> areaList = areaService.getAllAreas();
@@ -254,7 +277,7 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 		return "am_recreationalAreasList";
 	}
 
-	@GetMapping("/recreationalAreasList-user")
+	@GetMapping("/areas-user")
 	public String recreationalAreasListUser(Model model) {
 		// Add attributes to the model if needed for profile management
 		List<Area> areaList = areaService.getAllAreas();
@@ -292,13 +315,14 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 		return "view_recre_area_tenniscourt_user";
 	}
 
-	@GetMapping("/view-recreational-area-user")
-	public String recreationalSwmmingPoolUser(Model model) {
-		// Add attributes to the model if needed for profile management
-		List<Area> areaList = areaService.getAllAreas();
-		model.addAttribute("areaList", areaList);
-		return "view_recreational_area_user";
-	}
+	@GetMapping("/view-recreational-area-user/{id}")
+public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model model) {
+    // Add attributes to the model for profile management
+    Area area = areaService.getAreaById(id);
+    model.addAttribute("area", area);
+    return "view_recreational_area_user";
+}
+
 
 	@GetMapping("/view-recreational-area/{id}")
 	public String viewRecreationalArea(@PathVariable Long id, Model model) {
@@ -338,7 +362,7 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 		return "view_recre_area_tenniscourt";
 	}
 
-	@GetMapping("/useracc_admin")
+	@GetMapping("/accounts")
 	public String UserAccountsAdmin(Model model) {
 		// Add attributes to the model if needed for profile management
 		return "UserAccounts_page";
@@ -368,16 +392,30 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 	@PostMapping("/modifyrec_admin/{id}")
 	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add, Model model) throws IOException {
 		//Area areaEdit = areaService.getAreaById(id);
-		areaService.createArea(area, cover, add);
+		if(add.isEmpty()) {
+			areaService.createArea(area, cover, add);
+		}
+		else {
+			areaService.createArea2(area, cover);
+		}
 		model.addAttribute("area", area);
 		return "am_recreationalAreasList";
 	}
 
-	@GetMapping("/deletekungnaaymap/{id}")
-	public String deleteArea(@PathVariable Long id) {
+	/*@GetMapping("/deleteArea/{id}")
+	public String deleteArea(@PathVariable Long id, Model model) {
+		model.addAttribute("delete", "Are you sure you would like to delete this area?");
 		areaService.deleteArea(id);
+		
 		return "am_recreationalAreasList";
-	}
+	}*/
+
+	@GetMapping("/deleteArea/{id}")
+    public RedirectView deleteArea(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        areaService.deleteArea(id);
+        redirectAttributes.addFlashAttribute("message", "Area deleted successfully");
+        return new RedirectView("/recreational-areas-list", true);
+    }
 	
 	// @GetMapping("/details")
 	// public String UserAcc_VIewDetails(Model model) {
