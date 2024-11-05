@@ -1,11 +1,14 @@
 package com.accord.controller;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import jakarta.servlet.http.HttpSession;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.accord.Entity.Area;
 import com.accord.Entity.User;
@@ -31,6 +38,9 @@ public class RegisterLoginController {
 
 	@Autowired
 	private AreaService areaService;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@GetMapping("/")
 	public String index() {
@@ -78,53 +88,122 @@ public class RegisterLoginController {
 		}
 	}
 
-	@PostMapping("/login")
-	public String login(@ModelAttribute User user, Model model) {
-		//User authenticatedUser = userService.authenticate(user.getEmail(), user.getPassword());
-		//User role = userSerivce.findByEmail(UserService.getcu)
-		//Admin authenticatedAdmin = adminService.authenticate(admin.getEmail(), admin.getPassword());
-		/*if(authenticatedUser != null) {
-			model.addAttribute("userLogin", authenticatedUser.getEmail());
-			return "dashboard_user";
-		}
-		else if(authenticatedAdmin != null) {
-			model.addAttribute("adminLogin", authenticatedAdmin.getEmail());
-			return "dashboard_admin";
-		}
-		else {
-			model.addAttribute("error", "na error");
-			return "login_page";
-		}*/
-		/*String currentEmail = user.getEmail();
-		User userCurrent = userService.findByEmail(currentEmail);
-		if(userCurrent.getRole().contains("ROLE_USER")) {
-			return "dashboard_user";
-		}
-		else {
-			return "dashboard_admin";
-		}*/
-		String currentEmail = user.getEmail();
-		Boolean authenticateUser = userService.authenticateLogin(user.getEmail(), user.getPassword());
-		//User currectUser = userService.findByEmail(currentEmail);
+	// @PostMapping("/login")
+	// public String login(@ModelAttribute User user, Model model) {
+	// 	//User authenticatedUser = userService.authenticate(user.getEmail(), user.getPassword());
+	// 	//User role = userSerivce.findByEmail(UserService.getcu)
+	// 	//Admin authenticatedAdmin = adminService.authenticate(admin.getEmail(), admin.getPassword());
+	// 	/*if(authenticatedUser != null) {
+	// 		model.addAttribute("userLogin", authenticatedUser.getEmail());
+	// 		return "dashboard_user";
+	// 	}
+	// 	else if(authenticatedAdmin != null) {
+	// 		model.addAttribute("adminLogin", authenticatedAdmin.getEmail());
+	// 		return "dashboard_admin";
+	// 	}
+	// 	else {
+	// 		model.addAttribute("error", "na error");
+	// 		return "login_page";
+	// 	}*/
+	// 	/*String currentEmail = user.getEmail();
+	// 	User userCurrent = userService.findByEmail(currentEmail);
+	// 	if(userCurrent.getRole().contains("ROLE_USER")) {
+	// 		return "dashboard_user";
+	// 	}
+	// 	else {
+	// 		return "dashboard_admin";
+	// 	}*/
+	// 	String currentEmail = user.getEmail();
+	// 	Boolean authenticateUser = userService.authenticateLogin(user.getEmail(), user.getPassword());
+	// 	//User currectUser = userService.findByEmail(currentEmail);
 		
-		if (authenticateUser) {
-			// Use Optional to safely get the User object
-			Optional<User> optionalUser = userService.findByEmail(currentEmail);
+	// 	if (authenticateUser) {
+	// 		// Use Optional to safely get the User object
+	// 		Optional<User> optionalUser = userService.findByEmail(currentEmail);
 	
-			if (optionalUser.isPresent()) {
-				User currectUser = optionalUser.get(); // Get the actual User object
-				if (currectUser.getRole().contains("ROLE_USER")) {
-					return "dashboard_user";
-				} else {
-					return "dashboard_admin";
-				}
-			} else {
-				model.addAttribute("error", "User not found");
-				return "login_page"; // Return to login page if user not found
-			}
-		}
-		return "login_page"; // Return to login page if authentication fails
-	}
+	// 		if (optionalUser.isPresent()) {
+	// 			User currectUser = optionalUser.get(); // Get the actual User object
+	// 			if (currectUser.getRole().contains("ROLE_USER")) {
+	// 				return "dashboard_user";
+	// 			} else {
+	// 				return "dashboard_admin";
+	// 			}
+	// 		} else {
+	// 			model.addAttribute("error", "User not found");
+	// 			return "login_page"; // Return to login page if user not found
+	// 		}
+	// 	}
+	// 	return "login_page"; // Return to login page if authentication fails
+	// }
+
+// 	@PostMapping("/login")
+// public String login(@ModelAttribute User user, Model model, HttpSession session) {
+//     String currentEmail = user.getEmail();
+//     Boolean authenticateUser = userService.authenticateLogin(user.getEmail(), user.getPassword());
+
+//     if (authenticateUser) {
+//         Optional<User> optionalUser = userService.findByEmail(currentEmail);
+//         if (optionalUser.isPresent()) {
+//             User currentUser = optionalUser.get();
+
+//             // Store the user in the session for persistence across pages
+//             session.setAttribute("loggedInUser", currentUser);
+
+//             if (currentUser.getRole().contains("ROLE_USER")) {
+//                 return "redirect:/dashboard_user";
+//             } else {
+//                 return "redirect:/dashboard_admin";
+//             }
+//         } else {
+//             model.addAttribute("error", "User not found");
+//             return "login_page";
+//         }
+//     }
+
+//     model.addAttribute("error", "Invalid credentials");
+//     return "login_page";
+// }
+// @PostMapping("/login")
+// public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password, HttpSession session) {
+//     User user = userService.findByEmail(email).orElse(null);
+//     if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+//         session.setAttribute("userId", user.getId()); // Store user ID instead of the whole user object
+//         return ResponseEntity.ok("Login successful");
+//     } else {
+//         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+//     }
+// }
+
+@PostMapping("/login")
+public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password, HttpSession session) {
+    // Fetch user by email first
+    User user = userService.findByEmail(email).orElse(null);
+    
+    // Check if user exists and password matches
+    if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+        // Store the user ID in the session for persistence
+        session.setAttribute("userId", user.getId()); // Store user ID
+
+        // Now retrieve the user by ID (optional, if you want to fetch the latest details)
+        User currentUser = userService.findById(user.getId()).orElse(null);
+
+        // Store the current user in the session for persistence across pages
+        session.setAttribute("loggedInUser", currentUser);
+
+        // Redirect based on user role
+        if (currentUser.getRole().contains("ROLE_USER")) {
+            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/dash_user")).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/dash_admin")).build();
+        }
+    } else {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+    }
+}
+
+
+
+
 
 	@GetMapping("/dash_user")
 	public String showDashboard() {
@@ -151,10 +230,21 @@ public class RegisterLoginController {
 
 	
 	@GetMapping("/manage-profile")
-	public String manageProfile(Model model) {
-		// Add attributes to the model if needed for profile management
-		return "manage_profile";
-	}
+	public String manageProfile(Model model, HttpSession session) {
+    Long userId = (Long) session.getAttribute("userId");
+    if (userId != null) {
+        User currentUser = userService.findById(userId).orElse(null);
+        if (currentUser != null) {
+            model.addAttribute("user", currentUser);
+            return "manage_profile"; // Load the user's profile details in the view
+        } else {
+            model.addAttribute("error", "User not found.");
+            return "redirect:/"; // Redirect to home if user not found
+        }
+    }
+    return "redirect:/"; // Redirect to home if no userId in session
+}
+
 
 	@GetMapping("/recreational-areas-list")
 	public String recreationalAreasList(Model model) {

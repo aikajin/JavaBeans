@@ -38,10 +38,22 @@ public class UserService {
 
     @Autowired
     private JavaMailSender mailSender;  // Injecting JavaMailSender for sending email
+    
+    public interface UserDetailsService {
+        // ...
+    
+        void save(User user);
+    
+        // ...
+    }
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+    
 
     // ================== CRUD METHODS ==================
 
@@ -59,9 +71,13 @@ public class UserService {
      * @param id - User ID
      * @return - Optional User entity (returns empty if not found)
      */
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);  // Find user by ID from the repository
-    }
+   public Optional<User> getUserById(Long id) {
+       return findById(id);  // Call the existing findById method
+   }
+
+   public User save(User user) {
+       return userRepository.save(user);
+   }
 
     /**
      * Get all users from the database
@@ -70,6 +86,7 @@ public class UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();  // Retrieve all users from the repository
     }
+
 
     /**
      * Update an existing user by their ID
@@ -85,6 +102,10 @@ public class UserService {
             existingUser.setName(updatedUser.getName());
             existingUser.setEmail(updatedUser.getEmail());
             existingUser.setContactnumber(updatedUser.getContactnumber());
+            existingUser.setPassword(updatedUser.getPassword()); // If you're updating the password
+            existingUser.setProfile_picture(updatedUser.getProfile_picture());
+            existingUser.setProfile_name(updatedUser.getProfile_name());
+            existingUser.setProfilePictureUrl(updatedUser.getProfilePictureUrl()); 
             // Add other fields that need to be updated...
             return userRepository.save(existingUser);  // Save updated user to the repository
         } else {
@@ -101,7 +122,7 @@ public class UserService {
     }
     public boolean sendPasswordResetEmail(User user) {
         String token = UUID.randomUUID().toString();  // Generate unique token
-        String resetLink = "http://localhost:8080/forgotPassword_setPass?token=" + token;
+        String resetLink = "http://localhost:8086/forgotPassword_setPass?token=" + token;
         user.setResetToken(token);  
         userRepository.save(user);  
         MimeMessage message = mailSender.createMimeMessage();
@@ -129,6 +150,10 @@ public class UserService {
         }
     }
 
+   public Optional<User> findUserById(Long id) {
+       return userRepository.findById(id);
+   }
+    
     public Optional<User> findByEmail(String email) {
         return userRepository.findFirstByEmail(email);
     }

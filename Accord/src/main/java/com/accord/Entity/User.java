@@ -68,6 +68,19 @@ public class User {
 	private String profile_type;
 
 	private String resetToken;
+
+	
+	@Column(name = "profile_picture_url")
+	private String profilePictureUrl; // Add getter and setter
+
+
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
+    }
 	
 	public String generateBase64Tenancy() {
 		return Base64.encodeBase64String(this.tenancy_document);
