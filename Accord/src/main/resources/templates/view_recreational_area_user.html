@@ -74,7 +74,7 @@
         <main class="main-content">
             <form th:action="@{/view-recreational-area-user/{id}(id=${area.id})}" method="get">
                 <header class="header">
-                    <p><a th:href="@{/recreationalAreasList-user}" style="text-decoration: none; font-weight:bold;">Book a Facility </a>/ View Recreational Area Details</p>
+                    <p><a th:href="@{/areas-user}" style="text-decoration: none; font-weight:bold;">Book a Facility </a>/ View Recreational Area Details</p>
                 </header>
                 <h1 style="margin-bottom: 2rem;" th:text="${area.name}"></h1>
                 
