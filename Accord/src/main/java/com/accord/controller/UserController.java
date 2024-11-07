@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.accord.config.SecurityConfig;
+import com.accord.repository.UserRepository;
 
 import jakarta.servlet.http.*;
 
@@ -31,6 +32,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/users")
 public class UserController {
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
@@ -237,7 +241,7 @@ public String manageProfile(Model model, HttpSession session) {
 
 @PostMapping("/manage-profile")
 public ResponseEntity<?> updateProfile(@RequestParam String name,
-                                       @RequestParam(required = false) MultipartFile profilePicture,
+                                       @RequestParam("file") MultipartFile profilePicture,
                                        @RequestParam(required = false) String password,
                                        HttpSession session) {
     Long userId = (Long) session.getAttribute("userId");
@@ -256,15 +260,17 @@ public ResponseEntity<?> updateProfile(@RequestParam String name,
         if (profilePicture != null && !profilePicture.isEmpty()) {
             // Validate file type and size
             // Your validation code...
-            try {
-                loggedInUser.setProfile_name(profilePicture.getOriginalFilename());
-                loggedInUser.setProfile_picture(profilePicture.getBytes());
+            saveProfilePicture(profilePicture);
+            /*try {
+                //loggedInUser.setProfile_name(profilePicture.getOriginalFilename());
+                //loggedInUser.setProfile_picture(profilePicture.getBytes());
                 // Save URL if applicable
-                String profilePictureUrl = saveProfilePicture(profilePicture);
-                loggedInUser.setProfilePictureUrl(profilePictureUrl);
+                //String profilePictureUrl = saveProfilePicture(profilePicture);
+                saveProfilePicture(profilePicture);
+                //loggedInUser.setProfilePictureUrl(profilePictureUrl);
             } catch (IOException e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload profile picture.");
-            }
+            }*/
         }
 
         // Handle password update
@@ -325,8 +331,8 @@ public ResponseEntity<?> updateProfile(@RequestParam String name,
 //     return ResponseEntity.ok(response);
 // }
 
-private String saveProfilePicture(MultipartFile file) {
-    try {
+private void saveProfilePicture(MultipartFile file) {
+    /*try {
         String uploadDir = "/path/to/uploads"; // Define your upload directory
         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
         File uploadFile = new File(uploadDir, fileName);
@@ -335,7 +341,18 @@ private String saveProfilePicture(MultipartFile file) {
     } catch (IOException e) {
         e.printStackTrace();
         throw new RuntimeException("Could not save profile picture: " + e.getMessage());
+    }*/
+    User user = new User();
+    try {
+        user.setProfile_name(file.getOriginalFilename());
+        user.setProfile_type(file.getContentType());
+        user.setProfile_picture(file.getBytes());
+        //return userRepository.save(user).toString();
+        userRepository.save(user);
+    } catch(IOException e) {
+        e.printStackTrace();
     }
+    //return userRepository.save(user).toString();
 }
 
 
