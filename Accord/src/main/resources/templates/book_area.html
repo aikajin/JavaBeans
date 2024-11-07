@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello</title>
+    <link rel="icon" href="images/logoHead.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+<body>
+    <div class="container">
+    <form method="get" enctype="multipart/form-data" th:action="@{/submit_book}" th:object="${reservation}" >
+        <h1 style="margin-bottom: 2rem;">[[${area.name}]]</h1>
+        <img th:src="@{'data:image/*;base64,'+ ${area.generateBase64Cover()}}" alt="area" width="500" height="500" class="area-photo">
+        <h2>Guidelines</h2><br>
+        <h1 type="textarea">[[${area.guidelines}]]</h1><br>
+        <h2>Start Schedule</h2>
+        <label type="date">[[${area.startDate}]]</label><br>
+        <h2>End Schedule</h2>
+        <label type="date">[[${area.endDate}]]</label><br>
+        <h2>Start Time</h2>
+        <label type="time">[[${area.startTime}]]</label><br>
+        <h2>End Time</h2>
+        <label type="time">[[${area.endTime}]]</label><br><br>
+        <label>Book Area</label><br>
+        <label for="areaname">Area Name</label>
+        <input type="text" id="areaname" name="areaname" th:value="${area.name}" required readonly><br>
+        <label for="user-name">User Name</label>
+        <input type="text" id="username" name="username" th:value="${username}" required><br>
+        <label for="user-email">User Email</label>
+        <input type="email" id="useremail" name="useremail" th:field="*{useremail}" required><br>
+        <label for="user_start_date">Start Date</label>
+        <input type="date" id="user_start_date" name="user_start_date" th:field="*{user_start_date}" required><br>
+        <label for="user_end_date">End Date</label>
+        <input type="date" id="user_end_date" name="user_end_date" th:field="*{user_end_date}" required><br>
+        <label for="user_start_time">Start Time</label>
+        <input type="time" id="user_start_time" name="user_start_time" th:field="*{user_start_time}" required><br>
+        <label for="user_end_time">End Time</label>
+        <input type="time" id="user_end_time" name="user_end_time"  th:field="*{user_end_time}" required><br>
+        <button type="submit" class="submit-btn">Book Area</button>
+    </form>
+</div>
+</body>
+</head>
+</html>

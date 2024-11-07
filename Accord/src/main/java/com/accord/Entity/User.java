@@ -88,4 +88,8 @@ public class User {
 	public String generateBase64ValidId() {
 		return Base64.encodeBase64String(this.id_document);
 	}
+
+	public String generateBase64Profile() {
+		return Base64.encodeBase64String(this.profile_picture);
+	}
 }

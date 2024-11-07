@@ -112,6 +112,7 @@
                         <span class="file-name" id="cover-photo-name"></span>
                         <div class="error-message" id="cover-photo-error"></div>
                     </div>
+                    <img th:src="@{'data:image/*;base64,'+ ${area.generateBase64Cover()}}" alt="area" width="500" height="500" class="area-photo">
                     <div class="form-group">
                         <label for="additional-photos">Additional Photos (optional)</label>
                         <input type="file" id="additional-photos" name="fileAdd" accept=".png,.jpg,.jpeg" multiple>
@@ -119,6 +120,7 @@
                         <span class="file-name" id="additional-photos-name"></span>
                         <div class="error-message" id="additional-photos-error"></div>
                     </div>
+                    <img th:src="@{'data:image/*;base64,'+ ${area.generateBase64Add()}}" alt="area" width="500" height="500" class="area-photo">
                     <div class="form-group">
                         <label for="schedule">Schedule</label>
                         <div class="schedule-interface">
@@ -128,26 +130,26 @@
                                 <div class="form-group-inline">
                                     <div class="form-group">
                                         <label for="schedule-start-date">Start Date</label>
-                                        <input type="date" id="schedule-start-date" name="schedule-start-date" th:placeholder="${area.startDate}" th:field="*{startDate}" required>
+                                        <input type="date" id="startDate" name="schedule-start-date" th:value="${area.startDate}"  required>
                                     </div>
                                     <div class="form-group">
                                         <label for="schedule-end-date">End Date</label>
-                                        <input type="date" id="schedule-end-date" name="schedule-end-date" th:field="*{endDate}" required>
+                                        <input type="date" id="endDate" name="schedule-end-date" th:value="${area.endDate}" required>
                                     </div>
                                 </div>
                                 <div class="form-group-inline">
                                     <div class="form-group">
                                         <label for="schedule-start-time">Opening Time</label>
-                                        <input type="time" id="schedule-start-time" name="schedule-start-time"  th:field="*{startTime}" value ="area.startTime" required>
+                                        <input type="time" id="startTime" name="schedule-start-time"  th:value="${area.startTime}" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="schedule-end-time">Closing Time</label>
-                                        <input type="time" id="schedule-end-time" name="schedule-end-time" th:field="*{endTime}" required>
+                                        <input type="time" id="endTime" name="schedule-end-time" th:value="${area.endTime}" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="schedule-recurrence">Recurrence</label>
-                                    <select id="schedule-recurrence" name="schedule-recurrence" required>
+                                    <select id="recurrence" name="schedule-recurrence" th:value="${area.recurrence}" required>
                                         <option value="daily">Daily</option>
                                         <option value="weekly">Weekly</option>
                                         <option value="monthly">Monthly</option>

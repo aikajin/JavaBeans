@@ -9,8 +9,9 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    
     <div class="containerM">
-
+        <form th:action="@{/profile}" method="get" enctype="multipart/form-data">
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
             <div class="nav-items">
@@ -158,5 +159,6 @@
             });
         });
     </script>
+    </form>
 </body>
 </html>
