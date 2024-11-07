@@ -13,12 +13,20 @@
         <h1 style="margin-bottom: 2rem;">[[${area.name}]]</h1>
         <img th:src="@{'data:image/*;base64,'+ ${area.generateBase64Cover()}}" alt="area" width="500" height="500" class="area-photo">
         <h2>Guidelines</h2><br>
-        <h1>[[${area.guidelines}]]</h1>
+        <h1 type="textarea">[[${area.guidelines}]]</h1><br>
+        <h2>Start Schedule</h2>
+        <label type="date">[[${area.startDate}]]</label><br>
+        <h2>End Schedule</h2>
+        <label type="date">[[${area.endDate}]]</label><br>
+        <h2>Start Time</h2>
+        <label type="time">[[${area.startTime}]]</label><br>
+        <h2>End Time</h2>
+        <label type="time">[[${area.endTime}]]</label><br><br>
         <label>Book Area</label><br>
         <label for="areaname">Area Name</label>
-        <input type="text" id="areaname" name="areaname" th:field="*{areaname}" required><br>
+        <input type="text" id="areaname" name="areaname" th:value="${area.name}" required readonly><br>
         <label for="user-name">User Name</label>
-        <input type="text" id="username" name="username" th:field="*{username}" required><br>
+        <input type="text" id="username" name="username" th:value="${username}" required><br>
         <label for="user-email">User Email</label>
         <input type="email" id="useremail" name="useremail" th:field="*{useremail}" required><br>
         <label for="user_start_date">Start Date</label>
