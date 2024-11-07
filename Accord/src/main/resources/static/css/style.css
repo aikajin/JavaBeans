@@ -108,6 +108,7 @@ body.recreational-areas-list {
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s;
+  font-family: 'Lexend', sans-serif;
 }
 
 .btn-view {

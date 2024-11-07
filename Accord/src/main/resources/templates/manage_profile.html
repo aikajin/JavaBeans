@@ -9,8 +9,9 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    
     <div class="containerM">
-
+        <form th:action="@{/profile}" method="get" enctype="multipart/form-data">
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
             <div class="nav-items">
@@ -71,7 +72,7 @@
         <div class="main-content">
             <h1 th:if="${user != null}">Welcome, <span id="userName" th:text="${user.name}">John Doe</span>!</h1>
             <h1 th:unless="${user != null}">Welcome, Guest!</h1>
-            <p class="subtitle">Track your bookings and explore available amenities.</p>
+            <p class="subtitle">Update your profile and manage your account details.</p>
 
             <div style="max-width: 100%;">
                 <div style="margin-bottom: 30px;">
@@ -158,5 +159,6 @@
             });
         });
     </script>
+    </form>
 </body>
 </html>

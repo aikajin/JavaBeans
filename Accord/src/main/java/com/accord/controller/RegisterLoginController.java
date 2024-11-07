@@ -28,8 +28,10 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.accord.Entity.Area;
+import com.accord.Entity.Reservation;
 import com.accord.Entity.User;
 import com.accord.service.AreaService;
+import com.accord.service.ReservService;
 import com.accord.service.UserService;
 
 @Controller
@@ -41,6 +43,9 @@ public class RegisterLoginController {
 
 	@Autowired
 	private AreaService areaService;
+
+	@Autowired
+	private ReservService reservService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -263,10 +268,29 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 		return "managebookingsAdmin";
 	}
 
-	@GetMapping("/bookings")
-	public String viewBookingsDetails(Model model) {
+	@GetMapping("/bookings/{id}")
+	public String viewBookingsDetails(@PathVariable Long id, Model model) {
 		// Add attributes to the model if needed for profile management
-		return "viewbookingdetails_user";
+		Area area = areaService.getAreaById(id);
+		//Reservation reservation = reservService.findReservationById(id);
+		model.addAttribute("area", area);
+		//model.addAttribute("reservation", reservation);
+		return "view_recreational_area";
+	}
+
+	@GetMapping("/booking-area/{id}")
+	public String viewBookingArea(@PathVariable Long id, Model model) {
+		// Add attributes to the model if needed for profile management
+		Area area = areaService.getAreaById(id);
+		model.addAttribute("area", area);
+		model.addAttribute("reservation", new Reservation());
+		return "book_area";
+	} 
+	@GetMapping("/submit_book")
+	public String addBooking(@ModelAttribute Reservation reservation) {
+		// Add attributes to the model if needed for profile management
+		reservService.bookReservation(reservation);
+		return "redirect:/areas-user";
 	}
 
 	@GetMapping("/areas-admin")
