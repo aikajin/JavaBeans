@@ -151,6 +151,7 @@
                                 <th>Date</th>
                                 <th>Time</th>
                                 <th>Status</th>
+                                <th>Rating</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -164,6 +165,17 @@
                                 <td>Oct 25, 2023</td>
                                 <td>10:00 AM - 11:00 AM</td>
                                 <td><span class="status-badge completed">Completed</span></td>
+                                <td>
+                                    <div class="star-rating" data-booking-id="ACR-223390">
+                                        <span class="star" data-rating="1">&#9733;</span>
+                                        <span class="star" data-rating="2">&#9733;</span>
+                                        <span class="star" data-rating="3">&#9733;</span>
+                                        <span class="star" data-rating="4">&#9733;</span>
+                                        <span class="star" data-rating="5">&#9733;</span>
+                                    </div>
+                                    <button class="submit-rating" data-booking-id="ACR-223390" disabled>Submit Rating</button>
+                                    <div class="rating-message"></div>
+                                </td>
                             </tr>
                             <tr>
                                 <td>ACR-223385</td>
@@ -175,6 +187,7 @@
                                 <td>Oct 20, 2023</td>
                                 <td>2:00 PM - 4:00 PM</td>
                                 <td><span class="status-badge canceled">Canceled</span></td>
+                                <td>N/A</td>
                             </tr>
                         </tbody>
                     </table>
@@ -201,6 +214,68 @@
 
 </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const starRatings = document.querySelectorAll('.star-rating');
+    
+    starRatings.forEach(rating => {
+        const stars = rating.querySelectorAll('.star');
+        const submitButton = rating.nextElementSibling;
+        const messageDiv = submitButton.nextElementSibling;
+        let selectedRating = 0;
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', () => {
+                const ratingValue = parseInt(star.getAttribute('data-rating'));
+                highlightStars(stars, ratingValue);
+            });
+
+            star.addEventListener('mouseout', () => {
+                highlightStars(stars, selectedRating);
+            });
+
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.getAttribute('data-rating'));
+                highlightStars(stars, selectedRating);
+                submitButton.disabled = false;
+            });
+        });
+
+        submitButton.addEventListener('click', async () => {
+            if (selectedRating === 0) return;
+
+            submitButton.disabled = true;
+            messageDiv.textContent = 'Submitting...';
+
+            try {
+                // Simulating an API call
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                const success = Math.random() < 0.8; // 80% success rate for demonstration
+
+                if (success) {
+                    messageDiv.textContent = 'Thank you for your rating! Your feedback has been recorded.';
+                    messageDiv.className = 'rating-message rating-submitted';
+                    submitButton.style.display = 'none';
+                    stars.forEach(star => star.style.pointerEvents = 'none');
+                } else {
+                    throw new Error('Failed to submit rating');
+                }
+            } catch (error) {
+                messageDiv.textContent = 'Failed to submit a rating. Please try again later.';
+                messageDiv.className = 'rating-message rating-error';
+                submitButton.disabled = false;
+            }
+        });
+    });
+
+    function highlightStars(stars, rating) {
+        stars.forEach((star, index) => {
+            star.classList.toggle('active', index < rating);
+        });
+    }
+});
+</script>
               
 </body>
 </html>
