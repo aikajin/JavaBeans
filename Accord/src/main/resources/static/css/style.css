@@ -181,6 +181,12 @@ input::placeholder {
   height: 100vh;
   width: 100vw;
 }
+.containerN{
+  
+  display: block;
+  height: 100vh;
+  width: 100vw;
+}
 
 form2 {
   display: flex;
@@ -296,6 +302,13 @@ form2 {
   padding: 37px 40px;
   background-color: #FFF5F4;
   overflow-y: auto;
+}
+.main-content2 {
+  margin-left: 322px;
+  padding: 37px 40px;
+  background-color: #FFF5F4;
+  overflow-y: auto;
+  max-height: 90vh;
 }
 
 .subtitle {
