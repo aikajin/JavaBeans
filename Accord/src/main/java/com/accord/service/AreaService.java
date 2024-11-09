@@ -41,6 +41,22 @@ public class AreaService {
         }
         return areaRepository.save(area);
     }
+
+    public void updateArea(Area area, MultipartFile cover, MultipartFile add) {
+        //Optional<Area> area = areaRepository.findById(id);
+        //Area existingArea = area.get();
+        try {
+            area.setCoverName(cover.getOriginalFilename());
+            area.setCoverType(cover.getContentType());
+            area.setCoverDocument(cover.getBytes());
+            area.setAddName(add.getOriginalFilename());
+            area.setAddType(add.getContentType());
+            area.setAddDocument(add.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        areaRepository.save(area);
+    }
     public void deleteArea(Long id) {
         areaRepository.deleteById(id);
     }

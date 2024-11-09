@@ -38,4 +38,6 @@ public class Reservation {
     private LocalTime user_start_time;
 
     private LocalTime user_end_time;
+
+    private Boolean status;
 }

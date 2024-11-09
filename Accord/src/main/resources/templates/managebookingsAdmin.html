@@ -10,6 +10,7 @@
 
 </head>
 <body>
+    
     <div class="container">
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
@@ -123,26 +124,27 @@
                 </div>
         
                 <table id="activities-table">
-                    
                     <thead>
                         <tr>
                             <th>Booking ID</th>
                             <th>User</th>
                             <th>Area</th>
                             <th>Date</th>
-                            <th>Time</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>BK001</td>
-                            <td>John Smith</td>
-                            <td>Swimming Pool</td>
-                            <td>Oct 25, 2024</td> 
-                            <td>10:00 AM - 11:00 AM</td>
-                            <td><span class="status-badge completed">Completed</span></td>
+                        <tr th:each="reservation :${reservationList}">
+                            <td th:text="${reservation.id}"></td>
+                            <td th:text="${reservation.username}"></td>
+                            <td th:text="${reservation.areaname}"></td>
+                            <td th:text="${reservation.user_start_date}"></td> 
+                            <td th:text="${reservation.user_start_time}"></td>
+                            <td th:text="${reservation.user_end_time}"></td>
+                            <td th:text="${reservation.status}"><span class="status-badge completed"></span></td>
                             <td><button class="delete-btn3">Cancel</button></td>
                         </tr>
                         <tr>

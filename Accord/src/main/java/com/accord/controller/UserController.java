@@ -89,8 +89,8 @@ public class UserController {
 
     // Update user
     @PostMapping("/edit/{id}")
-    public String updateUser(@PathVariable Long id, @ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
-        User updatedUser = userService.updateUser(id, user);
+    public String updateUser(@PathVariable Long id, @ModelAttribute("user") User user, @RequestParam("file") MultipartFile prof, RedirectAttributes redirectAttributes) {
+        User updatedUser = userService.updateUser(id, user, prof);
         if (updatedUser != null) {
             redirectAttributes.addFlashAttribute("message", "User updated successfully!");
         } else {
@@ -171,7 +171,7 @@ public class UserController {
 //     }
 // }
 @GetMapping("/manage_profile")
-public String manageProfile(Model model, HttpSession session) {
+public String manageProfile(Model model, HttpSession session, @RequestParam("file") MultipartFile prof) {
     // Retrieve the user ID from the session
     Long userId = (Long) session.getAttribute("userId"); // Ensure you have this in the session
 
@@ -179,6 +179,7 @@ public String manageProfile(Model model, HttpSession session) {
         // Fetch user by ID using UserService
         Optional<User> optionalUser = userService.findById(userId); // Assuming findById returns Optional<User>
         if (optionalUser.isPresent()) {
+            User updatedUser = userService.updateUser(userId, optionalUser, prof);
             model.addAttribute("user", optionalUser.get());
         } else {
             model.addAttribute("error", "User not found");
@@ -279,7 +280,7 @@ public ResponseEntity<?> updateProfile(@RequestParam String name,
         }
 
         // Attempt to update user and check result
-        User updatedUser = userService.updateUser(loggedInUser.getId(), loggedInUser);
+        User updatedUser = userService.updateUser(loggedInUser.getId(), loggedInUser, profilePicture);
         if (updatedUser != null) {
             return ResponseEntity.ok("Profile updated successfully.");
         } else {

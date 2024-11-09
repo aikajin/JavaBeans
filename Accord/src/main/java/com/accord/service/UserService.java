@@ -94,8 +94,8 @@ public class UserService {
      * @param updatedUser - User object with updated fields
      * @return - The updated user entity or null if not found
      */
-    public User updateUser(Long id, User updatedUser) {
-        Optional<User> existingUserOptional = userRepository.findById(id);
+    public User updateUser(Long id, User updatedUser, MultipartFile photo) {
+        /*Optional<User> existingUserOptional = userRepository.findById(id);
         if (existingUserOptional.isPresent()) {
             User existingUser = existingUserOptional.get();
             // Update the fields of the existing user with new values
@@ -110,9 +110,29 @@ public class UserService {
             return userRepository.save(existingUser);  // Save updated user to the repository
         } else {
             return null;  // Return null if user not found
+        }*/
+        try {
+            updatedUser.setProfile_name(photo.getOriginalFilename());
+            updatedUser.setProfile_type(photo.getContentType());
+            updatedUser.setProfile_picture(photo.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return userRepository.save(updatedUser);
     }
 
+    public void update2(Long id, MultipartFile photo) {
+        Optional<User> existingUserOptional = userRepository.findById(id);
+        User existingUser = existingUserOptional.get();
+        try {
+            existingUser.setProfile_name(photo.getOriginalFilename());
+            existingUser.setProfile_type(photo.getContentType());
+            existingUser.setProfile_picture(photo.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        userRepository.save(existingUser);
+    }
     /**
      * Delete a user by their ID
      * @param id - User ID
@@ -310,5 +330,10 @@ public class UserService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    public User updateUser(Long userId, Optional<User> optionalUser, MultipartFile prof) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
     }
 }
