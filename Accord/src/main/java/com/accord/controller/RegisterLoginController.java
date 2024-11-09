@@ -290,6 +290,12 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 		return "facilityRating";
 	}
 
+	@GetMapping("/ratings")
+	public String viewRatingsList(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "viewRatingsList";
+	}
+
 	@GetMapping("/bookings/{id}")
 	public String viewBookingsDetails(@PathVariable Long id, Model model) {
 		// Add attributes to the model if needed for profile management
