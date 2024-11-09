@@ -11,7 +11,7 @@
 <body>
     
     <div class="containerM">
-        <form th:action="@{/profile}" method="get" enctype="multipart/form-data">
+        <form th:action="@{/profile}" method="post" enctype="multipart/form-data">
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
             <div class="nav-items">
@@ -76,11 +76,13 @@
 
             <div style="max-width: 100%;">
                 <div style="margin-bottom: 30px;">
+                    
                     <label style="display: block; color: black; font-size: 18px; font-weight: 500; margin-bottom: 10px;">Profile Picture</label>
                     <div style="display: flex; align-items: center;">
                         <div id="profilePicture" style="width: 150px; height: 150px; background: #FFCFBB; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #FF5916; margin-right: 20px;">JD</div>
+                        
                         <div>
-                            <input type="file" id="profile-picture" name="profile-picture" accept="image/*" style="display: none;">
+                            <input type="file" id="prof" name="prof" accept=".pdf,.doc,.docx,image/*">
                             <label for="profile-picture" style="background: #FF5916; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; display: inline-block; margin-bottom: 10px;">Choose New Picture</label>
                             <p style="color: #646464; font-size: 14px; margin: 0;">Supported formats: JPG, PNG (max. 5MB)</p>
                         </div>

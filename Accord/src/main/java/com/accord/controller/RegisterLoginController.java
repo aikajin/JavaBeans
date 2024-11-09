@@ -33,6 +33,9 @@ import com.accord.Entity.User;
 import com.accord.service.AreaService;
 import com.accord.service.ReservService;
 import com.accord.service.UserService;
+import org.springframework.web.bind.annotation.RequestBody;
+
+
 
 @Controller
 @RequestMapping("/")
@@ -239,32 +242,50 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 	
 
 	@GetMapping("/profile")
-	public String manageProfile(Model model, HttpSession session) {
+	public String manageProfile(Model model, HttpSession session, MultipartFile prof) throws IOException {
     Long userId = (Long) session.getAttribute("userId");
-    if (userId != null) {
+	User user = userService.findById(userId).orElse(null);
+	//userService.updateUser(userId, currentUser, prof);
+	//currentUser = userService.update2(currentUser, prof);
+	model.addAttribute("user", user);
+	return "manage_profile";
+    /*if (userId != null) {
         User currentUser = userService.findById(userId).orElse(null);
         if (currentUser != null) {
+			userService.updateUser(userId, currentUser, prof);
             model.addAttribute("user", currentUser);
             return "manage_profile"; // Load the user's profile details in the view
         } else {
             model.addAttribute("error", "User not found.");
             return "redirect:/"; // Redirect to home if user not found
         }
-    }
-    return "redirect:/"; // Redirect to home if no userId in session
+    }*/
+    //return "redirect:/"; // Redirect to home if no userId in session
 }
-
-
+	
+	@PostMapping("/profile")
+	public String updateProfile(@ModelAttribute User user, @RequestParam("prof") MultipartFile prof, HttpSession session) throws IOException {
+		//TODO: process POST request
+		Long userId = (Long) session.getAttribute("userId");
+		//User user = userService.findById(userId).orElse(null);
+		userService.update2(userId, prof);
+		return "manage_profile";
+	}
+	
 
 	@GetMapping("/mb-user")
 	public String manageBookingsUser(Model model) {
 		// Add attributes to the model if needed for profile management
+		reservService.checkStatus();
 		return "managebookingsUser";
 	}
 
 	@GetMapping("/mb-admin")
 	public String manageBookingsAdmin(Model model) {
 		// Add attributes to the model if needed for profile management
+		reservService.checkStatus();
+		List<Reservation> reservationList = reservService.listReservation();
+		model.addAttribute("reservationList", reservationList);
 		return "managebookingsAdmin";
 	}
 
@@ -415,14 +436,8 @@ public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model mo
 	
 	@PostMapping("/modifyrec_admin/{id}")
 	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add, Model model) throws IOException {
-		//Area areaEdit = areaService.getAreaById(id);
-		if(add.isEmpty()) {
-			areaService.createArea(area, cover, add);
-		}
-		else {
-			areaService.createArea2(area, cover);
-		}
-		model.addAttribute("area", area);
+		Area areaEdit = areaService.getAreaById(id);
+		areaService.createArea(areaEdit, cover, add);
 		return "am_recreationalAreasList";
 	}
 

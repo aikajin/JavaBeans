@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,10 +38,12 @@ public class ReservService {
         reservation.setUser_end_time(reservation.getUser_end_time());*/
         //reservRepository.save(reservation);
         //return book;
+        reservation.setStatus(true);
         return reservRepository.save(reservation);
     }
 
     public List<Reservation> listReservation() {
+        checkStatus();
         return reservRepository.findAll();
     }
 
@@ -55,4 +58,19 @@ public class ReservService {
     public Reservation findReservationById(Long id) {
         return reservRepository.findById(id).orElse(null);
     }
+
+    public void checkStatus() {
+        LocalDate dateNow = LocalDate.now();
+        LocalTime timeNow = LocalTime.now();
+        List<Reservation> r = reservRepository.findAll();
+        r.forEach(rA -> {
+            if (dateNow.isAfter(rA.getUser_end_date())) {
+                rA.setStatus(false);
+            } else {
+                rA.setStatus(true);
+            }
+        });
+        reservRepository.saveAll(r);
+    }
+
 }
