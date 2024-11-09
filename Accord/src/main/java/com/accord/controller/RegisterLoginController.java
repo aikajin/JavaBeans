@@ -1,16 +1,13 @@
 package com.accord.controller;
 
 import java.io.IOException;
-
 import java.net.URI;
-import java.util.Base64;
-
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import jakarta.servlet.http.HttpSession;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import com.accord.Entity.Area;
 import com.accord.Entity.Reservation;
 import com.accord.Entity.User;
@@ -36,6 +29,8 @@ import com.accord.service.UserService;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/")
@@ -287,6 +282,12 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 		List<Reservation> reservationList = reservService.listReservation();
 		model.addAttribute("reservationList", reservationList);
 		return "managebookingsAdmin";
+	}
+
+	@GetMapping("/analytics")
+	public String facilityRatingAdmin(Model model) {
+		// Add attributes to the model if needed for profile management
+		return "facilityRating";
 	}
 
 	@GetMapping("/bookings/{id}")
