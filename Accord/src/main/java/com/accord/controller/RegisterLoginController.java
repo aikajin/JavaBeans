@@ -445,6 +445,7 @@ public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model mo
 	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add, Model model) throws IOException {
 		Area areaEdit = areaService.getAreaById(id);
 		areaService.createArea(areaEdit, cover, add);
+		areaService.updateArea(area, cover, add);
 		return "am_recreationalAreasList";
 	}
 
