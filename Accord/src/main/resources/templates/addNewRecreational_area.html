@@ -124,16 +124,6 @@
                             <div class="schedule-form">
                                 <div class="form-group-inline">
                                     <div class="form-group">
-                                        <label for="schedule-start-date">Start Date</label>
-                                        <input type="date" id="schedule-start-date" name="schedule-start-date" th:field="*{startDate}" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="schedule-end-date">End Date</label>
-                                        <input type="date" id="schedule-end-date" name="schedule-end-date" th:field="*{endDate}" required>
-                                    </div>
-                                </div>
-                                <div class="form-group-inline">
-                                    <div class="form-group">
                                         <label for="schedule-start-time">Opening Time</label>
                                         <input type="time" id="schedule-start-time" name="schedule-start-time" th:field="*{startTime}" required>
                                     </div>
@@ -143,12 +133,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="schedule-recurrence">Recurrence</label>
-                                    <select id="schedule-recurrence" name="schedule-recurrence" th:field="*{recurrence}" required>
-                                        <option value="daily">Daily</option>
-                                        <option value="weekly">Weekly</option>
-                                        <option value="monthly">Monthly</option>
-                                    </select>
+                                    <label for="available">Available Check if avaiable</label>
+                                    <input type="checkbox" id="available" name="available" th:field="*{available}">
                                 </div>
                                 <div class="schedule-options">
                                 </div>

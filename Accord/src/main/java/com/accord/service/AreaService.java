@@ -60,8 +60,17 @@ public class AreaService {
     public void deleteArea(Long id) {
         areaRepository.deleteById(id);
     }
+
     public List<Area> getAllAreas() {
         return areaRepository.findAll(Sort.by("id").ascending());
+    }
+
+    public List<Area> getAllAvailableAreas() {
+        return areaRepository.findByAvailableTrue();
+    }
+
+    public List<Area> getAllUnavailableAreas() {
+        return areaRepository.findByAvailableFalse();
     }
 
     public Area getAreaById(Long id) {

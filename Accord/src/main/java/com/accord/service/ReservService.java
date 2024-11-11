@@ -1,6 +1,7 @@
 package com.accord.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import java.util.List;
@@ -60,11 +61,17 @@ public class ReservService {
     }
 
     public void checkStatus() {
-        LocalDate dateNow = LocalDate.now();
-        LocalTime timeNow = LocalTime.now();
+        LocalDateTime dateTime = LocalDateTime.now();
         List<Reservation> r = reservRepository.findAll();
-        r.forEach(rA -> {
+        /*r.forEach(rA -> {
             if (dateNow.isAfter(rA.getUser_end_date())) {
+                rA.setStatus(false);
+            } else {
+                rA.setStatus(true);
+            }
+        });*/
+        r.forEach(rA -> {
+            if (dateTime.isAfter(LocalDateTime.of(rA.getUser_start_date(), rA.getUser_end_time()))) {
                 rA.setStatus(false);
             } else {
                 rA.setStatus(true);

@@ -12,5 +12,9 @@ public interface AreaRepository extends JpaRepository<Area, Long>{
 
     Area findByName(String name);
 
+    List<Area> findByAvailableTrue();
+
+    List<Area> findByAvailableFalse();
+
     //List<Area> getAllAreas();
 }

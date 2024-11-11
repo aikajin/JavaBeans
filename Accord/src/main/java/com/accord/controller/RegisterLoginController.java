@@ -332,8 +332,8 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 	@GetMapping("/areas-user")
 	public String recreationalAreasListUser(Model model) {
 		// Add attributes to the model if needed for profile management
-		List<Area> areaList = areaService.getAllAreas();
-		model.addAttribute("areaList", areaList);
+		model.addAttribute("areaList", areaService.getAllAvailableAreas());
+		model.addAttribute("areaListFalse", areaService.getAllUnavailableAreas());
 		return "am_recreationalAreasList_user";
 	}
 
