@@ -30,19 +30,16 @@ public class Area {
     private Long id;
 
     private String name;
+    
     @Lob
     @Column(length = 16777215)
     private String guidelines;
-
-    private LocalDate startDate;
-
-    private LocalDate endDate;
 
     private LocalTime startTime;
 
     private LocalTime endTime;
 
-    private String recurrence;
+    private Boolean available;
 
     @Lob
     @Column(length = 2139999999)
