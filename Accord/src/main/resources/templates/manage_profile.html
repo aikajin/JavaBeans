@@ -12,7 +12,7 @@
     
 
     <div class="containerM">
-        <form th:action="@{/profile}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/user/update}" method="post" enctype="multipart/form-data">
 
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
@@ -62,7 +62,7 @@
 
             
             <div class="profile">
-                <div class="profile-pic" th:style="'background-image: url(' + ${user.profilePictureUrl} + ');'">JD</div>
+                <div class="profile-pic" th:style="'background-image: url(' + ${user.profile_picture} + ');'">JD</div>
                 <div class="profile-info">
                     <div class="profile-name" th:if="${user != null}" th:text="${user.name}">John Doe</div>
                     <div class="profile-name" th:unless="${user != null}">User not found</div>
@@ -116,17 +116,17 @@
     </div>
 
     <script>
-        document.getElementById('profile-picture').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const profilePictureDiv = document.getElementById('profilePicture');
-                    profilePictureDiv.style.backgroundImage = `url(${e.target.result})`;
-                    profilePictureDiv.textContent = ''; // Clear initials
-                }
-                reader.readAsDataURL(file);
-            }
+        document.getElementById('prof').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const profilePictureDiv = document.getElementById('profilePicture');
+            profilePictureDiv.style.backgroundImage = `url(${e.target.result})`;
+            profilePictureDiv.textContent = ''; // Clear initials
+        };
+        reader.readAsDataURL(file);
+        }
         });
 
         document.getElementById('saveProfile').addEventListener('click', function() {
