@@ -258,14 +258,29 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
     //return "redirect:/"; // Redirect to home if no userId in session
 }
 	
+	// @PostMapping("/profile")
+	// public String updateProfile(@ModelAttribute User user, @RequestParam("prof") MultipartFile prof, HttpSession session) throws IOException {
+	// 	//TODO: process POST request
+	// 	Long userId = (Long) session.getAttribute("userId");
+	// 	//User user = userService.findById(userId).orElse(null);
+	// 	userService.update2(userId, prof);
+	// 	return "manage_profile";
+	// }
 	@PostMapping("/profile")
-	public String updateProfile(@ModelAttribute User user, @RequestParam("prof") MultipartFile prof, HttpSession session) throws IOException {
-		//TODO: process POST request
-		Long userId = (Long) session.getAttribute("userId");
-		//User user = userService.findById(userId).orElse(null);
-		userService.update2(userId, prof);
-		return "manage_profile";
-	}
+	public String updateProfile(@ModelAttribute User user, @RequestParam("prof") MultipartFile prof, HttpSession session, Model model) throws IOException {
+    Long userId = (Long) session.getAttribute("userId");
+    // Call the service to update user profile data
+    userService.update2(userId, prof);
+
+    // Fetch updated user data after saving changes
+    User updatedUser = userService.findById(userId).orElse(null);
+
+    // Add the updated user to the model to reflect changes
+    model.addAttribute("user", updatedUser);
+
+    return "manage_profile"; // Return the same view to reflect updated data
+}
+
 	
 
 	@GetMapping("/mb-user")
