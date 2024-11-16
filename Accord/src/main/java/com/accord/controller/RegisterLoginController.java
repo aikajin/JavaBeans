@@ -448,20 +448,20 @@ public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model mo
 		return "am_recreationalAreasList";
 	}
 
-	/*@GetMapping("/deleteArea/{id}")
+	@GetMapping("/deleteArea/{id}")
 	public String deleteArea(@PathVariable Long id, Model model) {
 		model.addAttribute("delete", "Are you sure you would like to delete this area?");
 		areaService.deleteArea(id);
 		
-		return "am_recreationalAreasList";
-	}*/
+		return "redirect:/areas-admin";
+	}
 
-	@GetMapping("/deleteArea/{id}")
+	/*@GetMapping("/deleteArea/{id}")
     public RedirectView deleteArea(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         areaService.deleteArea(id);
         redirectAttributes.addFlashAttribute("message", "Area deleted successfully");
         return new RedirectView("/recreational-areas-list", true);
-    }
+    }*/
 	
 	// @GetMapping("/details")
 	// public String UserAcc_VIewDetails(Model model) {
