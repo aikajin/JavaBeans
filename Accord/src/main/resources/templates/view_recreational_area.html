@@ -105,7 +105,17 @@
                 </section>
                 <div class="schedule-header" id="schedules">
 
-                    <h1 style="margin-bottom: 5px;">Schedules</h1>
+                    <h1 style="margin-bottom: 2rem;">Schedules</h1>
+                    <div>
+                        <label>Start Time</label>
+                        <span th:text="${area.startTime}"></span>
+                        <label>End Time</label>
+                        <span th:text="${area.endTime}"></span>
+                    </div>
+                    <div>
+                        <label>Available</label>
+                        <span th:text="${area.avaiable}"></span>
+                    </div>
 
                     <div class="view-options2">
                         <button class="view-option list-view-button" onclick="showListView(); scrollToSchedules()">
