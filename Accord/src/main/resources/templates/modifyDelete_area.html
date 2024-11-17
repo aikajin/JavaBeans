@@ -130,12 +130,11 @@
                                 <div class="form-group-inline">
                                     <div class="form-group">
                                         <label for="schedule-start-time">Opening Time</label>
-                                        <input type="time" id="startTime" name="schedule-start-time" th:field="*{startTime}" required>
+                                        <input type="time" id="startTime" name="schedule-start-time"  th:value="${area.startTime}"  required>
                                     </div>
                                     <div class="form-group">
                                         <label for="schedule-end-time">Closing Time</label>
-                                        <input type="time" id="endTime" name="schedule-end-time" th:field="*{endTime}"  required>
-                                    </div>
+                                        <input type="time" id="endTime" name="schedule-end-time" th:value="${area.endTime}"  required>
                                 </div>
                                 <div class="form-group">
                                     <label for="available">Available Check if avaiable</label>

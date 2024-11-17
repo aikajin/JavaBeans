@@ -2,6 +2,7 @@ package com.accord.controller;
 
 import java.io.IOException;
 import java.net.URI;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -352,35 +353,9 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 		return "am_recreationalAreasList_user";
 	}
 
-	@GetMapping("/view-recre-area-basketball-user")
-	public String recreationalBasketballUser(Model model) {
-		// Add attributes to the model if needed for profile management
-		return "view_recre_area_basketball_user";
-	}
 
-	@GetMapping("/view-recre-area-clubhouse-user")
-	public String recreationalClubhouseUser(Model model) {
-		// Add attributes to the model if needed for profile management
-		return "view_recre_area_clubhouse_user";
-	}
 
-	@GetMapping("/view-recre-area-coveredcourt-user")
-	public String recreationalCoveredCourteUser(Model model) {
-		// Add attributes to the model if needed for profile management
-		return "view_recre_area_coveredcourt_user";
-	}
-
-	@GetMapping("/view-recre-area-hall-user")
-	public String recreationalHallUser(Model model) {
-		// Add attributes to the model if needed for profile management
-		return "view_recre_area_hall_user";
-	}
-
-	@GetMapping("/view-recre-area-tenniscourt-user")
-	public String recreationalTennisCourtUser(Model model) {
-		// Add attributes to the model if needed for profile management
-		return "view_recre_area_tenniscourt_user";
-	}
+	
 
 	@GetMapping("/view-recreational-area-user/{id}")
 public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model model) {
@@ -399,35 +374,7 @@ public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model mo
 		return "view_recreational_area";
 	}
 
-	@GetMapping("/view-recre-area-basketball")
-	public String viewRecreAreaBasketball(Model model) {
-		// Add attributes to the model if needed for profile management
-		return "view_recre_area_basketball";
-	}
 
-	@GetMapping("/view-recre-area-clubhouse")
-	public String viewRecreAreaClubhouse(Model model) {
-		// Add attributes to the model if needed for profile management
-		return "view_recre_area_clubhouse";
-	}
-
-	@GetMapping("/view-recre-area-coveredcourt")
-	public String viewRecreAreaCoveredCourt(Model model) {
-		// Add attributes to the model if needed for profile management
-		return "view_recre_area_coveredcourt";
-	}
-
-	@GetMapping("/view-recre-area-hall")
-	public String viewRecreAreaHall(Model model) {
-		// Add attributes to the model if needed for profile management
-		return "view_recre_area_hall";
-	}
-
-	@GetMapping("/view-recre-area-tenniscourt")
-	public String viewRecreAreaTennisCourt(Model model) {
-		// Add attributes to the model if needed for profile management
-		return "view_recre_area_tenniscourt";
-	}
 
 	@GetMapping("/accounts")
 	public String UserAccountsAdmin(Model model) {
@@ -457,27 +404,42 @@ public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model mo
 	}
 	
 	@PostMapping("/modifyrec_admin/{id}")
-	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add, Model model) throws IOException {
-		Area areaEdit = areaService.getAreaById(id);
-		areaService.createArea(areaEdit, cover, add);
-		areaService.updateArea(area, cover, add);
-		return "am_recreationalAreasList";
-	}
+	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add,  @RequestParam("schedule-start-time") String startTime,    @RequestParam("schedule-end-time") String endTime, Model model) throws IOException {
+	 // Retrieve the area to be edited
+	 Area areaEdit = areaService.getAreaById(id);
 
-	/*@GetMapping("/deleteArea/{id}")
+	 // Update schedule fields
+	 areaEdit.setStartTime(LocalTime.parse(startTime));
+	 areaEdit.setEndTime(LocalTime.parse(endTime));
+ 
+	 // Update other fields like Name, Guidelines, etc.
+	 areaEdit.setName(area.getName());
+	 areaEdit.setGuidelines(area.getGuidelines());
+
+ 
+	 // Update cover and additional photos if files are uploaded
+	 areaService.updateArea(areaEdit, cover, add); // Updates other properties, including photo fields
+ 
+	 // Fetch the updated area and pass it to the model
+	 Area updatedArea = areaService.getAreaById(id);
+	 model.addAttribute("area", updatedArea);
+ 
+	 return "redirect:/areas-admin"; // Redirect to the areas admin page
+ }
+
+	@GetMapping("/deleteArea/{id}")
 	public String deleteArea(@PathVariable Long id, Model model) {
 		model.addAttribute("delete", "Are you sure you would like to delete this area?");
 		areaService.deleteArea(id);
-		
-		return "am_recreationalAreasList";
-	}*/
+		return "redirect:/areas-admin";
+	}
 
-	@GetMapping("/deleteArea/{id}")
+	/*@GetMapping("/deleteArea/{id}")
     public RedirectView deleteArea(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         areaService.deleteArea(id);
         redirectAttributes.addFlashAttribute("message", "Area deleted successfully");
         return new RedirectView("/recreational-areas-list", true);
-    }
+    }*/
 	
 	// @GetMapping("/details")
 	// public String UserAcc_VIewDetails(Model model) {
@@ -504,12 +466,12 @@ public String processForgotPassword(@ModelAttribute("resetRequest") User resetRe
 		model.addAttribute("error", "No user found with the provided email.");
 	}
 	
-	return "forgotPassword_page"; // Redirect back to the form in case of an error
+	return "forgotPassword_page"; 
 }
 @GetMapping("/forgotPassword_setPass")
 public String showResetPasswordPage(@RequestParam("token") String token, Model model) {
 model.addAttribute("loginRequest", new User());
-model.addAttribute("token", token); // Add token to the model
+model.addAttribute("token", token); 
 return "forgotPassword_setPass";
 }
 @PostMapping("/forgotPassword_setPass")
@@ -524,7 +486,7 @@ if (!newPassword.equals(confirmPassword)) {
 
 boolean success = userService.resetPassword(token, newPassword);
 if (success) {
-	return "redirect:/?resetSuccess=true"; // Redirect to login page on success
+	return "redirect:/?resetSuccess=true"; 
 } else {
 	model.addAttribute("error", "An error occurred. Please try again.");
 	return "forgotPassword_setPass"; 
