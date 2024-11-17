@@ -431,6 +431,7 @@ public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model mo
 	public String deleteArea(@PathVariable Long id, Model model) {
 		model.addAttribute("delete", "Are you sure you would like to delete this area?");
 		areaService.deleteArea(id);
+
 		return "redirect:/areas-admin";
 	}
 
