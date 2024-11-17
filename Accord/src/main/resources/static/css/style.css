@@ -697,6 +697,7 @@ h1 {
   padding: 1.5rem;
   margin-bottom: 2rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-top: 5px solid #323aa1;
 }
 
 .activities-table {
@@ -762,14 +763,19 @@ h1 {
   font-size: 16px;
   font-weight: 300;
 }
-
 .view-options {
   display: flex;
   gap: 10px;
 }
+
+.view-options2 {
+  display: flex;
+  gap: 10px;
+  margin-top: 1.5rem;
+}
 .view-option {
   background: none;
-  border: 1px solid #ccc;
+  
   padding: 5px 10px;
   cursor: pointer;
   border-radius: 4px;
@@ -777,12 +783,37 @@ h1 {
 }
 .view-option:hover {
   background-color: #f0f0f0;
+  
 }
 .view-option.active {
-  background-color: #FFF5F4;
+  background-color: #FFCFBB;
   border-color: #FF5916;
+  border: 1px solid #ff5916;
 }
 .view-option.active svg {
+  stroke: #FF5916;
+}
+
+.view-option svg {
+  stroke: #000000;
+}
+
+.view-option2 {
+  background: none;
+  border: 1px solid #070000;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: -17%;
+}
+.view-option2:hover {
+  background-color: #0c0000;
+}
+.view-option2.active {
+  background-color: #ff5916;
+  border-color: #FF5916;
+}
+.view-option2.active svg {
   stroke: #FF5916;
 }
 
