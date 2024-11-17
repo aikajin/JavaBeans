@@ -14,10 +14,6 @@
         <img th:src="@{'data:image/*;base64,'+ ${area.generateBase64Cover()}}" alt="area" width="500" height="500" class="area-photo">
         <h2>Guidelines</h2><br>
         <h1 type="textarea">[[${area.guidelines}]]</h1><br>
-        <h2>Start Schedule</h2>
-        <label type="date">[[${area.startDate}]]</label><br>
-        <h2>End Schedule</h2>
-        <label type="date">[[${area.endDate}]]</label><br>
         <h2>Start Time</h2>
         <label type="time">[[${area.startTime}]]</label><br>
         <h2>End Time</h2>
@@ -31,8 +27,6 @@
         <input type="email" id="useremail" name="useremail" th:field="*{useremail}" required><br>
         <label for="user_start_date">Start Date</label>
         <input type="date" id="user_start_date" name="user_start_date" th:field="*{user_start_date}" required><br>
-        <label for="user_end_date">End Date</label>
-        <input type="date" id="user_end_date" name="user_end_date" th:field="*{user_end_date}" required><br>
         <label for="user_start_time">Start Time</label>
         <input type="time" id="user_start_time" name="user_start_time" th:field="*{user_start_time}" required><br>
         <label for="user_end_time">End Time</label>

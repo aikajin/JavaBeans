@@ -129,31 +129,17 @@
                             <div class="schedule-form">
                                 <div class="form-group-inline">
                                     <div class="form-group">
-                                        <label for="schedule-start-date">Start Date</label>
-                                        <input type="date" id="startDate" name="schedule-start-date" th:value="${area.startDate}"  required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="schedule-end-date">End Date</label>
-                                        <input type="date" id="endDate" name="schedule-end-date" th:value="${area.endDate}" required>
-                                    </div>
-                                </div>
-                                <div class="form-group-inline">
-                                    <div class="form-group">
                                         <label for="schedule-start-time">Opening Time</label>
-                                        <input type="time" id="startTime" name="schedule-start-time"  th:value="${area.startTime}" required>
+                                        <input type="time" id="startTime" name="schedule-start-time" th:field="*{startTime}" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="schedule-end-time">Closing Time</label>
-                                        <input type="time" id="endTime" name="schedule-end-time" th:value="${area.endTime}" required>
+                                        <input type="time" id="endTime" name="schedule-end-time" th:field="*{endTime}"  required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="schedule-recurrence">Recurrence</label>
-                                    <select id="recurrence" name="schedule-recurrence" th:value="${area.recurrence}" required>
-                                        <option value="daily">Daily</option>
-                                        <option value="weekly">Weekly</option>
-                                        <option value="monthly">Monthly</option>
-                                    </select>
+                                    <label for="available">Available Check if avaiable</label>
+                                    <input type="checkbox" id="available" name="available" th:field="*{available}">
                                 </div>
                                 <div class="schedule-options">
                                 </div>
