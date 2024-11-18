@@ -212,7 +212,7 @@ public String showDashboard(Model m, HttpSession session) {
 	
 	@GetMapping("/mb-user")
 	public String manageBookingsUser(Model m, HttpSession session) {
-		reservService.checkStatus();
+	reservService.checkStatus();
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
     if (currentUser != null) {
@@ -300,11 +300,26 @@ public String showDashboard(Model m, HttpSession session) {
 
 	
 
+	// @GetMapping("/view-recreational-area-user/{id}")
+	// public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model model) {
+    // // Add attributes to the model for profile management
+    // Area area = areaService.getAreaById(id);
+    // model.addAttribute("area", area);
+    // return "view_recreational_area_user";
+	// }
 	@GetMapping("/view-recreational-area-user/{id}")
-public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model model) {
-    // Add attributes to the model for profile management
-    Area area = areaService.getAreaById(id);
-    model.addAttribute("area", area);
+	public String viewRecreationalAreasUser(@PathVariable("id") Long id, Model m, HttpSession session) {
+	Area area = areaService.getAreaById(id);
+	m.addAttribute("area", area);
+    Long userId = (Long) session.getAttribute("userId");
+    User currentUser = userService.findById(userId).orElse(null);
+    if (currentUser != null) {
+		if (currentUser.getProfile_picture() != null) {
+			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
+			m.addAttribute("profilePictureBase64", base64Image);
+		}
+        m.addAttribute("user", currentUser); 
+    }
     return "view_recreational_area_user";
 }
 
