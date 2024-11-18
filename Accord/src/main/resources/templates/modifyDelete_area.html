@@ -120,9 +120,9 @@
                         <span class="file-name" id="additional-photos-name"></span>
                         <div class="error-message" id="additional-photos-error"></div>
                     </div>
-                    <img th:src="@{'data:image/*;base64,'+ ${area.generateBase64Add()}}" alt="area" width="500" height="500" class="area-photo">
+                    
                     <div class="form-group">
-                        <label for="schedule">Schedule</label>
+                        <label for="schedule">Modify Available Schedule</label>
                         <div class="schedule-interface">
                             <div class="schedule-header">
                             </div>
@@ -130,12 +130,11 @@
                                 <div class="form-group-inline">
                                     <div class="form-group">
                                         <label for="schedule-start-time">Opening Time</label>
-                                        <input type="time" id="startTime" name="schedule-start-time" th:field="*{startTime}" required>
+                                        <input type="time" id="startTime" name="schedule-start-time"  th:value="${area.startTime}"  required>
                                     </div>
                                     <div class="form-group">
                                         <label for="schedule-end-time">Closing Time</label>
-                                        <input type="time" id="endTime" name="schedule-end-time" th:field="*{endTime}"  required>
-                                    </div>
+                                        <input type="time" id="endTime" name="schedule-end-time" th:value="${area.endTime}"  required>
                                 </div>
                                 <div class="form-group">
                                     <label for="available">Available Check if avaiable</label>
