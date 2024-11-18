@@ -61,18 +61,27 @@
             </div>
 			
             <div class="profile">
-                <div class="profile-pic">JD</div>
+                <div class="profile-pic" style="width: 150px; height: 150px; background: #FFCFBB; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #FF5916; margin-right: 20px;">
+                            
+                    <!-- Check if the profile picture exists and display it -->
+                    <img th:if="${profilePictureBase64 != null}" 
+                        th:src="'data:image/jpeg;base64,' + ${profilePictureBase64}" 
+                        alt="Profile Picture" style="width: 100%; height: 100%; border-radius: 50%;" />
+                    
+                    <!-- Fallback to show the user's initials (e.g., 'JD') if no profile picture is available -->
+                    <span th:if="${profilePictureBase64 == null}" th:text="${user.name != null ? user.name.substring(0, 2).toUpperCase() : 'JD'}">JD</span>
+                </div>
                 <div class="profile-info">
                     <div class="profile-name">
-                        <a href="/manage-profile" class="logout"><u>John Doe</u></a>
+                        <a href="/manage-profile" class="logout"><u>[[${user.name}]]</u></a>
                     </div>
-                    <div class="profile-role">Homeowner</div>
+                    <div class="profile-role">[[${user.property_status}]]</div>
                 </div>
             </div>
         </div>
 
         <div class="main-content">
-            <h1>Welcome, <span id="userName">John Doe</span>!</h1>
+            <h1>Welcome, <span id="userName" th:text="${user.name}"></span>!</h1>
             <p class="subtitle">See your latest updates and reservations.</p>
 
 				<!-- Updated Active Bookings Section -->

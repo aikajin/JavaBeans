@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    
     <div class="container">
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
@@ -62,10 +63,19 @@
             </div>
             
             <div class="profile">
-                <div class="profile-pic">JD</div>
+                <div class="profile-pic" style="width: 150px; height: 150px; background: #FFCFBB; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #FF5916; margin-right: 20px;">
+                            
+                    <!-- Check if the profile picture exists and display it -->
+                    <img th:if="${profilePictureBase64 != null}" 
+                        th:src="'data:image/jpeg;base64,' + ${profilePictureBase64}" 
+                        alt="Profile Picture" style="width: 100%; height: 100%; border-radius: 50%;" />
+                    
+                    <!-- Fallback to show the user's initials (e.g., 'JD') if no profile picture is available -->
+                    <span th:if="${profilePictureBase64 == null}" th:text="${user.name != null ? user.name.substring(0, 2).toUpperCase() : 'JD'}">JD</span>
+                </div>
                 <div class="profile-info">
-                    <div class="profile-name">John Doe</div>
-                    <div class="profile-role">Homeowner</div>
+                    <div class="profile-name">[[${user.name}]]</div>
+                    <div class="profile-role">[[${user.property_status}]]</div>
                 </div>
             </div>
         </div>
@@ -103,24 +113,28 @@
                         <th>Booking ID</th>
                         <th>Area</th>
                         <th>Date</th>
-                        <th>Time</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr th:each="reservation :${reservation}">
                         <td>
-                            ACR-223398
+                            [[${reservation.id}]]
                         </td>
                         <td>
                             <div class="avatar-container">
-                                Tennis Court A
+                                [[${reservation.areaname}]]
                             </div>
                         </td>
-                        <td>Nov 1, 2024</td>
-                        <td>2:00 PM - 4:00 PM</td>
+                        <td>[[${reservation.user_start_date}]]</td>
+                        <td>[[${reservation.user_start_time}]]</td>
+                        <td>[[${reservation.user_end_time}]]</td>
+                        <td>[[${reservation.status}]]</td>
                         <td>
-                            <a href="/bookings" class="view-button">View</a>
+                            <a th:href="@{/cancelBooking/{id}(id=${reservation.id})}" class="view-button">Cancel Booking</a>
                         </td>
                     </tr>
                 </tbody>
