@@ -9,5 +9,32 @@
 <h1>Incorrect input</h1>
 <a href="/register">To Registration</a>
 <a href="/login">To Login</a>
+            
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Property Status</th>
+            <th>Role</th>
+            <th>Profile Picture</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="user : ${error}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.contactnumber}"></td>
+            <td th:text="${user.property_status}"></td>
+            <td th:text="${user.role}"></td>
+            <!-- <td>
+                <img th:if="${user.profilePictureUrl}" th:src="${user.profilePictureUrl}" alt="Profile Picture" width="50" height="50">
+                <span th:if="${!user.profilePictureUrl}">No Picture</span>
+            </td> -->
+        </tr>
+    </tbody>
 </body>
 </html>
