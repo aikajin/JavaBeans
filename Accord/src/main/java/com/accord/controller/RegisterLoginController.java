@@ -206,7 +206,7 @@ public String showDashboard(Model m, HttpSession session) {
     // Add the updated user to the model to reflect changes
 //     model.addAttribute("user", updatedUser);
 
-    return "manage_profile"; // Return the same view to reflect updated data
+    return "redirect:/profile"; // Return the same view to reflect updated data
 }
 
 	
