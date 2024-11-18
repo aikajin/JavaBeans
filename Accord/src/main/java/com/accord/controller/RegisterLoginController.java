@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Base64;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.accord.Entity.Area;
 import com.accord.Entity.Reservation;
 import com.accord.Entity.User;
+import com.accord.repository.UserRepository;
 import com.accord.service.AreaService;
 import com.accord.service.ReservService;
 import com.accord.service.UserService;
@@ -39,6 +41,8 @@ public class RegisterLoginController {
 	
 	@Autowired
 	private UserService userService;
+	@Autowired
+	UserRepository repo;
 
 	@Autowired
 	private AreaService areaService;
@@ -212,14 +216,28 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 
 
 
-	@GetMapping("/dash_user")
+	/*@GetMapping("/dash_user")
 	public String showDashboard(HttpSession session, Model model) {
 		reservService.checkStatus();
 		Long userId = (Long) session.getAttribute("userId");
 		User user = userService.findById(userId).orElse(null);
 		model.addAttribute("user", user);
 		return "dashboard_user";
-	}
+	}*/
+@GetMapping("/dash_user")
+public String showDashboard(Model m, HttpSession session) {
+    Long userId = (Long) session.getAttribute("userId");
+    User currentUser = userService.findById(userId).orElse(null);
+    if (currentUser != null) {
+		if (currentUser.getProfile_picture() != null) {
+			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
+			m.addAttribute("profilePictureBase64", base64Image);
+		}
+        m.addAttribute("user", currentUser); 
+    }
+    return "dashboard_user";
+}
+
 	@GetMapping("/dash_admin")
 	public String showDashboardAdmin() {
 		reservService.checkStatus();
@@ -265,6 +283,18 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
     }*/
     //return "redirect:/"; // Redirect to home if no userId in session
 }
+	/*public String manageProfile(Model m, HttpSession session, MultipartFile prof) throws IOException {
+		Long userId = (Long) session.getAttribute("userId");
+		User currentUser = userService.findById(userId).orElse(null);
+		if (currentUser != null) {
+			if (currentUser.getProfile_picture() != null) {
+				String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
+				m.addAttribute("profilePictureBase64", base64Image);
+			}
+			m.addAttribute("user", currentUser); // Single user
+		}
+		return "manage_profile";
+	}*/
 	
 	// @PostMapping("/profile")
 	// public String updateProfile(@ModelAttribute User user, @RequestParam("prof") MultipartFile prof, HttpSession session) throws IOException {
@@ -291,6 +321,7 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 
 	
 
+	
 	@GetMapping("/mb-user")
 	public String manageBookingsUser(HttpSession session, Model model) {
 		// Add attributes to the model if needed for profile management
@@ -298,9 +329,28 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 		Long userId = (Long) session.getAttribute("userId");
 		User user = userService.findById(userId).orElse(null);
 		model.addAttribute("reservation", reservService.findReservationsByUserEmail(user.getEmail()));
-		model.addAttribute("user", user);
+		if (user != null) {
+			if (user.getProfile_picture() != null) {
+				String base64Image = Base64.getEncoder().encodeToString(user.getProfile_picture());
+				model.addAttribute("profilePictureBase64", base64Image);
+			}
+			model.addAttribute("user", user); // Single user
+		}
 		return "managebookingsUser";
 	}
+	public String manageBookingsUser(Model m, HttpSession session) {
+		reservService.checkStatus();
+    Long userId = (Long) session.getAttribute("userId");
+    User currentUser = userService.findById(userId).orElse(null);
+    if (currentUser != null) {
+		if (currentUser.getProfile_picture() != null) {
+			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
+			m.addAttribute("profilePictureBase64", base64Image);
+		}
+        m.addAttribute("user", currentUser); // Single user
+    }
+    return "managebookingsUser";
+}
 
 	@GetMapping("/mb-admin")
 	public String manageBookingsAdmin(Model model) {
@@ -324,12 +374,19 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 	}
 
 	@GetMapping("/bookings/{id}")
-	public String viewBookingsDetails(@PathVariable Long id, Model model) {
+	public String viewBookingsDetails(@PathVariable Long id, HttpSession session,  Model model) {
 		// Add attributes to the model if needed for profile management
 		Area area = areaService.getAreaById(id);
-		//Reservation reservation = reservService.findReservationById(id);
+		Long userId = (Long) session.getAttribute("userId");
+		User user = userService.findById(userId).orElse(null);
 		model.addAttribute("area", area);
-		//model.addAttribute("reservation", reservation);
+		if (user != null) {
+			if (user.getProfile_picture() != null) {
+				String base64Image = Base64.getEncoder().encodeToString(user.getProfile_picture());
+				model.addAttribute("profilePictureBase64", base64Image);
+			}
+			model.addAttribute("user", user); // Single user
+		}
 		return "view_recreational_area";
 	}
 
@@ -339,9 +396,15 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 		Area area = areaService.getAreaById(id);
 		Long userId = (Long) session.getAttribute("userId");
 		User user = userService.findById(userId).orElse(null);
-		model.addAttribute("user", user);
 		model.addAttribute("area", area);
 		model.addAttribute("reservation", new Reservation());
+		if (user != null) {
+			if (user.getProfile_picture() != null) {
+				String base64Image = Base64.getEncoder().encodeToString(user.getProfile_picture());
+				model.addAttribute("profilePictureBase64", base64Image);
+			}
+			model.addAttribute("user", user); // Single user
+		}
 		return "book_area";
 	} 
 	@GetMapping("/submit_book")
@@ -364,9 +427,15 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 		// Add attributes to the model if needed for profile management
 		Long userId = (Long) session.getAttribute("userId");
 		User user = userService.findById(userId).orElse(null);
-		model.addAttribute("user", user);
 		model.addAttribute("areaList", areaService.getAllAvailableAreas());
 		model.addAttribute("areaListFalse", areaService.getAllUnavailableAreas());
+		if (user != null) {
+			if (user.getProfile_picture() != null) {
+				String base64Image = Base64.getEncoder().encodeToString(user.getProfile_picture());
+				model.addAttribute("profilePictureBase64", base64Image);
+			}
+			model.addAttribute("user", user); // Single user
+		}
 		return "am_recreationalAreasList_user";
 	}
 
