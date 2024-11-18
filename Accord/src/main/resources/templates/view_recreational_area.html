@@ -102,8 +102,14 @@
                 <section class="area-guidelines2">
                     <h2>Guidelines</h2>
                     <span th:text="${area.guidelines}"></span>
+                    </section>
+                    <section class="area-guidelines2">
+                    <h2 style="margin-bottom: -5px;">Schedule</h2>
+                    <p style ="font-size: small; color: dimgrey;"><i>Note: Military Time is used</i></p>
+                    <p> Everyday at <span th:text="${area.startTime}"></span> - <span th:text="${area.endTime}"></span>. </p>
                 </section>
-                <div class="schedule-header" id="schedules">
+                
+                <!--<div class="schedule-header" id="schedules">
 
                     <h1 style="margin-bottom: 5px;">Schedules</h1>
 
@@ -127,7 +133,7 @@
                     </div>
                 </div>
                 <div class="schedule-list"></div>
-                <div class="schedule-calendar"></div>
+                <div class="schedule-calendar"></div>-->
             </form>
         </main>
     </div>
