@@ -10,7 +10,7 @@ import com.accord.Entity.Area;
 public interface AreaRepository extends JpaRepository<Area, Long>{
     Optional<Area> findById(Long id);
 
-    Area findByName(String name);
+    Optional<Area> findByName(String name);
 
     List<Area> findByAvailableTrue();
 

@@ -32,6 +32,9 @@
         <label for="user_end_time">End Time</label>
         <input type="time" id="user_end_time" name="user_end_time"  th:field="*{user_end_time}" required><br>
         <button type="submit" class="submit-btn">Book Area</button>
+        <div th:if="${error}" class="error-message">
+            <p th:text="${error}"></p>
+        </div>
     </form>
 </div>
 </body>

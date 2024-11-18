@@ -415,16 +415,16 @@ public String showDashboard(Model m, HttpSession session) {
 		return "book_area";
 	} 
 	@GetMapping("/submit_book")
-	public String addBooking(@ModelAttribute Reservation reservation, Model model) {
+	public String addBooking(@ModelAttribute Reservation reservation, Model model, RedirectAttributes redirectAttributes) {
 		// Add attributes to the model if needed for profile management
-		/*Area area = areaService.getAreaById(id);
+		Area area = areaService.getByName(reservation.getAreaname());
 		LocalDate startDate = LocalDate.now();
         if((reservation.getUser_start_time().isBefore(area.getStartTime())) || 
             (reservation.getUser_end_time().isAfter(area.getEndTime())) ||
             (reservation.getUser_start_date().isBefore(startDate))) {
-                model.addAttribute("error", "Invalid Time/Date Input");
-				return "book_area";
-        }*/
+                redirectAttributes.addFlashAttribute("error", "Invalid Time/Date Input");
+				return "redirect:/booking-area/" + area.getId(); 
+        }
 		reservService.bookReservation(reservation);
 		return "redirect:/areas-user";
 	}

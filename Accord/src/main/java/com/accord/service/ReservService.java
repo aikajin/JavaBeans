@@ -20,16 +20,8 @@ public class ReservService {
     @Autowired
     private ReservRepository reservRepository;
 
-    public String bookReservation(Reservation reservation, Area area) {
-        LocalDate startDate = LocalDate.now();
-        if((reservation.getUser_start_time().isBefore(area.getStartTime())) || 
-            (reservation.getUser_end_time().isAfter(area.getEndTime())) ||
-            (reservation.getUser_start_date().isBefore(startDate))) {
-                return "Invalid Time/Date Input";
-        }
-        reservation.setStatus("NOT STARTED");
+    public void bookReservation(Reservation reservation) {
         reservRepository.save(reservation);
-        return "Successful Booking";
     }
 
     public List<Reservation> listReservation() {

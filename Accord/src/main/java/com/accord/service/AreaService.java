@@ -85,6 +85,10 @@ public class AreaService {
         areaRepository.deleteById(id);
     }
 
+    public Area getByName(String name) {
+        return areaRepository.findByName(name).orElse(null);
+    }
+
     public List<Area> getAllAreas() {
         return areaRepository.findAll(Sort.by("id").ascending());
     }
