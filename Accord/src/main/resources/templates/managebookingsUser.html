@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    
     <div class="container">
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
@@ -73,8 +74,8 @@
                     <span th:if="${profilePictureBase64 == null}" th:text="${user.name != null ? user.name.substring(0, 2).toUpperCase() : 'JD'}">JD</span>
                 </div>
                 <div class="profile-info">
-                    <div class="profile-name" th:text="${user.name}">John Doe</div>
-                    <div class="profile-role" th:text="${user.property_status}">Homeowner</div>
+                    <div class="profile-name">[[${user.name}]]</div>
+                    <div class="profile-role">[[${user.property_status}]]</div>
                 </div>
             </div>
         </div>
@@ -112,24 +113,28 @@
                         <th>Booking ID</th>
                         <th>Area</th>
                         <th>Date</th>
-                        <th>Time</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr th:each="reservation :${reservation}">
                         <td>
-                            ACR-223398
+                            [[${reservation.id}]]
                         </td>
                         <td>
                             <div class="avatar-container">
-                                Tennis Court A
+                                [[${reservation.areaname}]]
                             </div>
                         </td>
-                        <td>Nov 1, 2024</td>
-                        <td>2:00 PM - 4:00 PM</td>
+                        <td>[[${reservation.user_start_date}]]</td>
+                        <td>[[${reservation.user_start_time}]]</td>
+                        <td>[[${reservation.user_end_time}]]</td>
+                        <td>[[${reservation.status}]]</td>
                         <td>
-                            <a href="/bookings" class="view-button">View</a>
+                            <a th:href="@{/cancelBooking/{id}(id=${reservation.id})}" class="view-button">Cancel Booking</a>
                         </td>
                     </tr>
                 </tbody>

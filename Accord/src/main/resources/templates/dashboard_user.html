@@ -73,17 +73,15 @@
                 </div>
                 <div class="profile-info">
                     <div class="profile-name">
-                        <a href="/manage-profile" class="logout" th:text="${user.name}"><u>John Doe</u></a>
+                        <a href="/manage-profile" class="logout"><u>[[${user.name}]]</u></a>
                     </div>
-                    <div class="profile-role" th:text="${user.property_status}">Homeowner</div>
+                    <div class="profile-role">[[${user.property_status}]]</div>
                 </div>
             </div>
         </div>
 
         <div class="main-content">
-            
-            <h1>Welcome, <span id="userName" th:text="${user.name}">John Doe</span>!</h1>
-            
+            <h1>Welcome, <span id="userName" th:text="${user.name}"></span>!</h1>
             <p class="subtitle">See your latest updates and reservations.</p>
 
 				<!-- Updated Active Bookings Section -->

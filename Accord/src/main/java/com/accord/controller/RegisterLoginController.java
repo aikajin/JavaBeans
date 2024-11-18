@@ -1,3 +1,4 @@
+
 package com.accord.controller;
 
 import java.io.IOException;
@@ -178,15 +179,16 @@ public String showDashboard(Model m, HttpSession session) {
    
 // }
 	@GetMapping("/profile")
-	public String manageProfile(Model m, HttpSession session, MultipartFile prof) throws IOException {
+	public String manageProfile(Model model, HttpSession session, MultipartFile prof) throws IOException {
+    reservService.checkStatus();
 		Long userId = (Long) session.getAttribute("userId");
-		User currentUser = userService.findById(userId).orElse(null);
-		if (currentUser != null) {
-			if (currentUser.getProfile_picture() != null) {
-				String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
-				m.addAttribute("profilePictureBase64", base64Image);
+		User user = userService.findById(userId).orElse(null);
+		if (user != null) {
+			if (user.getProfile_picture() != null) {
+				String base64Image = Base64.getEncoder().encodeToString(user.getProfile_picture());
+				model.addAttribute("profilePictureBase64", base64Image);
 			}
-			m.addAttribute("user", currentUser); // Single user
+			model.addAttribute("user", user); // Single user
 		}
 		return "manage_profile";
 	}
@@ -202,7 +204,7 @@ public String showDashboard(Model m, HttpSession session) {
     User updatedUser = userService.findById(userId).orElse(null);
 
     // Add the updated user to the model to reflect changes
-    model.addAttribute("user", updatedUser);
+//     model.addAttribute("user", updatedUser);
 
     return "manage_profile"; // Return the same view to reflect updated data
 }
@@ -451,4 +453,5 @@ if (success) {
 	return "forgotPassword_setPass"; 
 }
 }
+
 }
