@@ -1,8 +1,8 @@
+
 package com.accord.controller;
 
 import java.io.IOException;
 import java.net.URI;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Base64;
@@ -100,91 +100,7 @@ public class RegisterLoginController {
 		}
 	}
 
-	// @PostMapping("/login")
-	// public String login(@ModelAttribute User user, Model model) {
-	// 	//User authenticatedUser = userService.authenticate(user.getEmail(), user.getPassword());
-	// 	//User role = userSerivce.findByEmail(UserService.getcu)
-	// 	//Admin authenticatedAdmin = adminService.authenticate(admin.getEmail(), admin.getPassword());
-	// 	/*if(authenticatedUser != null) {
-	// 		model.addAttribute("userLogin", authenticatedUser.getEmail());
-	// 		return "dashboard_user";
-	// 	}
-	// 	else if(authenticatedAdmin != null) {
-	// 		model.addAttribute("adminLogin", authenticatedAdmin.getEmail());
-	// 		return "dashboard_admin";
-	// 	}
-	// 	else {
-	// 		model.addAttribute("error", "na error");
-	// 		return "login_page";
-	// 	}*/
-	// 	/*String currentEmail = user.getEmail();
-	// 	User userCurrent = userService.findByEmail(currentEmail);
-	// 	if(userCurrent.getRole().contains("ROLE_USER")) {
-	// 		return "dashboard_user";
-	// 	}
-	// 	else {
-	// 		return "dashboard_admin";
-	// 	}*/
-	// 	String currentEmail = user.getEmail();
-	// 	Boolean authenticateUser = userService.authenticateLogin(user.getEmail(), user.getPassword());
-	// 	//User currectUser = userService.findByEmail(currentEmail);
-		
-	// 	if (authenticateUser) {
-	// 		// Use Optional to safely get the User object
-	// 		Optional<User> optionalUser = userService.findByEmail(currentEmail);
 	
-	// 		if (optionalUser.isPresent()) {
-	// 			User currectUser = optionalUser.get(); // Get the actual User object
-	// 			if (currectUser.getRole().contains("ROLE_USER")) {
-	// 				return "dashboard_user";
-	// 			} else {
-	// 				return "dashboard_admin";
-	// 			}
-	// 		} else {
-	// 			model.addAttribute("error", "User not found");
-	// 			return "login_page"; // Return to login page if user not found
-	// 		}
-	// 	}
-	// 	return "login_page"; // Return to login page if authentication fails
-	// }
-
-// 	@PostMapping("/login")
-// public String login(@ModelAttribute User user, Model model, HttpSession session) {
-//     String currentEmail = user.getEmail();
-//     Boolean authenticateUser = userService.authenticateLogin(user.getEmail(), user.getPassword());
-
-//     if (authenticateUser) {
-//         Optional<User> optionalUser = userService.findByEmail(currentEmail);
-//         if (optionalUser.isPresent()) {
-//             User currentUser = optionalUser.get();
-
-//             // Store the user in the session for persistence across pages
-//             session.setAttribute("loggedInUser", currentUser);
-
-//             if (currentUser.getRole().contains("ROLE_USER")) {
-//                 return "redirect:/dashboard_user";
-//             } else {
-//                 return "redirect:/dashboard_admin";
-//             }
-//         } else {
-//             model.addAttribute("error", "User not found");
-//             return "login_page";
-//         }
-//     }
-
-//     model.addAttribute("error", "Invalid credentials");
-//     return "login_page";
-// }
-// @PostMapping("/login")
-// public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password, HttpSession session) {
-//     User user = userService.findByEmail(email).orElse(null);
-//     if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-//         session.setAttribute("userId", user.getId()); // Store user ID instead of the whole user object
-//         return ResponseEntity.ok("Login successful");
-//     } else {
-//         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-//     }
-// }
 
 @PostMapping("/login")
 public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password, HttpSession session) {
@@ -217,14 +133,6 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 
 
 
-	/*@GetMapping("/dash_user")
-	public String showDashboard(HttpSession session, Model model) {
-		reservService.checkStatus();
-		Long userId = (Long) session.getAttribute("userId");
-		User user = userService.findById(userId).orElse(null);
-		model.addAttribute("user", user);
-		return "dashboard_user";
-	}*/
 @GetMapping("/dash_user")
 public String showDashboard(Model m, HttpSession session) {
     Long userId = (Long) session.getAttribute("userId");
@@ -241,13 +149,11 @@ public String showDashboard(Model m, HttpSession session) {
 
 	@GetMapping("/dash_admin")
 	public String showDashboardAdmin() {
-		reservService.checkStatus();
 		return "dashboard_admin";
 	}
 	
 	@GetMapping("/dashboard_admin")
 	public String allUsers(@ModelAttribute("form") User form, Model model) {
-		reservService.checkStatus();
 		List<User> users = userService.getAllUser();
 		model.addAttribute("result", users);
 		return "viewusers_page";
@@ -262,55 +168,32 @@ public String showDashboard(Model m, HttpSession session) {
 
 	
 
+// 	@GetMapping("/profile")
+// 	public String manageProfile(Model model, HttpSession session, MultipartFile prof) throws IOException {
+//     Long userId = (Long) session.getAttribute("userId");
+// 	User user = userService.findById(userId).orElse(null);
+// 	//userService.updateUser(userId, currentUser, prof);
+// 	//currentUser = userService.update2(currentUser, prof);
+// 	model.addAttribute("user", user);
+// 	return "manage_profile";
+   
+// }
 	@GetMapping("/profile")
 	public String manageProfile(Model model, HttpSession session, MultipartFile prof) throws IOException {
-	reservService.checkStatus();
-    Long userId = (Long) session.getAttribute("userId");
-	User user = userService.findById(userId).orElse(null);
-	//userService.updateUser(userId, currentUser, prof);
-	//currentUser = userService.update2(currentUser, prof);
-	if (user != null) {
-		if (user.getProfile_picture() != null) {
-			String base64Image = Base64.getEncoder().encodeToString(user.getProfile_picture());
-			model.addAttribute("profilePictureBase64", base64Image);
-		}
-		model.addAttribute("user", user); // Single user
-	}
-	return "manage_profile";
-    /*if (userId != null) {
-        User currentUser = userService.findById(userId).orElse(null);
-        if (currentUser != null) {
-			userService.updateUser(userId, currentUser, prof);
-            model.addAttribute("user", currentUser);
-            return "manage_profile"; // Load the user's profile details in the view
-        } else {
-            model.addAttribute("error", "User not found.");
-            return "redirect:/"; // Redirect to home if user not found
-        }
-    }*/
-    //return "redirect:/"; // Redirect to home if no userId in session
-}
-	/*public String manageProfile(Model m, HttpSession session, MultipartFile prof) throws IOException {
+    reservService.checkStatus();
 		Long userId = (Long) session.getAttribute("userId");
-		User currentUser = userService.findById(userId).orElse(null);
-		if (currentUser != null) {
-			if (currentUser.getProfile_picture() != null) {
-				String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
-				m.addAttribute("profilePictureBase64", base64Image);
+		User user = userService.findById(userId).orElse(null);
+		if (user != null) {
+			if (user.getProfile_picture() != null) {
+				String base64Image = Base64.getEncoder().encodeToString(user.getProfile_picture());
+				model.addAttribute("profilePictureBase64", base64Image);
 			}
-			m.addAttribute("user", currentUser); // Single user
+			model.addAttribute("user", user); // Single user
 		}
 		return "manage_profile";
-	}*/
+	}
 	
-	// @PostMapping("/profile")
-	// public String updateProfile(@ModelAttribute User user, @RequestParam("prof") MultipartFile prof, HttpSession session) throws IOException {
-	// 	//TODO: process POST request
-	// 	Long userId = (Long) session.getAttribute("userId");
-	// 	//User user = userService.findById(userId).orElse(null);
-	// 	userService.update2(userId, prof);
-	// 	return "manage_profile";
-	// }
+	
 	@PostMapping("/profile")
 	public String updateProfile(@ModelAttribute User user, @RequestParam("prof") MultipartFile prof, HttpSession session, Model model) throws IOException {
     Long userId = (Long) session.getAttribute("userId");
@@ -321,7 +204,7 @@ public String showDashboard(Model m, HttpSession session) {
     User updatedUser = userService.findById(userId).orElse(null);
 
     // Add the updated user to the model to reflect changes
-
+//     model.addAttribute("user", updatedUser);
 
     return "manage_profile"; // Return the same view to reflect updated data
 }
@@ -330,23 +213,8 @@ public String showDashboard(Model m, HttpSession session) {
 
 	
 	@GetMapping("/mb-user")
-	public String manageBookingsUser(HttpSession session, Model model) {
-		// Add attributes to the model if needed for profile management
-		reservService.checkStatus();
-		Long userId = (Long) session.getAttribute("userId");
-		User user = userService.findById(userId).orElse(null);
-		model.addAttribute("reservation", reservService.findReservationsByUserEmail(user.getEmail()));
-		if (user != null) {
-			if (user.getProfile_picture() != null) {
-				String base64Image = Base64.getEncoder().encodeToString(user.getProfile_picture());
-				model.addAttribute("profilePictureBase64", base64Image);
-			}
-			model.addAttribute("user", user); // Single user
-		}
-		return "managebookingsUser";
-	}
 	public String manageBookingsUser(Model m, HttpSession session) {
-		reservService.checkStatus();
+	reservService.checkStatus();
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
     if (currentUser != null) {
@@ -381,50 +249,26 @@ public String showDashboard(Model m, HttpSession session) {
 	}
 
 	@GetMapping("/bookings/{id}")
-	public String viewBookingsDetails(@PathVariable Long id, HttpSession session,  Model model) {
+	public String viewBookingsDetails(@PathVariable Long id, Model model) {
 		// Add attributes to the model if needed for profile management
 		Area area = areaService.getAreaById(id);
-		Long userId = (Long) session.getAttribute("userId");
-		User user = userService.findById(userId).orElse(null);
+		//Reservation reservation = reservService.findReservationById(id);
 		model.addAttribute("area", area);
-		if (user != null) {
-			if (user.getProfile_picture() != null) {
-				String base64Image = Base64.getEncoder().encodeToString(user.getProfile_picture());
-				model.addAttribute("profilePictureBase64", base64Image);
-			}
-			model.addAttribute("user", user); // Single user
-		}
+		//model.addAttribute("reservation", reservation);
 		return "view_recreational_area";
 	}
 
 	@GetMapping("/booking-area/{id}")
-	public String viewBookingArea(@PathVariable Long id, HttpSession session, Model model) {
+	public String viewBookingArea(@PathVariable Long id, Model model) {
 		// Add attributes to the model if needed for profile management
 		Area area = areaService.getAreaById(id);
-		Long userId = (Long) session.getAttribute("userId");
-		User user = userService.findById(userId).orElse(null);
 		model.addAttribute("area", area);
 		model.addAttribute("reservation", new Reservation());
-		if (user != null) {
-			if (user.getProfile_picture() != null) {
-				String base64Image = Base64.getEncoder().encodeToString(user.getProfile_picture());
-				model.addAttribute("profilePictureBase64", base64Image);
-			}
-			model.addAttribute("user", user); // Single user
-		}
 		return "book_area";
 	} 
 	@GetMapping("/submit_book")
-	public String addBooking(@ModelAttribute Reservation reservation, Model model, RedirectAttributes redirectAttributes) {
+	public String addBooking(@ModelAttribute Reservation reservation) {
 		// Add attributes to the model if needed for profile management
-		Area area = areaService.getByName(reservation.getAreaname());
-		LocalDate startDate = LocalDate.now();
-        if((reservation.getUser_start_time().isBefore(area.getStartTime())) || 
-            (reservation.getUser_end_time().isAfter(area.getEndTime())) ||
-            (reservation.getUser_start_date().isBefore(startDate))) {
-                redirectAttributes.addFlashAttribute("error", "Invalid Time/Date Input");
-				return "redirect:/booking-area/" + area.getId(); 
-        }
 		reservService.bookReservation(reservation);
 		return "redirect:/areas-user";
 	}
@@ -437,32 +281,47 @@ public String showDashboard(Model m, HttpSession session) {
 		return "am_recreationalAreasList";
 	}
 
+	
 	@GetMapping("/areas-user")
-	public String recreationalAreasListUser(HttpSession session, Model model) {
-		// Add attributes to the model if needed for profile management
-		Long userId = (Long) session.getAttribute("userId");
-		User user = userService.findById(userId).orElse(null);
-		model.addAttribute("areaList", areaService.getAllAvailableAreas());
-		model.addAttribute("areaListFalse", areaService.getAllUnavailableAreas());
-		if (user != null) {
-			if (user.getProfile_picture() != null) {
-				String base64Image = Base64.getEncoder().encodeToString(user.getProfile_picture());
-				model.addAttribute("profilePictureBase64", base64Image);
-			}
-			model.addAttribute("user", user); // Single user
+	public String showAreas(Model m, HttpSession session) {
+	m.addAttribute("areaList", areaService.getAllAvailableAreas());
+	m.addAttribute("areaListFalse", areaService.getAllUnavailableAreas());
+    Long userId = (Long) session.getAttribute("userId");
+    User currentUser = userService.findById(userId).orElse(null);
+    if (currentUser != null) {
+		if (currentUser.getProfile_picture() != null) {
+			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
+			m.addAttribute("profilePictureBase64", base64Image);
 		}
-		return "am_recreationalAreasList_user";
-	}
+        m.addAttribute("user", currentUser); // Single user
+    }
+    return "am_recreationalAreasList_user";
+}
 
 
 
 	
 
+	// @GetMapping("/view-recreational-area-user/{id}")
+	// public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model model) {
+    // // Add attributes to the model for profile management
+    // Area area = areaService.getAreaById(id);
+    // model.addAttribute("area", area);
+    // return "view_recreational_area_user";
+	// }
 	@GetMapping("/view-recreational-area-user/{id}")
-public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model model) {
-    // Add attributes to the model for profile management
-    Area area = areaService.getAreaById(id);
-    model.addAttribute("area", area);
+	public String viewRecreationalAreasUser(@PathVariable("id") Long id, Model m, HttpSession session) {
+	Area area = areaService.getAreaById(id);
+	m.addAttribute("area", area);
+    Long userId = (Long) session.getAttribute("userId");
+    User currentUser = userService.findById(userId).orElse(null);
+    if (currentUser != null) {
+		if (currentUser.getProfile_picture() != null) {
+			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
+			m.addAttribute("profilePictureBase64", base64Image);
+		}
+        m.addAttribute("user", currentUser); 
+    }
     return "view_recreational_area_user";
 }
 
@@ -536,20 +395,12 @@ public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model mo
 		return "redirect:/areas-admin";
 	}
 
-	@GetMapping("/cancelBooking/{id}")
-	public String deleteBooking(@PathVariable Long id, Model model) {
-		reservService.cancelBooking(id);
-		return "redirect:/mb-user";
-	}
-
 	/*@GetMapping("/deleteArea/{id}")
     public RedirectView deleteArea(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         areaService.deleteArea(id);
         redirectAttributes.addFlashAttribute("message", "Area deleted successfully");
         return new RedirectView("/recreational-areas-list", true);
     }*/
-
-	
 	
 	// @GetMapping("/details")
 	// public String UserAcc_VIewDetails(Model model) {
@@ -602,4 +453,5 @@ if (success) {
 	return "forgotPassword_setPass"; 
 }
 }
+
 }
