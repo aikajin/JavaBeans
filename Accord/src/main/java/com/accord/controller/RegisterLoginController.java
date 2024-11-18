@@ -214,6 +214,7 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 
 	@GetMapping("/dash_user")
 	public String showDashboard(HttpSession session, Model model) {
+		reservService.checkStatus();
 		Long userId = (Long) session.getAttribute("userId");
 		User user = userService.findById(userId).orElse(null);
 		model.addAttribute("user", user);
@@ -221,11 +222,13 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 	}
 	@GetMapping("/dash_admin")
 	public String showDashboardAdmin() {
+		reservService.checkStatus();
 		return "dashboard_admin";
 	}
 	
 	@GetMapping("/dashboard_admin")
 	public String allUsers(@ModelAttribute("form") User form, Model model) {
+		reservService.checkStatus();
 		List<User> users = userService.getAllUser();
 		model.addAttribute("result", users);
 		return "viewusers_page";
@@ -242,6 +245,7 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 
 	@GetMapping("/profile")
 	public String manageProfile(Model model, HttpSession session, MultipartFile prof) throws IOException {
+	reservService.checkStatus();
     Long userId = (Long) session.getAttribute("userId");
 	User user = userService.findById(userId).orElse(null);
 	//userService.updateUser(userId, currentUser, prof);
@@ -290,6 +294,7 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 	@GetMapping("/mb-user")
 	public String manageBookingsUser(HttpSession session, Model model) {
 		// Add attributes to the model if needed for profile management
+		reservService.checkStatus();
 		Long userId = (Long) session.getAttribute("userId");
 		User user = userService.findById(userId).orElse(null);
 		model.addAttribute("reservation", reservService.findReservationsByUserEmail(user.getEmail()));
@@ -355,8 +360,11 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 	}
 
 	@GetMapping("/areas-user")
-	public String recreationalAreasListUser(Model model) {
+	public String recreationalAreasListUser(HttpSession session, Model model) {
 		// Add attributes to the model if needed for profile management
+		Long userId = (Long) session.getAttribute("userId");
+		User user = userService.findById(userId).orElse(null);
+		model.addAttribute("user", user);
 		model.addAttribute("areaList", areaService.getAllAvailableAreas());
 		model.addAttribute("areaListFalse", areaService.getAllUnavailableAreas());
 		return "am_recreationalAreasList_user";
@@ -444,12 +452,20 @@ public String recreationalSwimmingPoolUser(@PathVariable("id") Long id, Model mo
 		return "redirect:/areas-admin";
 	}
 
+	@GetMapping("/cancelBooking/{id}")
+	public String deleteBooking(@PathVariable Long id, Model model) {
+		reservService.cancelBooking(id);
+		return "redirect:/mb-user";
+	}
+
 	/*@GetMapping("/deleteArea/{id}")
     public RedirectView deleteArea(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         areaService.deleteArea(id);
         redirectAttributes.addFlashAttribute("message", "Area deleted successfully");
         return new RedirectView("/recreational-areas-list", true);
     }*/
+
+	
 	
 	// @GetMapping("/details")
 	// public String UserAcc_VIewDetails(Model model) {

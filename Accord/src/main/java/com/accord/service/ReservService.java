@@ -32,7 +32,7 @@ public class ReservService {
         return reservRepository.findByAreaname(areaname);
     }
 
-    public Reservation findReservationsByUserEmail(String useremail) {
+    public List<Reservation> findReservationsByUserEmail(String useremail) {
         return reservRepository.findByUseremail(useremail);
     }
 
@@ -40,12 +40,18 @@ public class ReservService {
         return reservRepository.findById(id).orElse(null);
     }
 
+    public void cancelBooking(Long id) {
+        Reservation r =  reservRepository.findById(id).orElse(null);
+        r.setStatus("CANCELLED");
+        reservRepository.save(r);
+    }
+
     public void checkStatus() {
         LocalDateTime dateTime = LocalDateTime.now();
         List<Reservation> r = reservRepository.findAll();
         r.forEach(rA -> {
-            if(rA.getStatus() == "CANCELLED") {
-                rA.setStatus("CANCELLED");
+            if("CANCELLED".equals(rA.getStatus())) {
+                //rA.setStatus("CANCELLED");
             }
             else if(dateTime.isAfter(LocalDateTime.of(rA.getUser_start_date(), rA.getUser_end_time()))) {
                 rA.setStatus("COMPLETED");

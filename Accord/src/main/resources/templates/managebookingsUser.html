@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    
     <div class="container">
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
@@ -124,7 +125,7 @@
                         <td>[[${reservation.user_end_time}]]</td>
                         <td>[[${reservation.status}]]</td>
                         <td>
-                            <a href="/bookings" class="view-button">View</a>
+                            <a th:href="@{/cancelBooking/{id}(id=${reservation.id})}" class="view-button">Cancel Booking</a>
                         </td>
                     </tr>
                 </tbody>
