@@ -212,7 +212,10 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 
 
 	@GetMapping("/dash_user")
-	public String showDashboard() {
+	public String showDashboard(HttpSession session, Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		User user = userService.findById(userId).orElse(null);
+		model.addAttribute("user", user);
 		return "dashboard_user";
 	}
 	@GetMapping("/dash_admin")
@@ -284,9 +287,12 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 	
 
 	@GetMapping("/mb-user")
-	public String manageBookingsUser(Model model) {
+	public String manageBookingsUser(HttpSession session, Model model) {
 		// Add attributes to the model if needed for profile management
-		reservService.checkStatus();
+		Long userId = (Long) session.getAttribute("userId");
+		User user = userService.findById(userId).orElse(null);
+		model.addAttribute("reservation", reservService.findReservationsByUserEmail(user.getEmail()));
+		model.addAttribute("user", user);
 		return "managebookingsUser";
 	}
 
@@ -322,9 +328,12 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 	}
 
 	@GetMapping("/booking-area/{id}")
-	public String viewBookingArea(@PathVariable Long id, Model model) {
+	public String viewBookingArea(@PathVariable Long id, HttpSession session, Model model) {
 		// Add attributes to the model if needed for profile management
 		Area area = areaService.getAreaById(id);
+		Long userId = (Long) session.getAttribute("userId");
+		User user = userService.findById(userId).orElse(null);
+		model.addAttribute("user", user);
 		model.addAttribute("area", area);
 		model.addAttribute("reservation", new Reservation());
 		return "book_area";

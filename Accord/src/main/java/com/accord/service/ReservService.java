@@ -17,29 +17,9 @@ import com.accord.repository.ReservRepository;
 public class ReservService {
     @Autowired
     private ReservRepository reservRepository;
-    
-    public void addReservation(Reservation reservation, String areaname, String username, String useremail, LocalDate user_start_date,
-                                    LocalDate user_end_date, LocalTime user_start_time, LocalTime user_end_time) {
-        reservation.setAreaname(areaname);
-        reservation.setUsername(username);
-        reservation.setUseremail(useremail);
-        reservation.setUser_start_date(user_start_date);
-        reservation.setUser_end_date(user_end_date);
-        reservation.setUser_start_time(user_start_time);
-        reservation.setUser_end_time(user_end_time);
-        reservRepository.save(reservation);
-    }
+
     public Reservation bookReservation(Reservation reservation) {
-        /*reservation.setAreaname(reservation.getAreaname());
-        reservation.setUsername(reservation.getUsername());
-        reservation.setUseremail(reservation.getUseremail());
-        reservation.setUser_start_date(reservation.getUser_start_date());
-        reservation.setUser_end_date(reservation.getUser_end_date());
-        reservation.setUser_start_time(reservation.getUser_start_time());
-        reservation.setUser_end_time(reservation.getUser_end_time());*/
-        //reservRepository.save(reservation);
-        //return book;
-        reservation.setStatus(true);
+        reservation.setStatus("NOT STARTED");
         return reservRepository.save(reservation);
     }
 
@@ -63,18 +43,19 @@ public class ReservService {
     public void checkStatus() {
         LocalDateTime dateTime = LocalDateTime.now();
         List<Reservation> r = reservRepository.findAll();
-        /*r.forEach(rA -> {
-            if (dateNow.isAfter(rA.getUser_end_date())) {
-                rA.setStatus(false);
-            } else {
-                rA.setStatus(true);
-            }
-        });*/
         r.forEach(rA -> {
-            if (dateTime.isAfter(LocalDateTime.of(rA.getUser_start_date(), rA.getUser_end_time()))) {
-                rA.setStatus(false);
-            } else {
-                rA.setStatus(true);
+            if(rA.getStatus() == "CANCELLED") {
+                rA.setStatus("CANCELLED");
+            }
+            else if(dateTime.isAfter(LocalDateTime.of(rA.getUser_start_date(), rA.getUser_end_time()))) {
+                rA.setStatus("COMPLETED");
+            }
+            else if((dateTime.isBefore(LocalDateTime.of(rA.getUser_start_date(), rA.getUser_end_time()))) &&
+                    dateTime.isAfter(LocalDateTime.of(rA.getUser_start_date(), rA.getUser_start_time()))) {
+                rA.setStatus("STARTED");
+            }
+            else {
+                rA.setStatus("NOT STARTED");
             }
         });
         reservRepository.saveAll(r);

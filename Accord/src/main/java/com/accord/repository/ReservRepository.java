@@ -10,6 +10,8 @@ import java.time.LocalDate;
 
 public interface ReservRepository extends JpaRepository<Reservation, Long>{
     Optional<Reservation> findReservationById(Long id);
+
     Reservation findByAreaname(String areaname);
-    Reservation findByUseremail(String useremail);
+    
+    List<Reservation> findByUseremail(String useremail);
 }

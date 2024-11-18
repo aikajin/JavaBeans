@@ -33,11 +33,9 @@ public class Reservation {
 
     private LocalDate user_start_date;
 
-    private LocalDate user_end_date;
-
     private LocalTime user_start_time;
 
     private LocalTime user_end_time;
 
-    private Boolean status;
+    private String status;
 }

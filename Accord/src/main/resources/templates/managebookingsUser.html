@@ -64,8 +64,8 @@
             <div class="profile">
                 <div class="profile-pic">JD</div>
                 <div class="profile-info">
-                    <div class="profile-name">John Doe</div>
-                    <div class="profile-role">Homeowner</div>
+                    <div class="profile-name">[[${user.name}]]</div>
+                    <div class="profile-role">[[${user.property_status}]]</div>
                 </div>
             </div>
         </div>
@@ -103,22 +103,26 @@
                         <th>Booking ID</th>
                         <th>Area</th>
                         <th>Date</th>
-                        <th>Time</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr th:each="reservation :${reservation}">
                         <td>
-                            ACR-223398
+                            [[${reservation.id}]]
                         </td>
                         <td>
                             <div class="avatar-container">
-                                Tennis Court A
+                                [[${reservation.areaname}]]
                             </div>
                         </td>
-                        <td>Nov 1, 2024</td>
-                        <td>2:00 PM - 4:00 PM</td>
+                        <td>[[${reservation.user_start_date}]]</td>
+                        <td>[[${reservation.user_start_time}]]</td>
+                        <td>[[${reservation.user_end_time}]]</td>
+                        <td>[[${reservation.status}]]</td>
                         <td>
                             <a href="/bookings" class="view-button">View</a>
                         </td>
