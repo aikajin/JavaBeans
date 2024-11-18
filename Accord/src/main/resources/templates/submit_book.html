@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 <body>
-    <form method="get" enctype="multipart/form-data" th:action="@{/submit_book}" th:object="${reservation}"></form>
+    <form method="get" enctype="multipart/form-data" th:action="@{/submit_book/{id}(area=${area.id})}" th:object="${reservation}"></form>
 </body>
 </head>
 </html>

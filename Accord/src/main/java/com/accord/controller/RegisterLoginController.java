@@ -2,6 +2,7 @@ package com.accord.controller;
 
 import java.io.IOException;
 import java.net.URI;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Base64;
@@ -268,7 +269,13 @@ public String showDashboard(Model m, HttpSession session) {
 	User user = userService.findById(userId).orElse(null);
 	//userService.updateUser(userId, currentUser, prof);
 	//currentUser = userService.update2(currentUser, prof);
-	model.addAttribute("user", user);
+	if (user != null) {
+		if (user.getProfile_picture() != null) {
+			String base64Image = Base64.getEncoder().encodeToString(user.getProfile_picture());
+			model.addAttribute("profilePictureBase64", base64Image);
+		}
+		model.addAttribute("user", user); // Single user
+	}
 	return "manage_profile";
     /*if (userId != null) {
         User currentUser = userService.findById(userId).orElse(null);
@@ -314,7 +321,7 @@ public String showDashboard(Model m, HttpSession session) {
     User updatedUser = userService.findById(userId).orElse(null);
 
     // Add the updated user to the model to reflect changes
-    model.addAttribute("user", updatedUser);
+
 
     return "manage_profile"; // Return the same view to reflect updated data
 }
@@ -408,8 +415,16 @@ public String showDashboard(Model m, HttpSession session) {
 		return "book_area";
 	} 
 	@GetMapping("/submit_book")
-	public String addBooking(@ModelAttribute Reservation reservation) {
+	public String addBooking(@ModelAttribute Reservation reservation, Model model) {
 		// Add attributes to the model if needed for profile management
+		/*Area area = areaService.getAreaById(id);
+		LocalDate startDate = LocalDate.now();
+        if((reservation.getUser_start_time().isBefore(area.getStartTime())) || 
+            (reservation.getUser_end_time().isAfter(area.getEndTime())) ||
+            (reservation.getUser_start_date().isBefore(startDate))) {
+                model.addAttribute("error", "Invalid Time/Date Input");
+				return "book_area";
+        }*/
 		reservService.bookReservation(reservation);
 		return "redirect:/areas-user";
 	}

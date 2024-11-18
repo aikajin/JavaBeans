@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import com.accord.Entity.Area;
 import com.accord.Entity.Reservation;
 import com.accord.repository.ReservRepository;
 
@@ -18,9 +20,16 @@ public class ReservService {
     @Autowired
     private ReservRepository reservRepository;
 
-    public Reservation bookReservation(Reservation reservation) {
+    public String bookReservation(Reservation reservation, Area area) {
+        LocalDate startDate = LocalDate.now();
+        if((reservation.getUser_start_time().isBefore(area.getStartTime())) || 
+            (reservation.getUser_end_time().isAfter(area.getEndTime())) ||
+            (reservation.getUser_start_date().isBefore(startDate))) {
+                return "Invalid Time/Date Input";
+        }
         reservation.setStatus("NOT STARTED");
-        return reservRepository.save(reservation);
+        reservRepository.save(reservation);
+        return "Successful Booking";
     }
 
     public List<Reservation> listReservation() {
