@@ -149,6 +149,19 @@ public class UserService {
         userRepository.save(existingUser);
     }
 
+    public String update4(Long id, String name, String email) {
+        Optional<User> existingUserOptional = userRepository.findById(id);
+        User existingUser = existingUserOptional.get();
+        User user = userRepository.findByEmail(email);
+        if(user.getEmail().equals(email)) {
+            return "1";
+        }
+        existingUser.setName(name);
+        existingUser.setEmail(email);
+        userRepository.save(existingUser);
+        return "2";
+    }
+
     /**
      * Delete a user by their ID
      * @param id - User ID

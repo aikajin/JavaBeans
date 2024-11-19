@@ -3,6 +3,7 @@ package com.accord.controller;
 
 import java.io.IOException;
 import java.net.URI;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Base64;
@@ -195,11 +196,18 @@ public String showDashboard(Model m, HttpSession session) {
 	
 	
 	@PostMapping("/profile")
-	public String updateProfile(@ModelAttribute User user, @RequestParam("prof") MultipartFile prof, HttpSession session, Model model) throws IOException {
+	public String updateProfile(@ModelAttribute User user, @RequestParam("prof") MultipartFile prof, HttpSession session, Model model, RedirectAttributes redirectAttributes) throws IOException {
     Long userId = (Long) session.getAttribute("userId");
     // Call the service to update user profile data
 	if(user.getPassword() != null) {
 		userService.update3(userId, user.getPassword());
+		if(user.getName() != null && user.getEmail() != null) {
+			String s = userService.update4(userId, user.getName(), user.getEmail());
+			if(s == "1") {
+				redirectAttributes.addFlashAttribute("error", "Email Already Exists");
+				return "redirect:/profile";
+			}
+		}
 	}
     userService.update2(userId, prof);
 
@@ -270,8 +278,15 @@ public String showDashboard(Model m, HttpSession session) {
 		return "book_area";
 	} 
 	@GetMapping("/submit_book")
-	public String addBooking(@ModelAttribute Reservation reservation) {
-		// Add attributes to the model if needed for profile management
+	public String addBooking(@ModelAttribute Reservation reservation, RedirectAttributes redirectAttributes) {
+		Area area = areaService.getByName(reservation.getAreaname());
+		LocalDate startDate = LocalDate.now();
+		if ((reservation.getUser_start_time().isBefore(area.getStartTime())) || 
+			(reservation.getUser_end_time().isAfter(area.getEndTime())) || 
+			(reservation.getUser_start_date().isBefore(startDate))) {
+			redirectAttributes.addFlashAttribute("error", "Invalid Time/Date Input");
+			return "redirect:/booking-area/" + area.getId();
+		}
 		reservService.bookReservation(reservation);
 		return "redirect:/areas-user";
 	}
@@ -390,34 +405,6 @@ public String showDashboard(Model m, HttpSession session) {
  
 	 return "redirect:/areas-admin"; // Redirect to the areas admin page
  }
-
-	/*@PostMapping("/modifyrec_admin/{id}")
-	public String modifyRecArea(@PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add, Model model) {
-		//TODO: process POST request
-		Area area = areaService.getAreaById(id);
-
-		if(cover.isEmpty() && add.isEmpty()) {
-		   areaService.updateArea5(area);
-		   model.addAttribute("area", area);
-		   return "redirect:/areas-admin";
-		}
-		else if(cover.isEmpty()) {
-		   areaService.updateArea4(area, add);
-		   model.addAttribute("area", area);
-		   return "redirect:/areas-admin";
-		}
-		else if(add.isEmpty()) {
-		   areaService.updateArea3(area, cover);
-		   model.addAttribute("area", area);
-		   return "redirect:/areas-admin";
-		}
-		else {
-		   areaService.updateArea2(area, cover, add);
-		   model.addAttribute("area", area);
-		   return "redirect:/areas-admin";
-		}
-
-	}*/
 	
 	@GetMapping("/deleteArea/{id}")
 	public String deleteArea(@PathVariable Long id, Model model) {
