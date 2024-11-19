@@ -11,8 +11,10 @@
 <body>
     
 
-    <div class="containerM">
+
+    <div class="containerN">
         <form method="post" enctype="multipart/form-data" th:object="${user}">
+
 
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
@@ -63,7 +65,7 @@
             <!-- for profile pic ni dapita -->
             <div class="profile">
                 <!-- <div class="profile-pic" th:style="'background-image: url(' + ${user.profile_picture} + ');'">JD</div> -->
-                <div class="profile-pic" style="width: 150px; height: 150px; background: #FFCFBB; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #FF5916; margin-right: 20px;">
+                <div class="profile-pic2">
                             
                     <!-- Check if the profile picture exists and display it -->
                     <img th:if="${profilePictureBase64 != null}" 
@@ -71,7 +73,7 @@
                         alt="Profile Picture" style="width: 100%; height: 100%; border-radius: 50%;" />
                     
                     <!-- Fallback to show the user's initials (e.g., 'JD') if no profile picture is available -->
-                    <span th:if="${profilePictureBase64 == null}" th:text="${user.name != null ? user.name.substring(0, 2).toUpperCase() : 'JD'}">JD</span>
+                    <span th:if="${profilePictureBase64 == null}" th:text="${user.name != null ? user.name.substring(0, 2).toUpperCase() : 'JD'}" style="font-size: medium;">JD</span>
                 </div>
                         <!-- for profile pic ni dapita -->
                 <div class="profile-info">
