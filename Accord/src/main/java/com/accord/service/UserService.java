@@ -125,14 +125,30 @@ public class UserService {
         Optional<User> existingUserOptional = userRepository.findById(id);
         User existingUser = existingUserOptional.get();
         try {
-            existingUser.setProfile_name(photo.getOriginalFilename());
-            existingUser.setProfile_type(photo.getContentType());
-            existingUser.setProfile_picture(photo.getBytes());
+            if(!photo.isEmpty()) {
+                existingUser.setProfile_name(photo.getOriginalFilename());
+                existingUser.setProfile_type(photo.getContentType());
+                existingUser.setProfile_picture(photo.getBytes());
+            }
+            if(existingUser.getName() != null) {
+                existingUser.setName(existingUser.getName());
+            }
+            if(existingUser.getEmail() != null) {
+                existingUser.setEmail(existingUser.getEmail());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         userRepository.save(existingUser);
     }
+
+    public void update3(Long id, String password) {
+        Optional<User> existingUserOptional = userRepository.findById(id);
+        User existingUser = existingUserOptional.get();
+        existingUser.setPassword(passwordEncoder.encode(password));
+        userRepository.save(existingUser);
+    }
+
     /**
      * Delete a user by their ID
      * @param id - User ID

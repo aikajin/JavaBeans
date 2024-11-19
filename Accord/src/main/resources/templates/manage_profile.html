@@ -12,7 +12,7 @@
     
 
     <div class="containerM">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" th:object="${user}">
 
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
@@ -115,17 +115,17 @@
 
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; color: black; font-size: 16px; font-weight: 500; margin-bottom: 5px;">Full Name</label>
-                    <input type="text" th:value="${user != null ? user.name : ''}" style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px;" id="fullName">
+                    <input type="text" id="name" th:field="*{name}"  th:value="${user != null ? user.name : ''}" style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px;" >
                 </div>
 
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; color: black; font-size: 16px; font-weight: 500; margin-bottom: 5px;">Email</label>
-                    <input type="email" th:value="${user != null ? user.email : ''}" style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px; font-family: 'Lexend', sans-serif;" id="email">
+                    <input type="email" id="email" th:field="*{email}" th:value="${user != null ? user.email : ''}" style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px; font-family: 'Lexend', sans-serif;">
                 </div>
 
                 <div style="margin-bottom: 30px;">
                     <label style="display: block; color: black; font-size: 16px; font-weight: 500; margin-bottom: 5px;">Password</label>
-                    <input type="password" style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px;" id="password">
+                    <input type="password" th:field="*{password}" style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px;" id="password">
                 </div>
                 
                 <div style="text-align: right;">

@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="container">
-        <form th:action="@{/modifyrec_admin/{id}(id=${area.id})}" enctype="multipart/form-data" method="post" th:object="${area}" style="display: flex; height: 100vh; width: 100vw;">
+        <form enctype="multipart/form-data" method="post" th:object="${area}" style="display: flex; height: 100vh; width: 100vw;">
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" src="/images/logo.png" alt="Logo" />
             
@@ -107,7 +107,7 @@
                     </div>
                     <div class="form-group">
                         <label for="cover-photo">Cover Photo</label>
-                        <input type="file" id="cover-photo" name="fileCover" accept=".png,.jpg,.jpeg" required>
+                        <input type="file" id="cover-photo" name="fileCover" accept=".png,.jpg,.jpeg">
                         <label for="cover-photo" class="file-upload-label">Choose Cover Photo</label>
                         <span class="file-name" id="cover-photo-name"></span>
                         <div class="error-message" id="cover-photo-error"></div>
@@ -120,7 +120,7 @@
                         <span class="file-name" id="additional-photos-name"></span>
                         <div class="error-message" id="additional-photos-error"></div>
                     </div>
-                    
+                    <img th:src="@{'data:image/*;base64,'+ ${area.generateBase64Add()}}" alt="area" width="500" height="500" class="area-photo">
                     <div class="form-group">
                         <label for="schedule">Modify Available Schedule</label>
                         <div class="schedule-interface">
