@@ -99,7 +99,8 @@
                     <select class="filter-select">
                         <option value="">Filter by Status</option>
                         <option value="completed">Completed</option>
-                        <option value="canceled">Canceled</option>
+                        <option value="canceled">Cancelled</option>
+                        <option value="canceled">Not Started</option>
                     </select>
                     <select class="filter-select">
                         <option value="">Sort by Date</option>
@@ -237,6 +238,7 @@
 </div>
 
 <script>
+    
 document.addEventListener('DOMContentLoaded', function() {
     const starRatings = document.querySelectorAll('.star-rating');
     
@@ -296,6 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
 </script>
               
 </body>

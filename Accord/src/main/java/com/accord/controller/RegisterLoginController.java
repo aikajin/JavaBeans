@@ -228,6 +228,7 @@ public String showDashboard(Model m, HttpSession session) {
 	reservService.checkStatus();
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
+	m.addAttribute("reservation", reservService.findReservationsByUserEmail(currentUser.getEmail()));
     if (currentUser != null) {
 		if (currentUser.getProfile_picture() != null) {
 			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
@@ -235,6 +236,7 @@ public String showDashboard(Model m, HttpSession session) {
 		}
         m.addAttribute("user", currentUser); // Single user
     }
+	
     return "managebookingsUser";
 }
 
@@ -302,7 +304,7 @@ public String showDashboard(Model m, HttpSession session) {
 			}
 			model.addAttribute("user", currentUser); 
 		}
-		return "book_area";
+		return "book_area2";
 	} 
 
 	

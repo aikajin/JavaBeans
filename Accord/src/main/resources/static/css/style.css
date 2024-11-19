@@ -1071,10 +1071,26 @@ h1 {
 }
 
 .area-guidelines2 h2 {
-  color: #FF5916;
-  font-size: 1.25rem;
+  color: black;
+  font-size: 1.50rem;
   margin-top: 0;
-  margin-bottom: 2rem;
+  margin-bottom: 5px;
+}
+
+.area-guidelines3 {
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 1rem;
+  margin-bottom: 5px;
+  border-top: 2.5px solid #FF5916;
+}
+
+.area-guidelines3 h2 {
+  color: black;
+  font-size: 1.50rem;
+  margin-top: 0;
+  margin-bottom: 5px;
 }
 
 .schedule-header {
@@ -1887,4 +1903,8 @@ h1 {
 
 .book-now-btn:hover {
   background-color: var(--primary-hover);
+}
+
+.form-group {
+  margin-bottom: 20px;
 }
