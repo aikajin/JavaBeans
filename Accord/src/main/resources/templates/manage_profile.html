@@ -131,7 +131,9 @@
                 <div style="text-align: right;">
                     <button id="saveProfile" style="background: #FF5916; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; font-family: 'Lexend', sans-serif;">Save Changes</button>
                 </div>
-            
+                <div th:if="${error}" class="error-message">
+                    <p th:text="${error}"></p>
+                </div>
             </div>
         </div>
     </div>
