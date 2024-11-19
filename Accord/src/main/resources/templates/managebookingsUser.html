@@ -63,7 +63,7 @@
             </div>
             
             <div class="profile">
-                <div class="profile-pic" style="width: 150px; height: 150px; background: #FFCFBB; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #FF5916; margin-right: 20px;">
+                <div class="profile-pic2">
                             
                     <!-- Check if the profile picture exists and display it -->
                     <img th:if="${profilePictureBase64 != null}" 
@@ -71,11 +71,12 @@
                         alt="Profile Picture" style="width: 100%; height: 100%; border-radius: 50%;" />
                     
                     <!-- Fallback to show the user's initials (e.g., 'JD') if no profile picture is available -->
-                    <span th:if="${profilePictureBase64 == null}" th:text="${user.name != null ? user.name.substring(0, 2).toUpperCase() : 'JD'}">JD</span>
+                    <span th:if="${profilePictureBase64 == null}" th:text="${user.name != null ? user.name.substring(0, 2).toUpperCase() : 'JD'}"style="font-size: medium;">JD</span>
                 </div>
                 <div class="profile-info">
-                    <div class="profile-name">[[${user.name}]]</div>
-                    <div class="profile-role">[[${user.property_status}]]</div>
+                    <div class="profile-name" th:if="${user != null}" th:text="${user.name}">John Doe</div>
+                    <div class="profile-name" th:unless="${user != null}">User not found</div>
+                    <div class="profile-role" th:if="${user != null}" th:text="${user.property_status}">Homeowner</div>
                 </div>
             </div>
         </div>
