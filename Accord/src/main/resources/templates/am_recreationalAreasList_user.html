@@ -88,7 +88,17 @@
                 <h1 style="margin-bottom: 2rem;">Recreational Areas</h1>
             </div>
             <div class="search-and-view">
-                <input type="text" id="searchInput" placeholder="Search Area..." class="controls">
+                <div class="filter-section">
+                    <div class="filter-label">Filter by Status</div>
+                    <div class="filter-controls">
+                        <select id="statusFilter" class="status-filter">
+                            <option value="all">All</option>
+                            <option value="available">Available</option>
+                            <option value="unavailable">Unavailable</option>
+                        </select>
+                        <input type="text" id="searchInput" placeholder="Search Area..." class="search-input">
+                    </div>
+                </div>
 
                 <!--<div class="view-options">
                     <button class="view-option active" data-view="grid">
@@ -112,8 +122,7 @@
             
             <div id="view-content"></div>
             <div class="areas-grid">
-                    <h1>Available</h1>
-                    <div th:each="area :${areaList}">
+                <div th:each="area :${areaList}">
                     <div class="area-card">
                         <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
                         <div class="area-details">
@@ -122,32 +131,12 @@
                             </div>
                             <p class="area-guidelines">[[${area.guidelines}]]</p>
                             <div class="area-actions">
-
-
                                 <a th:href="@{/view-recreational-area-user/{id}(id=${area.id})}" class="view-detailsUser">View details →</a>
                                 <a th:href="@{/booking-area/{id}(id=${area.id})}" class="view-details">Book area →</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <h1>Unavailable</h1>
-                <div th:each="area :${areaListFalse}">
-                    <div class="area-card">
-                        <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
-                        <div class="area-details">
-                            <div class="area-name">
-                                <h3>[[${area.name}]]</h3>
-                            </div>
-                            <p class="area-guidelines">[[${area.guidelines}]]</p>
-                            <div class="area-actions">
-
-
-                                <a th:href="@{/view-recreational-area-user/{id}(id=${area.id})}" class="view-detailsUser">View details →</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Area cards will be dynamically populated here -->
             </div>
         </main>
     </div>
@@ -157,6 +146,7 @@
             const searchInput = document.getElementById('searchInput');
             const areasGrid = document.querySelector('.areas-grid');
             const originalOrder = Array.from(document.querySelectorAll('.area-card'));
+            const statusFilter = document.getElementById('statusFilter');
             
             searchInput.addEventListener('input', function() {
                 filterAreas(this.value.toLowerCase(), originalOrder, areasGrid);
@@ -171,6 +161,21 @@
                         areasGrid.style.display = 'grid';
                     } else {
                         areasGrid.style.display = 'none';
+                    }
+                });
+            });
+
+            statusFilter.addEventListener('change', function() {
+                const selectedValue = this.value;
+                const cards = document.querySelectorAll('.area-card');
+                
+                cards.forEach(card => {
+                    if (selectedValue === 'all') {
+                        card.style.display = '';
+                    } else if (selectedValue === 'available') {
+                        card.style.display = card.querySelector('.view-details') ? '' : 'none';
+                    } else if (selectedValue === 'unavailable') {
+                        card.style.display = card.querySelector('.view-details') ? 'none' : '';
                     }
                 });
             });
@@ -200,8 +205,6 @@
             // Update grid display
             areasGrid.style.display = 'grid';
         }
-        </script>
-        
-              
+    </script>
 </body>
 </html>
