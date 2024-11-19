@@ -316,6 +316,19 @@ form2 {
   margin-right: 19px;
   margin-left: -25px;
 }
+
+.profile-pic2 {
+  width: 50px;
+  height: 50px;
+  background: #FFCFBB; 
+  border-radius: 50%; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-size: 48px; 
+  color: #FF5916; 
+  margin-right: 20px;
+}
 .profile-info {
   display: flex;
   flex-direction: column;
@@ -324,6 +337,7 @@ form2 {
   color: black;
   font-size: 12px;
   font-weight: 400;
+  text-decoration: none;
 }
 .profile-role {
   color: #8A8888;
