@@ -198,6 +198,9 @@ public String showDashboard(Model m, HttpSession session) {
 	public String updateProfile(@ModelAttribute User user, @RequestParam("prof") MultipartFile prof, HttpSession session, Model model) throws IOException {
     Long userId = (Long) session.getAttribute("userId");
     // Call the service to update user profile data
+	if(user.getPassword() != null) {
+		userService.update3(userId, user.getPassword());
+	}
     userService.update2(userId, prof);
 
     // Fetch updated user data after saving changes
@@ -368,6 +371,7 @@ public String showDashboard(Model m, HttpSession session) {
 	 // Retrieve the area to be edited
 	 Area areaEdit = areaService.getAreaById(id);
 
+
 	 // Update schedule fields
 	 areaEdit.setStartTime(LocalTime.parse(startTime));
 	 areaEdit.setEndTime(LocalTime.parse(endTime));
@@ -382,11 +386,39 @@ public String showDashboard(Model m, HttpSession session) {
  
 	 // Fetch the updated area and pass it to the model
 	 Area updatedArea = areaService.getAreaById(id);
-	 model.addAttribute("area", updatedArea);
+	 model.addAttribute("area", areaEdit);
  
 	 return "redirect:/areas-admin"; // Redirect to the areas admin page
  }
 
+	/*@PostMapping("/modifyrec_admin/{id}")
+	public String modifyRecArea(@PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add, Model model) {
+		//TODO: process POST request
+		Area area = areaService.getAreaById(id);
+
+		if(cover.isEmpty() && add.isEmpty()) {
+		   areaService.updateArea5(area);
+		   model.addAttribute("area", area);
+		   return "redirect:/areas-admin";
+		}
+		else if(cover.isEmpty()) {
+		   areaService.updateArea4(area, add);
+		   model.addAttribute("area", area);
+		   return "redirect:/areas-admin";
+		}
+		else if(add.isEmpty()) {
+		   areaService.updateArea3(area, cover);
+		   model.addAttribute("area", area);
+		   return "redirect:/areas-admin";
+		}
+		else {
+		   areaService.updateArea2(area, cover, add);
+		   model.addAttribute("area", area);
+		   return "redirect:/areas-admin";
+		}
+
+	}*/
+	
 	@GetMapping("/deleteArea/{id}")
 	public String deleteArea(@PathVariable Long id, Model model) {
 		model.addAttribute("delete", "Are you sure you would like to delete this area?");
