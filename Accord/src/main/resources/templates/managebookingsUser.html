@@ -74,7 +74,7 @@
                     <span th:if="${profilePictureBase64 == null}" th:text="${user.name != null ? user.name.substring(0, 2).toUpperCase() : 'JD'}"style="font-size: medium;">JD</span>
                 </div>
                 <div class="profile-info">
-                    <div class="profile-name" th:if="${user != null}" th:text="${user.name}">John Doe</div>
+                    <a href="/profile" style="text-decoration: none;"><div class="profile-name" th:if="${user != null}" th:text="${user.name}">John Doe</div></a>
                     <div class="profile-name" th:unless="${user != null}">User not found</div>
                     <div class="profile-role" th:if="${user != null}" th:text="${user.property_status}">Homeowner</div>
                 </div>
