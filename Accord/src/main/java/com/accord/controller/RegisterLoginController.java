@@ -347,7 +347,13 @@ public String showDashboard(Model m, HttpSession session) {
     return "am_recreationalAreasList_user";
 }
 
-
+@GetMapping("/cancelBooking/{id}")
+	public String cancelBookingUser(@PathVariable Long id, Model model) {
+		// Add attributes to the model if needed for profile management
+		reservService.checkStatus();
+		reservService.cancelBooking(id);
+		return "redirect:/mb-user";
+	}
 
 	
 
