@@ -228,6 +228,7 @@ public String showDashboard(Model m, HttpSession session) {
 	reservService.checkStatus();
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
+	m.addAttribute("reservation", reservService.findReservationsByUserEmail(currentUser.getEmail()));
     if (currentUser != null) {
 		if (currentUser.getProfile_picture() != null) {
 			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
@@ -235,6 +236,7 @@ public String showDashboard(Model m, HttpSession session) {
 		}
         m.addAttribute("user", currentUser); // Single user
     }
+	
     return "managebookingsUser";
 }
 
@@ -269,7 +271,7 @@ public String showDashboard(Model m, HttpSession session) {
 		return "view_recreational_area";
 	}
 
-	@GetMapping("/booking-area/{id}")
+	/*@GetMapping("/booking-area/{id}")
 	public String viewBookingArea(@PathVariable Long id, Model model, HttpSession session) {
 		// Add attributes to the model if needed for profile management
 		Area area = areaService.getAreaById(id);
@@ -285,6 +287,24 @@ public String showDashboard(Model m, HttpSession session) {
 			model.addAttribute("user", currentUser); 
 		}
 		return "book_area";
+	} */
+
+	@GetMapping("/booking-area/{id}")
+	public String viewBookingArea(@PathVariable Long id, Model model, HttpSession session) {
+		// Add attributes to the model if needed for profile management
+		Area area = areaService.getAreaById(id);
+		model.addAttribute("area", area);
+		model.addAttribute("reservation", new Reservation());
+		Long userId = (Long) session.getAttribute("userId");
+		User currentUser = userService.findById(userId).orElse(null);
+		if (currentUser != null) {
+			if (currentUser.getProfile_picture() != null) {
+				String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
+				model.addAttribute("profilePictureBase64", base64Image);
+			}
+			model.addAttribute("user", currentUser); 
+		}
+		return "book_area2";
 	} 
 
 	
@@ -327,7 +347,13 @@ public String showDashboard(Model m, HttpSession session) {
     return "am_recreationalAreasList_user";
 }
 
-
+@GetMapping("/cancelBooking/{id}")
+	public String cancelBookingUser(@PathVariable Long id, Model model) {
+		// Add attributes to the model if needed for profile management
+		reservService.checkStatus();
+		reservService.cancelBooking(id);
+		return "redirect:/mb-user";
+	}
 
 	
 

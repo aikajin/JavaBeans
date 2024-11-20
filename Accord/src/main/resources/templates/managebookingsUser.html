@@ -99,7 +99,8 @@
                     <select class="filter-select">
                         <option value="">Filter by Status</option>
                         <option value="completed">Completed</option>
-                        <option value="canceled">Canceled</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="not started">Not Started</option>
                     </select>
                     <select class="filter-select">
                         <option value="">Sort by Date</option>
@@ -238,6 +239,83 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Get all necessary elements
+    const searchInput = document.querySelector('.search-bar2 input');
+    const statusFilter = document.querySelector('select[class="filter-select"]:first-of-type');
+    const dateFilter = document.querySelector('select[class="filter-select"]:last-of-type');
+    const table = document.querySelector('.activities-table');
+
+    // Function to filter table rows
+    function filterTable() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const statusValue = statusFilter.value.toLowerCase();
+        const dateValue = dateFilter.value;
+        const rows = table.querySelectorAll('tbody tr');
+
+        // Convert rows to array for sorting
+        const rowsArray = Array.from(rows);
+
+        // Sort rows if date filter is selected
+        if (dateValue) {
+            rowsArray.sort((a, b) => {
+                const dateA = new Date(a.querySelector('td:nth-child(3)').textContent);
+                const dateB = new Date(b.querySelector('td:nth-child(3)').textContent);
+                return dateValue === 'newest' ? dateB - dateA : dateA - dateB;
+            });
+        }
+
+        // Reorder rows in table if sorted
+        if (dateValue) {
+            const tbody = table.querySelector('tbody');
+            rowsArray.forEach(row => tbody.appendChild(row));
+        }
+
+        // Apply filters to each row
+        rowsArray.forEach(row => {
+            const cells = row.querySelectorAll('td:not(:last-child)');
+            let text = '';
+            cells.forEach(cell => {
+                text += cell.textContent.toLowerCase() + ' ';
+            });
+
+            const status = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
+            const matchesSearch = searchTerm === '' || text.includes(searchTerm);
+            const matchesStatus = statusValue === '' || status === statusValue;
+
+            // Show/hide row based on all filters
+            row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+        });
+
+        updateFilterCounts();
+    }
+
+    // Function to update filter counts
+    function updateFilterCounts() {
+        const visibleRows = table.querySelectorAll('tbody tr:not([style*="display: none"])').length;
+        const totalRows = table.querySelectorAll('tbody tr').length;
+        
+        // You can display this information somewhere in your UI
+        console.log(`Showing ${visibleRows} of ${totalRows} bookings`);
+    }
+
+    // Add event listeners
+    searchInput.addEventListener('input', filterTable);
+    statusFilter.addEventListener('change', filterTable);
+    dateFilter.addEventListener('change', filterTable);
+
+    // Function to reset filters
+    function resetFilters() {
+        searchInput.value = '';
+        statusFilter.value = '';
+        dateFilter.value = '';
+        filterTable();
+    }
+    // Initial count
+    updateFilterCounts();
+});
+    
+    
+document.addEventListener('DOMContentLoaded', function() {
     const starRatings = document.querySelectorAll('.star-rating');
     
     starRatings.forEach(rating => {
@@ -296,6 +374,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+
 </script>
               
 </body>
