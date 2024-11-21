@@ -2,6 +2,7 @@ package com.accord.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -148,7 +149,28 @@ public class UserService {
         existingUser.setPassword(passwordEncoder.encode(password));
         userRepository.save(existingUser);
     }
+public void updatename(Long id, String name) {
+        Optional<User> existingUserOptional = userRepository.findById(id);
+        User existingUser = existingUserOptional.get();
+        existingUser.setName(name);
+        userRepository.save(existingUser);
+}
+public void updateemail(Long id, String email) {
+    if (id == null || id <= 0) {
+        throw new IllegalArgumentException("Invalid user ID");
+    }
+    
+    Optional<User> userOptional = userRepository.findById(id);
+    if (!userOptional.isPresent()) {
+        throw new NoSuchElementException("User not found");
+    }
+    
+    User user = userOptional.get();
+    user.setEmail(email);
+    userRepository.save(user);
+}
 
+    
     public String update4(Long id, String name, String email) {
         Optional<User> existingUserOptional = userRepository.findById(id);
         User existingUser = existingUserOptional.get();
