@@ -147,11 +147,21 @@ public String showDashboard(Model m, HttpSession session) {
     }
     return "dashboard_user";
 }
+@GetMapping("/dash_admin")
+public String showDashboardAdmin(Model m, HttpSession session) {
+	m.addAttribute("recentUsers",repo.findAll());
+    Long userId = (Long) session.getAttribute("userId");
+    User currentUser = userService.findById(userId).orElse(null);
+    if (currentUser != null) {
+		if (currentUser.getProfile_picture() != null) {
+			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
+			m.addAttribute("profilePictureBase64", base64Image);
+		}
+        m.addAttribute("user", currentUser); 
+    }
+    return "dashboard_admin";
+}
 
-	@GetMapping("/dash_admin")
-	public String showDashboardAdmin() {
-		return "dashboard_admin";
-	}
 	
 	@GetMapping("/dashboard_admin")
 	public String allUsers(@ModelAttribute("form") User form, Model model) {
