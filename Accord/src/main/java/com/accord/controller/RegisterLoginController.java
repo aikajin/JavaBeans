@@ -133,7 +133,7 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 
 
 
-
+  
 @GetMapping("/dash_user")
 public String showDashboard(Model m, HttpSession session) {
     Long userId = (Long) session.getAttribute("userId");
@@ -149,11 +149,21 @@ public String showDashboard(Model m, HttpSession session) {
     }
     return "dashboard_user";
 }
+@GetMapping("/dash_admin")
+public String showDashboardAdmin(Model m, HttpSession session) {
+	m.addAttribute("recentUsers",repo.findAll());
+    Long userId = (Long) session.getAttribute("userId");
+    User currentUser = userService.findById(userId).orElse(null);
+    if (currentUser != null) {
+		if (currentUser.getProfile_picture() != null) {
+			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
+			m.addAttribute("profilePictureBase64", base64Image);
+		}
+        m.addAttribute("user", currentUser); 
+    }
+    return "dashboard_admin";
+}
 
-	@GetMapping("/dash_admin")
-	public String showDashboardAdmin() {
-		return "dashboard_admin";
-	}
 	
 	@GetMapping("/dashboard_admin")
 	public String allUsers(@ModelAttribute("form") User form, Model model) {
@@ -201,17 +211,16 @@ public String showDashboard(Model m, HttpSession session) {
 	public String updateProfile(@ModelAttribute User user, @RequestParam("prof") MultipartFile prof, HttpSession session, Model model, RedirectAttributes redirectAttributes) throws IOException {
     Long userId = (Long) session.getAttribute("userId");
     // Call the service to update user profile data
-	if(user.getPassword() != null) {
-		userService.update3(userId, user.getPassword());
-		if(user.getName() != null && user.getEmail() != null) {
-			String s = userService.update4(userId, user.getName(), user.getEmail());
-			if(s == "1") {
-				redirectAttributes.addFlashAttribute("error", "Email Already Exists");
-				return "redirect:/profile";
-			}
-		}
-		//return "redirect:/profile";
-	}
+	// if(user.getPassword() != null) {
+	// 	userService.update3(userId, user.getPassword());
+	// 	if(user.getName() != null && user.getEmail() != null) {
+	// 		String s = userService.update4(userId, user.getName(), user.getEmail());
+	// 		if(s == "1") {
+	// 			redirectAttributes.addFlashAttribute("error", "Email Already Exists");
+	// 			return "redirect:/profile";
+	// 		}
+	// 	}
+	// }
     userService.update2(userId, prof);
 
     // Fetch updated user data after saving changes
@@ -226,7 +235,7 @@ public String showDashboard(Model m, HttpSession session) {
 	
 
 	
-	@GetMapping("/mb-user")
+  	@GetMapping("/mb-user")
 	public String manageBookingsUser(Model m, HttpSession session) {
 	reservService.checkStatus();
     Long userId = (Long) session.getAttribute("userId");
@@ -318,8 +327,7 @@ public String showDashboard(Model m, HttpSession session) {
 		LocalDate startDate = LocalDate.now();
 		if ((reservation.getUser_start_time().isBefore(area.getStartTime())) || 
 			(reservation.getUser_end_time().isAfter(area.getEndTime())) || 
-			(reservation.getUser_start_date().isBefore(startDate))){ //||
-			//(reservation.getUser_start_date().isEqual(startDate))) {
+			(reservation.getUser_start_date().isBefore(startDate))) {
 			redirectAttributes.addFlashAttribute("error", "Invalid Time/Date Input");
 			return "redirect:/booking-area/" + area.getId();
 		}
@@ -423,7 +431,7 @@ public String showDashboard(Model m, HttpSession session) {
 		return "modifyDelete_area";
 	}
 	
-	@PostMapping("/modifyrec_admin/{id}")
+		@PostMapping("/modifyrec_admin/{id}")
 	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add,  @RequestParam("schedule-start-time") String startTime,    @RequestParam("schedule-end-time") String endTime,  @RequestParam(value = "available", required = false) Boolean available, Model model) throws IOException {
 
 		Area areaEdit = areaService.getAreaById(id);
@@ -445,7 +453,7 @@ public String showDashboard(Model m, HttpSession session) {
 	
 		return "redirect:/areas-admin"; 
  	}
-	
+  
 	@GetMapping("/deleteArea/{id}")
 	public String deleteArea(@PathVariable Long id, Model model) {
 		model.addAttribute("delete", "Are you sure you would like to delete this area?");
@@ -514,3 +522,4 @@ if (success) {
 }
 
 }
+
