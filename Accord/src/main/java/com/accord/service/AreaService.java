@@ -73,7 +73,7 @@ public class AreaService {
             if (area.getGuidelines() != null) {
                 area.setGuidelines(area.getGuidelines());
             }
-    
+            area.setAvailable(area.getAvailable());
         } catch (IOException e) {
             e.printStackTrace();
         }
