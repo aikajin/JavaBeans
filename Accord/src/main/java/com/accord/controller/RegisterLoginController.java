@@ -199,16 +199,16 @@ public String showDashboard(Model m, HttpSession session) {
 	public String updateProfile(@ModelAttribute User user, @RequestParam("prof") MultipartFile prof, HttpSession session, Model model, RedirectAttributes redirectAttributes) throws IOException {
     Long userId = (Long) session.getAttribute("userId");
     // Call the service to update user profile data
-	if(user.getPassword() != null) {
-		userService.update3(userId, user.getPassword());
-		if(user.getName() != null && user.getEmail() != null) {
-			String s = userService.update4(userId, user.getName(), user.getEmail());
-			if(s == "1") {
-				redirectAttributes.addFlashAttribute("error", "Email Already Exists");
-				return "redirect:/profile";
-			}
-		}
-	}
+	// if(user.getPassword() != null) {
+	// 	userService.update3(userId, user.getPassword());
+	// 	if(user.getName() != null && user.getEmail() != null) {
+	// 		String s = userService.update4(userId, user.getName(), user.getEmail());
+	// 		if(s == "1") {
+	// 			redirectAttributes.addFlashAttribute("error", "Email Already Exists");
+	// 			return "redirect:/profile";
+	// 		}
+	// 	}
+	// }
     userService.update2(userId, prof);
 
     // Fetch updated user data after saving changes
