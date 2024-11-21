@@ -3,7 +3,9 @@ package com.accord.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +38,27 @@ public class ReservService {
     public List<Reservation> findReservationsByUserEmail(String useremail) {
         return reservRepository.findByUseremail(useremail);
     }
+
+    public List<Reservation> findReservationsByUserEmailStatusCompletedAndCancelled(String useremail) {
+        List<String> statuses = Arrays.asList("COMPLETED", "CANCELLED");
+        return reservRepository.findByUseremailAndStatusIn(useremail, statuses);
+    }
+
+    public List<Reservation> findReservationsByUserEmailStatusStartedAndNotStarted(String useremail) {
+        List<String> statuses = Arrays.asList("STARTED", "NOT STARTED");
+        return reservRepository.findByUseremailAndStatusIn(useremail, statuses);
+    }
+
+    public List<Reservation> findReservationsByUserEmailStatusAndNotStarted(String useremail) {
+        List<String> statuses = Arrays.asList("NOT STARTED");
+        return reservRepository.findByUseremailAndStatusIn(useremail, statuses);
+    }
+
+    public Long countReservationsStatusAndNotStarted(String useremail) {
+        List<String> statuses = Arrays.asList("NOT STARTED");
+        return reservRepository.countByUseremailAndStatusIn(useremail, statuses);
+    }
+
 
     public Reservation findReservationById(Long id) {
         return reservRepository.findById(id).orElse(null);

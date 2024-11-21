@@ -133,11 +133,13 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 
 
 
-
+  
 @GetMapping("/dash_user")
 public String showDashboard(Model m, HttpSession session) {
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
+	m.addAttribute("reservation", reservService.findReservationsByUserEmailStatusAndNotStarted(currentUser.getEmail()));
+	m.addAttribute("number", reservService.countReservationsStatusAndNotStarted(currentUser.getEmail()));
     if (currentUser != null) {
 		if (currentUser.getProfile_picture() != null) {
 			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
@@ -233,12 +235,13 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	
 
 	
-	@GetMapping("/mb-user")
+  	@GetMapping("/mb-user")
 	public String manageBookingsUser(Model m, HttpSession session) {
 	reservService.checkStatus();
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
-	m.addAttribute("reservation", reservService.findReservationsByUserEmail(currentUser.getEmail()));
+	m.addAttribute("reservation", reservService.findReservationsByUserEmailStatusStartedAndNotStarted(currentUser.getEmail()));
+	m.addAttribute("reservationHistory", reservService.findReservationsByUserEmailStatusCompletedAndCancelled(currentUser.getEmail()));
     if (currentUser != null) {
 		if (currentUser.getProfile_picture() != null) {
 			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
@@ -428,25 +431,29 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 		return "modifyDelete_area";
 	}
 	
-  @PostMapping("/modifyrec_admin/{id}")
-	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add,  @RequestParam("schedule-start-time") String startTime,    @RequestParam("schedule-end-time") String endTime, @RequestParam(value = "available", required = false) Boolean available, Model model) throws IOException {
+		@PostMapping("/modifyrec_admin/{id}")
+	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add,  @RequestParam("schedule-start-time") String startTime,    @RequestParam("schedule-end-time") String endTime,  @RequestParam(value = "available", required = false) Boolean available, Model model) throws IOException {
+
+		Area areaEdit = areaService.getAreaById(id);
+
+		
+		areaEdit.setStartTime(LocalTime.parse(startTime));
+		areaEdit.setEndTime(LocalTime.parse(endTime));
+		areaEdit.setAvailable(available != null && available);
+		
+		areaEdit.setName(area.getName());
+		areaEdit.setGuidelines(area.getGuidelines());
+
 	
-	 Area areaEdit = areaService.getAreaById(id);
+		
+		areaService.updateArea(areaEdit, cover, add); 
 
-
-	 areaEdit.setStartTime(LocalTime.parse(startTime));
-	 areaEdit.setEndTime(LocalTime.parse(endTime));
-	 areaEdit.setAvailable(available != null && available);
-	 areaEdit.setName(area.getName());
-	 areaEdit.setGuidelines(area.getGuidelines());
-	 areaService.updateArea(areaEdit, cover, add); 
-
-	 Area updatedArea = areaService.getAreaById(id);
-	 model.addAttribute("area", updatedArea);
- 
-	 return "redirect:/areas-admin"; 
- }
+		Area updatedArea = areaService.getAreaById(id);
+		model.addAttribute("area", updatedArea);
 	
+		return "redirect:/areas-admin"; 
+ 	}
+  
 	@GetMapping("/deleteArea/{id}")
 	public String deleteArea(@PathVariable Long id, Model model) {
 		model.addAttribute("delete", "Are you sure you would like to delete this area?");

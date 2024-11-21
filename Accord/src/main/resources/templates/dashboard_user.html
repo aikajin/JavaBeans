@@ -97,7 +97,7 @@
 						</div>
 						<div class="active-bookings-text">
 							<span class="active-bookings-label">Active Bookings This Month</span>
-							<span class="active-bookings-count" id="activeBookingsCount">Loading...</span>
+							<span class="active-bookings-count">You Have <span th:text="${number}"></span><span> Upcoming Bookings</span></span>
 						</div>
 					</div>
 					<button class="view-button" onclick="navigateToManageBookings()">Check This Out</button>
@@ -110,12 +110,21 @@
                         <tr>
                             <th>Recreational Area</th>
                             <th>Reservation Date</th>
-                            <th>Reservation Time</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
 							<th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="upcomingActivitiesContainer">
-                        <!-- Table rows will be dynamically inserted here -->
+                        <tr th:each="reservation :${reservation}">
+                            <td>[[${reservation.areaname}]]</td>
+                            <td>[[${reservation.user_start_date}]]</td>
+                            <td>[[${reservation.user_start_time}]]</td>
+                            <td>[[${reservation.user_end_time}]]</td>
+                            <td>
+                                <a th:href="@{/cancelBooking/{id}(id=${reservation.id})}" class="view-button">Cancel Booking</a>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <div class="pagination" id="activitiesPagination">

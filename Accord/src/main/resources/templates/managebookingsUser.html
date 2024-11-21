@@ -165,7 +165,8 @@
                                 <th>Booking ID</th>
                                 <th>Area</th>
                                 <th>Date</th>
-                                <th>Time</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
                                 <th>Status</th>
 
                                 <th>Rating</th>
@@ -173,17 +174,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>ACR-223390</td>
+                            <tr th:each="reservation :${reservationHistory}">
+                                <td>
+                                    [[${reservation.id}]]
+                                </td>
                                 <td>
                                     <div class="avatar-container">
-                                        Swimming Pool
+                                        [[${reservation.areaname}]]
                                     </div>
                                 </td>
-                                <td>Oct 25, 2023</td>
-                                <td>10:00 AM - 11:00 AM</td>
-                                <td><span class="status-badge completed">Completed</span></td>
-
+                                <td>[[${reservation.user_start_date}]]</td>
+                                <td>[[${reservation.user_start_time}]]</td>
+                                <td>[[${reservation.user_end_time}]]</td>
+                                <td>[[${reservation.status}]]</td>
                                 <td>
                                     <div class="star-rating" data-booking-id="ACR-223390">
                                         <span class="star" data-rating="1">&#9733;</span>
@@ -195,21 +198,6 @@
                                     <button class="submit-rating" data-booking-id="ACR-223390" disabled>Submit Rating</button>
                                     <div class="rating-message"></div>
                                 </td>
-
-                            </tr>
-                            <tr>
-                                <td>ACR-223385</td>
-                                <td>
-                                    <div class="avatar-container">
-                                        Tennis Court B
-                                    </div>
-                                </td>
-                                <td>Oct 20, 2023</td>
-                                <td>2:00 PM - 4:00 PM</td>
-                                <td><span class="status-badge canceled">Canceled</span></td>
-
-                                <td>N/A</td>
-
                             </tr>
                         </tbody>
                     </table>
