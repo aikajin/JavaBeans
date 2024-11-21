@@ -153,7 +153,7 @@ public class UserService {
         Optional<User> existingUserOptional = userRepository.findById(id);
         User existingUser = existingUserOptional.get();
         User user = userRepository.findByEmail(email);
-        if(user.getEmail().equals(email)) {
+        if(user.getEmail().equals(email) && user.getId().equals(id)) {
             return "1";
         }
         existingUser.setName(name);

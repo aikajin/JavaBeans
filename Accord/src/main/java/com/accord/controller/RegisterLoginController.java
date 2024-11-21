@@ -138,6 +138,8 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 public String showDashboard(Model m, HttpSession session) {
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
+	m.addAttribute("reservation", reservService.findReservationsByUserEmailStatusAndNotStarted(currentUser.getEmail()));
+	m.addAttribute("number", reservService.countReservationsStatusAndNotStarted(currentUser.getEmail()));
     if (currentUser != null) {
 		if (currentUser.getProfile_picture() != null) {
 			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
@@ -208,6 +210,7 @@ public String showDashboard(Model m, HttpSession session) {
 				return "redirect:/profile";
 			}
 		}
+		//return "redirect:/profile";
 	}
     userService.update2(userId, prof);
 
@@ -228,7 +231,8 @@ public String showDashboard(Model m, HttpSession session) {
 	reservService.checkStatus();
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
-	m.addAttribute("reservation", reservService.findReservationsByUserEmail(currentUser.getEmail()));
+	m.addAttribute("reservation", reservService.findReservationsByUserEmailStatusStartedAndNotStarted(currentUser.getEmail()));
+	m.addAttribute("reservationHistory", reservService.findReservationsByUserEmailStatusCompletedAndCancelled(currentUser.getEmail()));
     if (currentUser != null) {
 		if (currentUser.getProfile_picture() != null) {
 			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
@@ -314,7 +318,8 @@ public String showDashboard(Model m, HttpSession session) {
 		LocalDate startDate = LocalDate.now();
 		if ((reservation.getUser_start_time().isBefore(area.getStartTime())) || 
 			(reservation.getUser_end_time().isAfter(area.getEndTime())) || 
-			(reservation.getUser_start_date().isBefore(startDate))) {
+			(reservation.getUser_start_date().isBefore(startDate))){ //||
+			//(reservation.getUser_start_date().isEqual(startDate))) {
 			redirectAttributes.addFlashAttribute("error", "Invalid Time/Date Input");
 			return "redirect:/booking-area/" + area.getId();
 		}
@@ -419,29 +424,27 @@ public String showDashboard(Model m, HttpSession session) {
 	}
 	
 	@PostMapping("/modifyrec_admin/{id}")
-	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add,  @RequestParam("schedule-start-time") String startTime,    @RequestParam("schedule-end-time") String endTime, Model model) throws IOException {
-	 // Retrieve the area to be edited
-	 Area areaEdit = areaService.getAreaById(id);
+	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add,  @RequestParam("schedule-start-time") String startTime,    @RequestParam("schedule-end-time") String endTime,  @RequestParam(value = "available", required = false) Boolean available, Model model) throws IOException {
 
+		Area areaEdit = areaService.getAreaById(id);
 
-	 // Update schedule fields
-	 areaEdit.setStartTime(LocalTime.parse(startTime));
-	 areaEdit.setEndTime(LocalTime.parse(endTime));
- 
-	 // Update other fields like Name, Guidelines, etc.
-	 areaEdit.setName(area.getName());
-	 areaEdit.setGuidelines(area.getGuidelines());
+		
+		areaEdit.setStartTime(LocalTime.parse(startTime));
+		areaEdit.setEndTime(LocalTime.parse(endTime));
+		areaEdit.setAvailable(available != null && available);
+		
+		areaEdit.setName(area.getName());
+		areaEdit.setGuidelines(area.getGuidelines());
 
- 
-	 // Update cover and additional photos if files are uploaded
-	 areaService.updateArea(areaEdit, cover, add); // Updates other properties, including photo fields
- 
-	 // Fetch the updated area and pass it to the model
-	 Area updatedArea = areaService.getAreaById(id);
-	 model.addAttribute("area", areaEdit);
- 
-	 return "redirect:/areas-admin"; // Redirect to the areas admin page
- }
+	
+		
+		areaService.updateArea(areaEdit, cover, add); 
+
+		Area updatedArea = areaService.getAreaById(id);
+		model.addAttribute("area", updatedArea);
+	
+		return "redirect:/areas-admin"; 
+ 	}
 	
 	@GetMapping("/deleteArea/{id}")
 	public String deleteArea(@PathVariable Long id, Model model) {
