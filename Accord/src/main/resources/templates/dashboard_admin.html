@@ -144,6 +144,25 @@
                 <option value="Homeowner - Assumed">Homeowner - Assumed</option>
             </select>
         </div>
+        <!-- <table id="usersTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Property Status</th>
+                    <th>Block No.</th>
+                    <th>Lot No.</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each ="user : ${recentUsers}">
+                    <td th:text="${user.name}">John Doe</td>
+                    <td th:text="${user.propertyStatus}">Vacant</td>
+                    <td th:text="${user.blockNo}">A</td>
+                    <td th:text="${user.lotNo}">1</td>
+                    
+            </tbody>
+        </table> -->
         <table id="usersTable">
             <thead>
                 <tr>
@@ -161,7 +180,7 @@
     </div>
 
     <!-- Recent Ratings Table -->
-    <div class="table-container">
+    <!-- <div class="table-container">
         <h2>Recent Ratings</h2>
         <table>
             <thead>
@@ -184,9 +203,107 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </div> -->
 </div>
 
+<script>
+    // Fetch and display users once the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchUsers();
+
+        // Search and filter functionality
+        const searchInput = document.getElementById('searchInputUsers');
+        const filterSelect = document.getElementById('filterSelectUsers');
+
+        searchInput.addEventListener('input', filterUsers);
+        filterSelect.addEventListener('change', filterUsers);
+    });
+
+    // Fetch users from the back-end and render them in the table
+    function fetchUsers() {
+        fetch('/users/list')  // Make sure this endpoint returns users in JSON format
+            .then(response => response.json())
+            .then(users => {
+                renderUsers(users);
+            })
+            .catch(error => console.error('Error fetching users:', error));
+    }
+
+    // Render the users in the HTML table
+    function renderUsers(users) {
+        const tableBody = document.querySelector('#usersTable tbody');
+        tableBody.innerHTML = '';  // Clear existing table rows
+
+        users.forEach(user => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${user.name}</td>
+                <td>${user.property_status}</td>
+                <td>${user.block_num}</td>
+                <td>${user.lot_num}</td>
+                <td>
+                    
+                    <button onclick="deleteUser(${user.id})" class="btn-delete">Delete</button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Filter users based on search input and property status filter
+    function filterUsers() {
+        const searchValue = document.getElementById('searchInputUsers').value.toLowerCase();
+        const filterValue = document.getElementById('filterSelectUsers').value;
+
+        fetch('/users/list')  // Fetch the full user list again
+            .then(response => response.json())
+            .then(users => {
+                const filteredUsers = users.filter(user => {
+                    const matchesSearch = user.name.toLowerCase().includes(searchValue);
+                    const matchesFilter = filterValue === '' || user.property_status === filterValue;
+                    return matchesSearch && matchesFilter;
+                });
+
+                renderUsers(filteredUsers);  // Re-render the filtered users
+            })
+            .catch(error => console.error('Error filtering users:', error));
+    }
+
+    // Redirect to edit user page
+    function editUser(userId) {
+        window.location.href = `/users/edit/${userId}`;
+    }
+    function viewUser(userId) {
+    window.location.href = `/details/${userId}`;
+    }
+
+    // Redirect to delete user confirmation
+    function deleteUser(userId) {
+        if (confirm('Are you sure you want to delete this user?')) {
+            window.location.href = `/users/delete/${userId}`;
+        }
+    }
+
+    function filterUsers() {
+    const searchValue = document.getElementById('searchInputUsers').value.toLowerCase();
+    const filterValue = document.getElementById('filterSelectUsers').value;
+
+    fetch('/users/list')  // Fetch the full user list again
+        .then(response => response.json())
+        .then(users => {
+            const filteredUsers = users.filter(user => {
+                const matchesSearch = user.name.toLowerCase().includes(searchValue);
+                const matchesFilter = filterValue === '' || user.property_status === filterValue;
+                return matchesSearch && matchesFilter;
+            });
+
+            renderUsers(filteredUsers);  // Re-render the filtered users
+        })
+        .catch(error => console.error('Error filtering users:', error));
+}
+</script>
     <script>
       
 
