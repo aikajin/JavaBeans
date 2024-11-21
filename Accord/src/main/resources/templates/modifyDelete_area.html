@@ -1,39 +1,39 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modify Recreational Area</title>
-    <link rel="icon" href="/images/logoHead.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Manage Your Profile</title>
+    <link rel="icon" href="images/logoHead.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container">
-        <form enctype="multipart/form-data" method="post" th:object="${area}" style="display: flex; height: 100vh; width: 100vw;">
+    
+
+    <div class="containerM">
+        <form th:action="@{/user/update}" method="post" enctype="multipart/form-data">
+
         <div class="sidebar">
-            <img class="logo" style="width: 262px; height: 56px;" src="/images/logo.png" alt="Logo" />
-            
+            <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
             <div class="nav-items">
-                <a href="/dash_admin" class="nav-item">
+                <a href="/dash_user" class="nav-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="3" width="7" height="7"></rect>
-                        <rect x="14" y="3" width="7" height="7"></rect>
-                        <rect x="14" y="14" width="7" height="7"></rect>
-                        <rect x="3" y="14" width="7" height="7"></rect>
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
                     </svg>
                     <div>Dashboard</div>
                 </a>
-                
-                <a href="/areas-admin" class="nav-item active">
+                <a href="/areas-user" class="nav-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                        <circle cx="12" cy="10" r="3"></circle>
+                        <path d="M3 21h18"></path>
+                        <path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path>
+                        <path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path>
+                        <rect x="9" y="7" width="6" height="4"></rect>
                     </svg>
-                    <div>Areas Management</div>
+                    <div>Book a Facility</div>
                 </a>
-                
-                <a href="/mb-admin" class="nav-item">
+                <a href="/mb-user" class="nav-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                         <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -42,33 +42,14 @@
                     </svg>
                     <div>Manage Bookings</div>
                 </a>
-                
-                <a href="/accounts" class="nav-item">
+                <a href="#" class="nav-item active">
                     <svg xmlns="http://www.w3.org/2000/svg" width="17.44" height="17.04" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
-                    <div>User Accounts</div>
+                    <div>Manage Profile</div>
                 </a>
-
-                <a href="#" class="nav-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="20" x2="18" y2="10"></line>
-                        <line x1="12" y1="20" x2="12" y2="4"></line>
-                        <line x1="6" y1="20" x2="6" y2="14"></line>
-                    </svg>
-                    <div>Analytics</div>
-                </a>
-
-                <a href="/ratings" class="nav-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    <div>Ratings</div>
-                </a>
-                
                 <div class="nav-divider"></div>
-                
                 <a href="/" class="logout">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -76,112 +57,114 @@
                         <line x1="21" y1="12" x2="9" y2="12"></line>
                     </svg>
                     <div>Log out</div>
-                </a> 
+                </a>        
             </div>
+
             
             <div class="profile">
-                <div class="profile-pic">JD</div>
+                <div class="profile-pic" th:style="'background-image: url(' + ${user.profile_picture} + ');'">JD</div>
                 <div class="profile-info">
-                    <div class="profile-name">John Doe</div>
-                    <div class="profile-role">Superadmin</div>
+                    <div class="profile-name" th:if="${user != null}" th:text="${user.name}">John Doe</div>
+                    <div class="profile-name" th:unless="${user != null}">User not found</div>
+                    <div class="profile-role" th:if="${user != null}" th:text="${user.role}">Homeowner</div>
                 </div>
             </div>
         </div>
+        
+        <div class="main-content2">
+            <h1 th:if="${user != null}">Welcome, <span id="userName" th:text="${user.name}">John Doe</span>!</h1>
+            <h1 th:unless="${user != null}">Welcome, Guest!</h1>
+            <p class="subtitle">Update your profile and manage your account details.</p>
 
-        <div class="main-content">
-            <header class="header">
-               <p> <a href="/areas-admin" style="text-decoration: none; font-weight:bold;">Areas Management </a> / Modify Recreational Area</p>
-                <h1>Modify Recreational Area</h1>
-            </header>
             <div class="form-container">
-                <form id="add-area-form">
-                    <div class="form-group">
-                        <label for="area-name">Name of Recreational Area</label>
-                        <input type="text" id="areaname" name="area-name" th:field="*{name}" required>
-                        <div class="error-message" id="area-name-error"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="guidelines">Guidelines</label>
-                        <textarea id="guidelines" name="guidelines" th:field="*{guidelines}" required></textarea>
-                        <div class="error-message" id="guidelines-error"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="cover-photo">Cover Photo</label>
-                        <input type="file" id="cover-photo" name="fileCover" accept=".png,.jpg,.jpeg">
-                        <label for="cover-photo" class="file-upload-label">Choose Cover Photo</label>
-                        <span class="file-name" id="cover-photo-name"></span>
-                        <div class="error-message" id="cover-photo-error"></div>
-                    </div>
-                    <img th:src="@{'data:image/*;base64,'+ ${area.generateBase64Cover()}}" alt="area" width="500" height="500" class="area-photo">
-                    <div class="form-group">
-                        <label for="additional-photos">Additional Photos (optional)</label>
-                        <input type="file" id="additional-photos" name="fileAdd" accept=".png,.jpg,.jpeg" multiple>
-                        <label for="additional-photos" class="file-upload-label">Choose Additional Photos</label>
-                        <span class="file-name" id="additional-photos-name"></span>
-                        <div class="error-message" id="additional-photos-error"></div>
-                    </div>
-                    <img th:src="@{'data:image/*;base64,'+ ${area.generateBase64Add()}}" alt="area" width="500" height="500" class="area-photo">
-                    <div class="form-group">
-                        <label for="schedule">Modify Available Schedule</label>
-                        <div class="schedule-interface">
-                            <div class="schedule-header">
-                            </div>
-                            <div class="schedule-form">
-                                <div class="form-group-inline">
-                                    <div class="form-group">
-                                        <label for="schedule-start-time">Opening Time</label>
-                                        <input type="time" id="startTime" name="schedule-start-time"  th:value="${area.startTime}"  required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="schedule-end-time">Closing Time</label>
-                                        <input type="time" id="endTime" name="schedule-end-time" th:value="${area.endTime}"  required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="available" style="align-self: center;">Available</label>
-                                    <input type="checkbox" id="available" name="available" th:field="*{available}">
-                                </div>
-                                <div class="schedule-options">
-                                </div>
-                            </div>
+            
+                <div style="margin-bottom: 30px;">
+                    
+                    <label style="display: block; color: black; font-size: 18px; font-weight: 500; margin-bottom: 10px;">Profile Picture</label>
+                    <div style="display: flex; align-items: center;">
+                        <div id="profilePicture" style="width: 150px; height: 150px; background: #FFCFBB; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #FF5916; margin-right: 20px;">JD</div>
+                        
+                        <div>
+                            <input type="file" id="prof" name="prof" accept=".pdf,.doc,.docx,image/*">
+                            <label for="profile-picture" style="background: #FF5916; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; display: inline-block; margin-bottom: 10px;">Choose New Picture</label>
+                            <p style="color: #646464; font-size: 14px; margin: 0;">Supported formats: JPG, PNG (max. 5MB)</p>
                         </div>
-                        <div class="error-message" id="schedule-error"></div>
                     </div>
-                    <div class="button-container">
-                    <div class="button-group">
-                    <button type="submit" class="submit-btn">Modify</button>
-                    <a th:href="@{/deleteArea/{id}(id=${area.id})}"class="delete-btn2">Delete</a>
-                    </div>
-                    </div>
-                </form>
-                <div class="success-message" id="success-message"></div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; color: black; font-size: 16px; font-weight: 500; margin-bottom: 5px;">Full Name</label>
+                    <input type="text" th:value="${user != null ? user.name : ''}" style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px;" id="fullName">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; color: black; font-size: 16px; font-weight: 500; margin-bottom: 5px;">Email</label>
+                    <input type="email" th:value="${user != null ? user.email : ''}" style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px; font-family: 'Lexend', sans-serif;" id="email">
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <label style="display: block; color: black; font-size: 16px; font-weight: 500; margin-bottom: 5px;">Password</label>
+                    <input type="password" style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px;" id="password">
+                </div>
+                
+                <div style="text-align: right;">
+                    <button id="saveProfile" style="background: #FF5916; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; font-family: 'Lexend', sans-serif;">Save Changes</button>
+                </div>
+            
             </div>
-    </div>
-    <div id="deleteModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h2>Confirm Deletion</h2>
-            <p>Are you sure you want to delete this recreational area? This action cannot be undone.</p>
-            <button id="confirmDelete"><a th:href="@{/deleteArea/{id}(id=${area.id})}"></a>Yes, Delete</button>
-            <button id="cancelDelete">Cancel</button>
         </div>
     </div>
-</form>
-</div>
-    
+
     <script>
-
-function fetchAreas() {
-    fetch('/areas/list')  // Ensure this endpoint returns areas in JSON format
-        .then(response => response.json())
-        .then(areas => {
-            renderAreas(areas);
-        })
-        .catch(error => console.error('Error fetching areas:', error));
-}
-
-    function deleteArea(userId) {
-        if (confirm('Are you sure you want to delete this area?')) {
-            window.location.href = `/areas/delete/${userId}`;
+        document.getElementById('prof').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const profilePictureDiv = document.getElementById('profilePicture');
+            profilePictureDiv.style.backgroundImage = `url(${e.target.result})`;
+            profilePictureDiv.textContent = ''; // Clear initials
+        };
+        reader.readAsDataURL(file);
         }
-    }</script>
+        });
+
+        document.getElementById('saveProfile').addEventListener('click', function() {
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const profilePictureInput = document.getElementById('profile-picture');
+
+            const formData = new FormData();
+            formData.append('name', fullName);
+            formData.append('email', email);
+            formData.append('password', password);
+            if (profilePictureInput.files[0]) {
+                formData.append('profilePicture', profilePictureInput.files[0]);
+            }
+
+            fetch('/user/update', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert('Profile updated successfully!');
+                } else {
+                    alert('Error updating profile: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        });
+    </script>
+    </form>
 </body>
 </html>

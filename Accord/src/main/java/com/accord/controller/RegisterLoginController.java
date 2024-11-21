@@ -429,28 +429,22 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	}
 	
 	@PostMapping("/modifyrec_admin/{id}")
-	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add,  @RequestParam("schedule-start-time") String startTime,    @RequestParam("schedule-end-time") String endTime, Model model) throws IOException {
-	 // Retrieve the area to be edited
+	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add,  @RequestParam("schedule-start-time") String startTime,    @RequestParam("schedule-end-time") String endTime, @RequestParam(value = "available", required = false) Boolean available, Model model) throws IOException {
+	
 	 Area areaEdit = areaService.getAreaById(id);
 
 
-	 // Update schedule fields
 	 areaEdit.setStartTime(LocalTime.parse(startTime));
 	 areaEdit.setEndTime(LocalTime.parse(endTime));
- 
-	 // Update other fields like Name, Guidelines, etc.
+	 areaEdit.setAvailable(available != null && available);
 	 areaEdit.setName(area.getName());
 	 areaEdit.setGuidelines(area.getGuidelines());
+	 areaService.updateArea(areaEdit, cover, add); 
 
- 
-	 // Update cover and additional photos if files are uploaded
-	 areaService.updateArea(areaEdit, cover, add); // Updates other properties, including photo fields
- 
-	 // Fetch the updated area and pass it to the model
 	 Area updatedArea = areaService.getAreaById(id);
-	 model.addAttribute("area", areaEdit);
+	 model.addAttribute("area", updatedArea);
  
-	 return "redirect:/areas-admin"; // Redirect to the areas admin page
+	 return "redirect:/areas-admin"; 
  }
 	
 	@GetMapping("/deleteArea/{id}")

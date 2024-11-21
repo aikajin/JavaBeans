@@ -44,21 +44,21 @@ public class AreaService {
 
     public void updateArea(Area area, MultipartFile cover, MultipartFile add) {
         try {
-            // Update the cover photo if provided
+        
             if (cover != null && !cover.isEmpty()) {
                 area.setCoverName(cover.getOriginalFilename());
                 area.setCoverType(cover.getContentType());
                 area.setCoverDocument(cover.getBytes());
             }
     
-            // Update additional photos if provided
+ 
             if (add != null && !add.isEmpty()) {
                 area.setAddName(add.getOriginalFilename());
                 area.setAddType(add.getContentType());
                 area.setAddDocument(add.getBytes());
             }
     
-            // Update schedule fields
+      
             if (area.getStartTime() != null) {
                 area.setStartTime(area.getStartTime());
             }
@@ -66,19 +66,19 @@ public class AreaService {
                 area.setEndTime(area.getEndTime());
             }
     
-            // Update other fields (name, guidelines, recurrence, etc.)
+            
             if (area.getName() != null) {
                 area.setName(area.getName());
             }
             if (area.getGuidelines() != null) {
                 area.setGuidelines(area.getGuidelines());
             }
-    
+            area.setAvailable(area.getAvailable());
         } catch (IOException e) {
             e.printStackTrace();
         }
     
-        // Save the updated area object
+     
         areaRepository.save(area);
     }
     public void deleteArea(Long id) {
