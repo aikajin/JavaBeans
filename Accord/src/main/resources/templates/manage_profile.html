@@ -7,13 +7,11 @@
     <link rel="icon" href="images/logoHead.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">    
 </head>
+
 <body>
-    
-
-    <div class="containerM">
-        <form th:action="@{/user/update}" method="post" enctype="multipart/form-data">
-
+    <div class="containerN">
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
             <div class="nav-items">
@@ -60,20 +58,31 @@
                 </a>        
             </div>
 
-            
+            <!-- for profile pic ni dapita -->
             <div class="profile">
-                <div class="profile-pic" th:style="'background-image: url(' + ${user.profile_picture} + ');'">JD</div>
+                <!-- <div class="profile-pic" th:style="'background-image: url(' + ${user.profile_picture} + ');'">JD</div> -->
+                <div class="profile-pic2">
+                            
+                    <!-- Check if the profile picture exists and display it -->
+                    <img th:if="${profilePictureBase64 != null}" 
+                        th:src="'data:image/jpeg;base64,' + ${profilePictureBase64}" 
+                        alt="Profile Picture" style="width: 100%; height: 100%; border-radius: 50%;" />
+                    
+                    <!-- Fallback to show the user's initials (e.g., 'JD') if no profile picture is available -->
+                    <span th:if="${profilePictureBase64 == null}" th:text="${user.name != null ? user.name.substring(0, 2).toUpperCase() : 'JD'}" style="font-size: medium;">JD</span>
+                </div>
+                        <!-- for profile pic ni dapita -->
                 <div class="profile-info">
                     <div class="profile-name" th:if="${user != null}" th:text="${user.name}">John Doe</div>
                     <div class="profile-name" th:unless="${user != null}">User not found</div>
-                    <div class="profile-role" th:if="${user != null}" th:text="${user.role}">Homeowner</div>
+                    <div class="profile-role" th:if="${user != null}" th:text="${user.property_status}">Homeowner</div>
                 </div>
             </div>
         </div>
         
         <div class="main-content2">
+            <form method="post" enctype="multipart/form-data" th:object="${user}">
             <h1 th:if="${user != null}">Welcome, <span id="userName" th:text="${user.name}">John Doe</span>!</h1>
-            <h1 th:unless="${user != null}">Welcome, Guest!</h1>
             <p class="subtitle">Update your profile and manage your account details.</p>
 
             <div class="form-container">
@@ -82,89 +91,284 @@
                     
                     <label style="display: block; color: black; font-size: 18px; font-weight: 500; margin-bottom: 10px;">Profile Picture</label>
                     <div style="display: flex; align-items: center;">
-                        <div id="profilePicture" style="width: 150px; height: 150px; background: #FFCFBB; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #FF5916; margin-right: 20px;">JD</div>
-                        
+                        <!-- <div id="profilePicture" style="width: 150px; height: 150px; background: #FFCFBB; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #FF5916; margin-right: 20px;" th:text="${user.profile_picture}">JD</div> -->
+                        <div id="profilePicture" 
+                            style="width: 150px; height: 150px; background: #FFCFBB; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #FF5916; margin-right: 20px;">
+                            
+                            
+                            <img th:if="${profilePictureBase64 != null}" 
+                                th:src="'data:image/jpeg;base64,' + ${profilePictureBase64}" 
+                                alt="Profile Picture" style="width: 100%; height: 100%; border-radius: 50%;" />
+                            
+                            
+                            <span th:if="${profilePictureBase64 == null}" th:text="${user.name != null ? user.name.substring(0, 2).toUpperCase() : 'JD'}">JD</span>
+                        </div>
+ 
                         <div>
                             <input type="file" id="prof" name="prof" accept=".pdf,.doc,.docx,image/*">
                             <label for="profile-picture" style="background: #FF5916; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; display: inline-block; margin-bottom: 10px;">Choose New Picture</label>
                             <p style="color: #646464; font-size: 14px; margin: 0;">Supported formats: JPG, PNG (max. 5MB)</p>
                         </div>
                     </div>
-                </div>
-
+                </div>    
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; color: black; font-size: 16px; font-weight: 500; margin-bottom: 5px;">Full Name</label>
-                    <input type="text" th:value="${user != null ? user.name : ''}" style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px;" id="fullName">
+                    <input type="text" id="name" th:field="*{name}" th:value="${user != null ? user.name : ''}" 
+                        style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px;" disabled>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" >Edit Name</button>
                 </div>
 
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; color: black; font-size: 16px; font-weight: 500; margin-bottom: 5px;">Email</label>
-                    <input type="email" th:value="${user != null ? user.email : ''}" style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px; font-family: 'Lexend', sans-serif;" id="email">
+                    <input type="email" id="email" th:field="*{email}" th:value="${user != null ? user.email : ''}" 
+                        style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px;" disabled>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2" data-bs-whatever="@fat">Edit Email</button>
                 </div>
 
                 <div style="margin-bottom: 30px;">
                     <label style="display: block; color: black; font-size: 16px; font-weight: 500; margin-bottom: 5px;">Password</label>
-                    <input type="password" style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px;" id="password">
+                    <input type="password" th:field="*{password}" th:value="${user != null ? user.password : ''}"  style="width: 100%; padding: 10px; border: 1px solid #dce0e5; border-radius: 5px; font-size: 16px;" disabled id="password">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3" data-bs-whatever="@getbootstrap">Edit Password</button>
                 </div>
+
+
+
+
+
+<!-- para fkng name -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Name</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Name</label>
+              <input type="text" class="form-control" id="recipient-name" th:value="${user != null ? user.name : ''}" disabled>
+            </div>
+            <div class="mb-3">
+              <label for="ForNewname" class="col-form-label">New Name</label>
+              <textarea class="form-control" id="ForNewname"></textarea>
+            </div>
+            <!-- Hidden input for user ID, making sure it's a valid Long value -->
+            <input type="hidden" id="user-id" th:value="${user != null ? user.id : 0}"> <!-- Default value 0 if null -->
+            
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveNameBtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+<!-- para fking email -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Email</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Email</label>
+              <input type="text" class="form-control" id="recipient-name" th:value="${user != null ? user.email : ''}" disabled>
+            </div>
+            <div class="mb-3">
+              <label for="message-text" class="col-form-label">New Email</label>
+              <textarea class="form-control" id="ForNewEmail"></textarea>
+            </div>
+            <input type="hidden" id="user-id" value="${user != null ? user.id : 0}">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveEmailBtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- para fking password -->
+  <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Password</label>
+              <input type="text" class="form-control" id="recipient-name" th:value="${user != null ? user.password : ''}" disabled>
+            </div>
+            <div class="mb-3">
+              <label for="message-text" class="col-form-label">New Password</label>
+              <textarea class="form-control" id="ForNewpass"></textarea>
+            </div>
+            <input type="hidden" id="user-id" value="${user != null ? user.id : 0}">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="savePassBtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
                 
                 <div style="text-align: right;">
                     <button id="saveProfile" style="background: #FF5916; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; font-family: 'Lexend', sans-serif;">Save Changes</button>
                 </div>
-            
+                <div th:if="${error}" class="error-message">
+                    <p th:text="${error}"></p>
+                </div>
             </div>
+            </form>
+            
         </div>
     </div>
 
-    <script>
-        document.getElementById('prof').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const profilePictureDiv = document.getElementById('profilePicture');
-            profilePictureDiv.style.backgroundImage = `url(${e.target.result})`;
-            profilePictureDiv.textContent = ''; // Clear initials
-        };
-        reader.readAsDataURL(file);
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script></body>
+<!-- name script -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const saveNameBtn = document.getElementById("saveNameBtn");
+        const modal = new bootstrap.Modal(document.getElementById("exampleModal")); 
+    
+        saveNameBtn.addEventListener("click", function () {
+    const newName = document.getElementById("ForNewname").value;
+    const userId = document.getElementById("user-id").value; 
+    if (!newName.trim()) {
+        alert("Please enter a valid name.");
+        return;
+    }
+
+    if (!userId || isNaN(userId) || userId <= 0) {
+        alert("Invalid user ID.");
+        return;
+    }
+
+    fetch("/updateName", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({ id: userId, name: newName }),
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Name updated successfully!");
+            window.location.reload();
+        } else {
+            response.text().then(text => alert("Error: " + text));
         }
-        });
+    })
+    .catch(error => {
+        console.error("Error updating name:", error);
+        alert("An error occurred. Please try again.");
+    });
+});
+    });
+    </script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const saveEmailBtn = document.getElementById("saveEmailBtn");
+            const modal = new bootstrap.Modal(document.getElementById("exampleModal2")); 
+        
+            saveEmailBtn.addEventListener("click", function () {
+    const newEmail = document.getElementById("ForNewEmail").value;
+    const userId = document.getElementById("user-id").value; 
 
-        document.getElementById('saveProfile').addEventListener('click', function() {
-            const fullName = document.getElementById('fullName').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const profilePictureInput = document.getElementById('profile-picture');
+    console.log("New Email: ", newEmail);
+    console.log("User ID: ", userId); 
 
-            const formData = new FormData();
-            formData.append('name', fullName);
-            formData.append('email', email);
-            formData.append('password', password);
-            if (profilePictureInput.files[0]) {
-                formData.append('profilePicture', profilePictureInput.files[0]);
-            }
+    if (!newEmail.trim()) {
+        alert("Please enter a valid email.");
+        return;
+    }
 
-            fetch('/user/update', {
-                method: 'POST',
-                body: formData,
-            })
+    if (!userId || isNaN(userId) || userId <= 0) {
+        alert("Invalid user ID.");
+        return;
+    }
+
+    fetch("/updateEmail", {
+        method: "POST",
+        headers: {    
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({ id: userId, email: newEmail }),
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Email updated successfully!");
+            window.location.reload();
+        } else {
+            response.text().then(text => alert("Error: " + text));    
+        }
+    })            
+    .catch(error => {
+        console.error("Error updating email:", error);
+        alert("An error occurred. Please try again.");
+    });
+});
+  });
+    </script>
+    
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const savePassBtn = document.getElementById("savePassBtn");
+        const modal = new bootstrap.Modal(document.getElementById("exampleModal3")); 
+        
+        savePassBtn.addEventListener("click", function () {
+        const newPassword = document.getElementById("ForNewpass").value;
+        const userId = document.getElementById("user-id").value; 
+
+        console.log("New Password: ", newPassword);                     
+        console.log("User ID: ", userId);                                                   
+            if (!newPassword.trim()) {
+                alert("Please enter a valid password.");
+                return;
+             }    
+
+            if (!userId || isNaN(userId) || userId <= 0) {            
+                alert("Invalid user ID.");
+                return;
+            }    
+
+            fetch("/updatePassword", {
+                method: "POST",
+                headers: {    
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({ id: userId, password: newPassword }),
+            })            
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    alert('Profile updated successfully!');
+                if (response.ok) {
+                    alert("Password updated successfully!");
+                    window.location.reload();
                 } else {
-                    alert('Error updating profile: ' + data.message);
+                    response.text().then(text => alert("Error: " + text));    
                 }
-            })
+            })            
             .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
+                console.error("Error updating password:", error);
+                alert("An error occurred. Please try again.");
             });
         });
+        });
     </script>
-    </form>
-</body>
 </html>

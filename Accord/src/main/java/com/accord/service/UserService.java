@@ -2,6 +2,7 @@ package com.accord.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -125,14 +126,64 @@ public class UserService {
         Optional<User> existingUserOptional = userRepository.findById(id);
         User existingUser = existingUserOptional.get();
         try {
-            existingUser.setProfile_name(photo.getOriginalFilename());
-            existingUser.setProfile_type(photo.getContentType());
-            existingUser.setProfile_picture(photo.getBytes());
+            if(!photo.isEmpty()) {
+                existingUser.setProfile_name(photo.getOriginalFilename());
+                existingUser.setProfile_type(photo.getContentType());
+                existingUser.setProfile_picture(photo.getBytes());
+            }
+            if(existingUser.getName() != null) {
+                existingUser.setName(existingUser.getName());
+            }
+            if(existingUser.getEmail() != null) {
+                existingUser.setEmail(existingUser.getEmail());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         userRepository.save(existingUser);
     }
+
+    public void update3(Long id, String password) {
+        Optional<User> existingUserOptional = userRepository.findById(id);
+        User existingUser = existingUserOptional.get();
+        existingUser.setPassword(passwordEncoder.encode(password));
+        userRepository.save(existingUser);
+    }
+public void updatename(Long id, String name) {
+        Optional<User> existingUserOptional = userRepository.findById(id);
+        User existingUser = existingUserOptional.get();
+        existingUser.setName(name);
+        userRepository.save(existingUser);
+}
+public void updateemail(Long id, String email) {
+    if (id == null || id <= 0) {
+        throw new IllegalArgumentException("Invalid user ID");
+    }
+    
+    Optional<User> userOptional = userRepository.findById(id);
+    if (!userOptional.isPresent()) {
+        throw new NoSuchElementException("User not found");
+    }
+    
+    User user = userOptional.get();
+    user.setEmail(email);
+    userRepository.save(user);
+}
+
+    
+    public String update4(Long id, String name, String email) {
+        Optional<User> existingUserOptional = userRepository.findById(id);
+        User existingUser = existingUserOptional.get();
+        User user = userRepository.findByEmail(email);
+        if(user.getEmail().equals(email)) {
+            return "1";
+        }
+        existingUser.setName(name);
+        existingUser.setEmail(email);
+        userRepository.save(existingUser);
+        return "2";
+    }
+
     /**
      * Delete a user by their ID
      * @param id - User ID
@@ -336,4 +387,6 @@ public class UserService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
     }
+
+ 
 }

@@ -102,17 +102,21 @@
                         <input type="text" placeholder="Search bookings..." style="width: 300px;">
                     </div>
                     <div class="filter-controls">
-                        <select class="filter-select2">
-                            <option value="">Filter by Area</option>
-                            <option value="pool">Swimming Pool</option>
-                            <option value="tennis">Tennis Court</option>
-                            <option value="gym">Gym</option>
-                        </select>
+                        
                         <select class="filter-select2">
                             <option value="">Filter by Month</option>
                             <option value="1">January</option>
                             <option value="2">February</option>
                             <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
                         </select>
                         <select class="filter-select2">
                             <option value="">Filter by Status</option>
@@ -147,24 +151,6 @@
                             <td th:text="${reservation.status}"><span class="status-badge completed"></span></td>
                             <td><button class="delete-btn3">Cancel</button></td>
                         </tr>
-                        <tr>
-                            <td>BK002</td>
-                            <td>Sarah Johnson</td>
-                            <td>Tennis Court</td>
-                            <td>Oct 26, 2023</td>
-                            <td> 4:00 - 5:00 PM </td>
-                            <td> <span class="status-badge canceled">Cancelled</span></td>
-                            <td><button class="delete-btn3">Cancel</button></td>
-                        </tr>
-                        <tr>
-                            <td>BK003</td>
-                            <td>Mike Wilson</td>
-                            <td>Swimming Pool</td>
-                            <td>Oct 27, 2023 </td> 
-                            <td>3:00 PM - 4:00 PM</td>
-                            <td><span class="status-badge completed">Completed</span></td>
-                            <td><button class="delete-btn3">Cancel</button></td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -187,23 +173,115 @@
                     <button id="cancelDelete" class="modal-button">No, Keep</button>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         </div> <!--last div-->
+        <script>
+            const searchInput = document.querySelector('.search-bar input');
+const monthFilter = document.querySelector('select[class="filter-select2"]:first-of-type');
+const statusFilter = document.querySelector('select[class="filter-select2"]:last-of-type');
+const tableBody = document.querySelector('#activities-table tbody');
+
+// Store original table data
+let originalRows = [];
+
+// Initialize the original data when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    originalRows = Array.from(tableBody.querySelectorAll('tr'));
+    
+    // Add event listeners
+    searchInput.addEventListener('input', filterTable);
+    monthFilter.addEventListener('change', filterTable);
+    statusFilter.addEventListener('change', filterTable);
+});
+
+function filterTable() {
+    const searchTerm = searchInput.value.toLowerCase();
+    const selectedMonth = monthFilter.value;
+    const selectedStatus = statusFilter.value.toUpperCase();
+    
+    // Start with all original rows
+    let filteredRows = [...originalRows];
+    
+    // Apply search filter
+    if (searchTerm) {
+        filteredRows = filteredRows.filter(row => {
+            const textContent = row.textContent.toLowerCase();
+            return textContent.includes(searchTerm);
+        });
+    }
+    
+    // Apply month filter
+    if (selectedMonth) {
+        filteredRows = filteredRows.filter(row => {
+            const dateCell = row.querySelector('td:nth-child(4)').textContent;
+            const rowMonth = new Date(dateCell).getMonth() + 1; // Adding 1 because getMonth() returns 0-11
+            return rowMonth === parseInt(selectedMonth);
+        });
+    }
+    
+    // Apply status filter
+    if (selectedStatus) {
+        filteredRows = filteredRows.filter(row => {
+            const statusCell = row.querySelector('td:nth-child(7)').textContent.toUpperCase();
+            if (selectedStatus === 'ACTIVE') {
+                return statusCell === 'NOT STARTED';
+            }
+            return statusCell === selectedStatus;
+        });
+    }
+    
+    // Clear the table body
+    tableBody.innerHTML = '';
+    
+    // Add filtered rows back to the table
+    if (filteredRows.length > 0) {
+        filteredRows.forEach(row => tableBody.appendChild(row.cloneNode(true)));
+    } else {
+        // Show "No results found" message
+        const noResultsRow = document.createElement('tr');
+        noResultsRow.innerHTML = '<td colspan="8" style="text-align: center; padding: 20px;">No results found</td>';
+        tableBody.appendChild(noResultsRow);
+    }
+}
+
+// Add these helper functions for the cancel buttons
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('bookingModal');
+    const cancelButtons = document.querySelectorAll('.delete-btn3');
+    const confirmButton = document.getElementById('confirmCancel');
+    const keepButton = document.getElementById('cancelDelete');
+    let selectedRow = null;
+
+    // Show modal when cancel button is clicked
+    cancelButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            modal.style.display = 'block';
+            selectedRow = e.target.closest('tr');
+        });
+    });
+
+    // Handle confirmation
+    confirmButton.addEventListener('click', () => {
+        if (selectedRow) {
+            selectedRow.remove();
+            selectedRow = null;
+        }
+        modal.style.display = 'none';
+    });
+
+    // Handle cancellation
+    keepButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+        selectedRow = null;
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            selectedRow = null;
+        }
+    });
+});
+        </script>
     </body>
     </html>

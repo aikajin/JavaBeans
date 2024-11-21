@@ -3,11 +3,286 @@
 <html>
 <head>
 <meta charset="UTF-8">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
 <title>Error</title>
 </head>
 <body>
 <h1>Incorrect input</h1>
 <a href="/register">To Registration</a>
 <a href="/login">To Login</a>
+            
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Property Status</th>
+            <th>Role</th>
+            <th>Profile Picture</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="user : ${error}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.contactnumber}"></td>
+            <td th:text="${user.property_status}"></td>
+            <td th:text="${user.role}"></td>
+            <!-- <td>
+                <img th:if="${user.profilePictureUrl}" th:src="${user.profilePictureUrl}" alt="Profile Picture" width="50" height="50">
+                <span th:if="${!user.profilePictureUrl}">No Picture</span>
+            </td> -->
+        </tr>
+    </tbody>
+    <div class="profile">
+        
+        <div class="profile-info">
+            <div class="profile-name" th:if="${user != null}" th:text="${user.name}">John Doe</div>
+            <div class="profile-name" th:unless="${user != null}">User not found</div>
+            <div class="profile-role" th:if="${user != null}" th:text="${user.property_status}">Homeowner</div>
+        </div>
+    </div>
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" >Edit Name</button>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2" data-bs-whatever="@fat">Edit Email</button>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3" data-bs-whatever="@getbootstrap">Edit Password</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Name</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Name</label>
+              <input type="text" class="form-control" id="recipient-name" th:value="${user != null ? user.name : ''}">
+            </div>
+            <div class="mb-3">
+              <label for="ForNewname" class="col-form-label">New Name</label>
+              <textarea class="form-control" id="ForNewname"></textarea>
+            </div>
+            <!-- Hidden input for user ID, making sure it's a valid Long value -->
+            <input type="hidden" id="user-id" th:value="${user != null ? user.id : 0}"> <!-- Default value 0 if null -->
+            
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveNameBtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+<!-- 2 -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Email</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Email</label>
+              <input type="text" class="form-control" id="recipient-name" th:value="${user != null ? user.email : ''}">
+            </div>
+            <div class="mb-3">
+              <label for="message-text" class="col-form-label">New Email</label>
+              <textarea class="form-control" id="ForNewEmail"></textarea>
+            </div>
+            <input type="hidden" id="user-id" value="${user != null ? user.id : 0}">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveEmailBtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 3 -->
+  <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Password</label>
+              <input type="text" class="form-control" id="recipient-name" th:value="${user != null ? user.password : ''}">
+            </div>
+            <div class="mb-3">
+              <label for="message-text" class="col-form-label">New Password</label>
+              <textarea class="form-control" id="ForNewpass"></textarea>
+            </div>
+            <input type="hidden" id="user-id" value="${user != null ? user.id : 0}">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="savePassBtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<!-- name script -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const saveNameBtn = document.getElementById("saveNameBtn");
+        const modal = new bootstrap.Modal(document.getElementById("exampleModal")); // Modal instance
+    
+        saveNameBtn.addEventListener("click", function () {
+    const newName = document.getElementById("ForNewname").value;
+    const userId = document.getElementById("user-id").value; // Hidden input for user ID
+
+    // Basic validation
+    if (!newName.trim()) {
+        alert("Please enter a valid name.");
+        return;
+    }
+
+    if (!userId || isNaN(userId) || userId <= 0) {
+        alert("Invalid user ID.");
+        return;
+    }
+
+    fetch("/updateName", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({ id: userId, name: newName }),
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Name updated successfully!");
+            window.location.reload();
+        } else {
+            response.text().then(text => alert("Error: " + text));
+        }
+    })
+    .catch(error => {
+        console.error("Error updating name:", error);
+        alert("An error occurred. Please try again.");
+    });
+});
+    });
+    </script>
+    <!-- email script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const saveEmailBtn = document.getElementById("saveEmailBtn");
+            const modal = new bootstrap.Modal(document.getElementById("exampleModal2")); // Modal instance
+        
+            saveEmailBtn.addEventListener("click", function () {
+    const newEmail = document.getElementById("ForNewEmail").value;
+    const userId = document.getElementById("user-id").value; // Hidden input for user ID
+
+    console.log("New Email: ", newEmail);
+    console.log("User ID: ", userId); // Log the value of user ID
+
+    // Basic validation
+    if (!newEmail.trim()) {
+        alert("Please enter a valid email.");
+        return;
+    }
+
+    if (!userId || isNaN(userId) || userId <= 0) {
+        alert("Invalid user ID.");
+        return;
+    }
+
+    fetch("/updateEmail", {
+        method: "POST",
+        headers: {    
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({ id: userId, email: newEmail }),
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Email updated successfully!");
+            window.location.reload();
+        } else {
+            response.text().then(text => alert("Error: " + text));    
+        }
+    })            
+    .catch(error => {
+        console.error("Error updating email:", error);
+        alert("An error occurred. Please try again.");
+    });
+});
+  });
+    </script>
+    <!-- password script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const savePassBtn = document.getElementById("savePassBtn");
+            const modal = new bootstrap.Modal(document.getElementById("exampleModal3")); // Modal instance
+        
+            savePassBtn.addEventListener("click", function () {
+    const newPassword = document.getElementById("ForNewpass").value;
+    const userId = document.getElementById("user-id").value; // Hidden input for user ID
+
+    console.log("New Password: ", newPassword); // Log the value of new password                        
+    console.log("User ID: ", userId); // Log the value of user ID                                                    
+
+    // Basic validation
+    if (!newPassword.trim()) {
+        alert("Please enter a valid password.");
+        return;
+    }    
+
+    if (!userId || isNaN(userId) || userId <= 0) {            
+        alert("Invalid user ID.");
+        return;
+    }    
+
+    fetch("/updatePassword", {
+        method: "POST",
+        headers: {    
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({ id: userId, password: newPassword }),
+    })            
+    .then(response => {
+        if (response.ok) {
+            alert("Password updated successfully!");
+            window.location.reload();
+        } else {
+            response.text().then(text => alert("Error: " + text));    
+        }
+    })            
+    .catch(error => {
+        console.error("Error updating password:", error);
+        alert("An error occurred. Please try again.");
+    });
+});
+  });
+    </script>
+    
+    
+    
+
 </body>
 </html>

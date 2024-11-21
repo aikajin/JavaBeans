@@ -63,10 +63,21 @@
             </div>
             
             <div class="profile">
-                <div class="profile-pic">JD</div>
+                <div class="profile-pic2">
+                            
+                    <!-- Check if the profile picture exists and display it -->
+                    <img th:if="${profilePictureBase64 != null}" 
+                        th:src="'data:image/jpeg;base64,' + ${profilePictureBase64}" 
+                        alt="Profile Picture" style="width: 100%; height: 100%; border-radius: 50%;" />
+                    
+                    <!-- Fallback to show the user's initials (e.g., 'JD') if no profile picture is available -->
+                    <span th:if="${profilePictureBase64 == null}" th:text="${user.name != null ? user.name.substring(0, 2).toUpperCase() : 'JD'}"style="font-size: medium;">JD</span>
+                </div>
                 <div class="profile-info">
-                    <div class="profile-name">John Doe</div>
-                    <div class="profile-role">Homeowner</div>
+                    <a href="/profile" style="text-decoration: none;"><div class="profile-name" th:if="${user != null}" th:text="${user.name}">John Doe</div></a>
+                    <div class="profile-name" th:unless="${user != null}">User not found</div>
+                    <div class="profile-role" th:if="${user != null}" th:text="${user.property_status}">Homeowner</div>
+                  
                 </div>
             </div>
         </div>
@@ -84,36 +95,13 @@
                 <section class="area-guidelines2">
                     <h2>Guidelines</h2>
                     <span th:text="${area.guidelines}"></span>
+                    </section>
+                    <section class="area-guidelines2">
+                    <h2 style="margin-bottom: -5px;">Schedule</h2>
+                    <p style ="font-size: small; color: dimgrey;"><i>Note: Military Time is used</i></p>
+                    <p> Everyday at <span th:text="${area.startTime}"></span> - <span th:text="${area.endTime}"></span>. </p>
                 </section>
-                <div class="schedule-header" id="schedules">
-                    <h1 style="margin-bottom: 2rem;">Schedules</h1>
-                    <div>
-                        <label>Start Time</label>
-                        <span th:text="${area.startTime}"></span>
-                        <label>End Time</label>
-                        <span th:text="${area.endTime}"></span>
-                    </div>
-                    <div class="view-options2">
-                        <button class="view-option2 list-view-button" onclick="showListView(); scrollToSchedules()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="7" height="7"></rect>
-                                <rect x="14" y="3" width="7" height="7"></rect>
-                                <rect x="14" y="14" width="7" height="7"></rect>
-                                <rect x="3" y="14" width="7" height="7"></rect>
-                            </svg>
-                        </button>
-                        <button class="view-option2 calendar-view-button" onclick="showCalendarView(); scrollToSchedules()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="schedule-list"></div>
-                <div class="schedule-calendar"></div>
+                
             </form>
         </main>
     </div>

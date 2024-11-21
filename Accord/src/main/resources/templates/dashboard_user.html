@@ -61,18 +61,27 @@
             </div>
 			
             <div class="profile">
-                <div class="profile-pic">JD</div>
+                <div class="profile-pic2">
+                            
+                    <!-- Check if the profile picture exists and display it -->
+                    <img th:if="${profilePictureBase64 != null}" 
+                        th:src="'data:image/jpeg;base64,' + ${profilePictureBase64}" 
+                        alt="Profile Picture" style="width: 100%; height: 100%; border-radius: 50%;" />
+                    
+                    <!-- Fallback to show the user's initials (e.g., 'JD') if no profile picture is available -->
+                    <span th:if="${profilePictureBase64 == null}" th:text="${user.name != null ? user.name.substring(0, 2).toUpperCase() : 'JD'}"style="font-size: medium;">JD</span>
+                </div>
                 <div class="profile-info">
-                    <div class="profile-name">
-                        <a href="/manage-profile" class="logout"><u>John Doe</u></a>
-                    </div>
-                    <div class="profile-role">Homeowner</div>
+                    <a href="/profile" style="text-decoration: none;"><div class="profile-name" th:if="${user != null}" th:text="${user.name}">John Doe</div></a>
+                    <div class="profile-name" th:unless="${user != null}">User not found</div>
+                    <div class="profile-role" th:if="${user != null}" th:text="${user.property_status}">Homeowner</div>
+                  
                 </div>
             </div>
         </div>
 
         <div class="main-content">
-            <h1>Welcome, <span id="userName">John Doe</span>!</h1>
+            <h1>Welcome, <span id="userName" th:text="${user.name}"></span>!</h1>
             <p class="subtitle">See your latest updates and reservations.</p>
 
 				<!-- Updated Active Bookings Section -->
