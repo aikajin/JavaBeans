@@ -300,6 +300,7 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 		return "viewRatingsList";
 	}
 
+
 	@GetMapping("/rate-area/{id}")
 	public String viewRateArea(@PathVariable Long id, Model model) {
 		Reservation reservation = reservService.findReservationById(id);
@@ -353,6 +354,7 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 		ratingService.createRating(rating);
 		return "redirect:/mb-user";
 	}*/
+
 
 	@GetMapping("/bookings/{id}")
 	public String viewBookingsDetails(@PathVariable Long id, Model model) {

@@ -192,8 +192,9 @@
                                 <td>[[${reservation.status}]]</td>
                                 <td>
                                     <!-- <a href="/rate-area/${areaName}" class="view-button">Rate</a> -->
+
                                     <a th:href="@{/rate-area/{id}(id=${reservation.id})}" class="view-button">Rate</a>
-                        </td>
+           </td>
 
                                     <!--<div class="star-rating" data-booking-id="ACR-223390">
                                         <span class="star" data-rating="1">&#9733;</span>
