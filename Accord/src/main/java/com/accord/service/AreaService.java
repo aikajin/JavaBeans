@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.accord.Entity.Area;
+import com.accord.Entity.Rating;
 import com.accord.repository.AreaRepository;
+import com.accord.repository.RatingRepository;
+import com.accord.repository.ReservRepository;
 
 @Service
 public class AreaService {
@@ -104,5 +107,13 @@ public class AreaService {
 
     public Area getAreaById(Long id) {
         return areaRepository.findById(id).orElse(null);
+    }
+
+    public double allAvarageStars(Area area) {
+        List<Rating> rating = area.getRatings();
+        if(rating == null || rating.isEmpty()) {
+            return 0.0;
+        }
+        return rating.stream().mapToInt(Rating::getStars).average().orElse(0.0);
     }
 }

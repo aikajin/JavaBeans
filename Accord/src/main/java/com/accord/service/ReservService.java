@@ -54,11 +54,30 @@ public class ReservService {
         return reservRepository.findByUseremailAndStatusIn(useremail, statuses);
     }
 
-    public Long countReservationsStatusAndNotStarted(String useremail) {
+    public Long countReservationsStatusNotStarted(String useremail) {
         List<String> statuses = Arrays.asList("NOT STARTED");
         return reservRepository.countByUseremailAndStatusIn(useremail, statuses);
     }
 
+    public Long countAllReservationStatusStartedAndNotStarted() {
+        List<String> statuses = Arrays.asList("STARTED", "NOT STARTED");
+        return reservRepository.countByStatusIn(statuses);
+    }
+
+    public Long countAllReservationStatusCompleted() {
+        List<String> statuses = Arrays.asList("COMPLETED");
+        return reservRepository.countByStatusIn(statuses);
+    }
+
+    public Long countAllReservationStatusCancelled() {
+        List<String> statuses = Arrays.asList("CANCELLED");
+        return reservRepository.countByStatusIn(statuses);
+    }
+
+    public Long countAllReservationStatusNotStarted() {
+        List<String> statuses = Arrays.asList("NOT STARTED");
+        return reservRepository.countByStatusIn(statuses);
+    }
 
     public Reservation findReservationById(Long id) {
         return reservRepository.findById(id).orElse(null);
@@ -66,6 +85,9 @@ public class ReservService {
 
     public void cancelBooking(Long id) {
         Reservation r =  reservRepository.findById(id).orElse(null);
+        if("COMPLETED".equals(r.getStatus())) {
+            return;
+        }
         r.setStatus("CANCELLED");
         reservRepository.save(r);
     }
@@ -75,7 +97,10 @@ public class ReservService {
         List<Reservation> r = reservRepository.findAll();
         r.forEach(rA -> {
             if("CANCELLED".equals(rA.getStatus())) {
-                //rA.setStatus("CANCELLED");
+                return;
+            }
+            if("COMPLETED".equals(rA.getStatus())) {
+                return;
             }
             else if(dateTime.isAfter(LocalDateTime.of(rA.getUser_start_date(), rA.getUser_end_time()))) {
                 rA.setStatus("COMPLETED");

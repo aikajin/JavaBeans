@@ -8,9 +8,11 @@ import java.util.List;
 public interface RatingRepository extends JpaRepository<Rating, Long>{
     Rating findFirstByUseremail(String useremail);
 
-    Rating findFirstByAreaname(String areaname);
+    List<Rating> findFirstByAreaname(String areaname);
 
     List<Rating> findByAreaname(String areaname);
 
     List<Rating> findByUseremail(String useremail);
+
+    Long countByAreaname(String areaname);
 }

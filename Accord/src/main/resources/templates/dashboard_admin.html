@@ -104,7 +104,7 @@
                 </svg>
             </div>
             <h3>Active Bookings</h3>
-            <p th:text="${activeBookings}">100</p>
+            <p th:text="${reservationActiveAndNot}">100</p>
         </div>
         <div class="stat-card">
             <div class="stat-icon">
@@ -118,7 +118,7 @@
                 </svg>
             </div>
             <h3>Total Bookings</h3>
-            <p th:text="${totalBookings}">250</p>
+            <p th:text="${reservationNotStarted}">250</p>
         </div>
         <div class="stat-card">
             <div class="stat-icon">
@@ -128,7 +128,7 @@
                 </svg>
             </div>
             <h3>Completed Bookings</h3>
-            <p th:text="${completedBookings}">150</p>
+            <p th:text="${reservationCompleted}">150</p>
         </div>
     </div>
 

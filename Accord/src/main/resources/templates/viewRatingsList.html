@@ -89,6 +89,15 @@
                 </div>
                 <div id="areasGrid" class="areas-grid2">
                     <!-- Area cards will be dynamically inserted here -->
+                     <div th:each="area : ${area}">
+                        <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
+                        <div class="area-details">
+                            <div class="area-name">
+                                <h3>[[${area.name}]]</h3>
+                            </div>
+                            <p>Rating: <span th:text="${stars[area.name]}"></span>★</p>
+                        </div>
+                     </div>
                 </div>
             </div>
         </div>

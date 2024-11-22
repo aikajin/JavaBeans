@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import com.accord.Entity.Area;
 import com.accord.Entity.Rating;
 import com.accord.repository.RatingRepository;
 
@@ -21,7 +22,7 @@ public class RatingService {
         return ratingRepository.findFirstByUseremail(useremail);
     }
 
-    public Rating findByAreaname(String areaname) {
+    public List<Rating> findByAreaname(String areaname) {
         return ratingRepository.findFirstByAreaname(areaname);
     }
 
@@ -39,6 +40,11 @@ public class RatingService {
 
     public double averageStars() {
         List<Rating> rating = ratingRepository.findAll();
+        return rating.stream().mapToInt(Rating::getStars).average().orElse(0.0);
+    }
+
+    public double averageStarsAreaname(String areaname) {
+        List<Rating> rating = ratingRepository.findFirstByAreaname(areaname);
         return rating.stream().mapToInt(Rating::getStars).average().orElse(0.0);
     }
 }

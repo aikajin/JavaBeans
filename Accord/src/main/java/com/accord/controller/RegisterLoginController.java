@@ -6,7 +6,11 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.Base64;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +31,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.accord.Entity.Area;
 import com.accord.Entity.Reservation;
 import com.accord.Entity.User;
+import com.accord.Entity.Rating;
 import com.accord.repository.UserRepository;
 import com.accord.service.AreaService;
 import com.accord.service.RatingService;
@@ -143,7 +148,8 @@ public String showDashboard(Model m, HttpSession session) {
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
 	m.addAttribute("reservation", reservService.findReservationsByUserEmailStatusAndNotStarted(currentUser.getEmail()));
-	m.addAttribute("number", reservService.countReservationsStatusAndNotStarted(currentUser.getEmail()));
+	m.addAttribute("number", reservService.countReservationsStatusNotStarted(currentUser.getEmail()));
+	m.addAttribute("rating", ratingService.listByUseremail(currentUser.getEmail()));
     if (currentUser != null) {
 		if (currentUser.getProfile_picture() != null) {
 			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
@@ -158,6 +164,9 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	m.addAttribute("recentUsers",repo.findAll());
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
+	m.addAttribute("reservationActiveAndNot", reservService.countAllReservationStatusStartedAndNotStarted());
+	m.addAttribute("reservationNotStarted", reservService.countAllReservationStatusNotStarted());
+	m.addAttribute("reservationCompleted", reservService.countAllReservationStatusCompleted());
     if (currentUser != null) {
 		if (currentUser.getProfile_picture() != null) {
 			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
@@ -276,8 +285,74 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	@GetMapping("/ratings")
 	public String viewRatingsList(Model model) {
 		// Add attributes to the model if needed for profile management
+		reservService.checkStatus();
+		List<Rating> rating = ratingService.findAll();
+		List<Area> area = areaService.getAllAreas();
+		/*Map<String, Double> averageRating = new HashMap<>();
+
+		for(Area areas : area) {
+			double averageStars = ratingService.averageStarsAreaname(areas.getName());
+			averageRating.put(areas.getName(), averageStars);
+		}*/
+		model.addAttribute("rating", rating);
+		model.addAttribute("area", area);
+		//model.addAttribute("stars", averageRating);
 		return "viewRatingsList";
 	}
+
+	@GetMapping("/rate-area/{id}")
+	public String viewRateArea(@PathVariable Long id, Model model) {
+		Reservation reservation = reservService.findReservationById(id);
+		Area area = areaService.getByName(reservation.getAreaname());
+		model.addAttribute("rating", new Rating());
+		model.addAttribute("area", area);
+		//model.addAttribute("areaName", areas.getName());
+		return "ratingPageUser";
+	}
+	
+	@PostMapping("/submit-rating/{id}")
+	public String submitRating(@PathVariable Long id, @ModelAttribute Rating rating, @ModelAttribute Area area, HttpSession session, Model model) {
+		//TODO: process POST request
+		Reservation reservation = reservService.findReservationById(id);
+		Long userId = (Long) session.getAttribute("userId");
+		User currentUser = userService.findById(userId).orElse(null);
+		if (currentUser != null) {
+			if (currentUser.getProfile_picture() != null) {
+				String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
+				model.addAttribute("profilePictureBase64", base64Image);
+			}
+			model.addAttribute("user", currentUser); 
+		}
+		rating.setAreaname(reservation.getAreaname());
+		rating.setUseremail(currentUser.getEmail());
+		rating.setUsername(currentUser.getName());
+		ratingService.createRating(rating);
+		return "redirect:/mb-user";
+	}
+	
+	/*@GetMapping("/rate-area/{areaName}")
+	public String viewRateArea(@PathVariable("areaName") String areaName, Model model) {
+    model.addAttribute("areaName", areaName);
+    return "ratingPageUser";
+	}
+	
+	@PostMapping("/submit-rating")
+	public String viewRatingsList(@RequestParam("areaName") String areaName, @RequestParam("feedback") String feedback, 
+								@RequestParam("ratingDate") LocalDate ratingDate, @RequestParam("stars") int stars) {
+		// Add attributes to the model if needed for profile management
+		reservService.checkStatus();
+
+		Reservation reservation = reservService.findReservationsByAreaName(areaName);
+		Rating rating = new Rating();
+		rating.setAreaname(reservation.getAreaname());
+		rating.setUsername(reservation.getUsername());
+		rating.setUseremail(reservation.getUseremail());
+		rating.setStars(stars);
+		rating.setFeedback(feedback);
+		rating.setRatingDate(ratingDate);
+		ratingService.createRating(rating);
+		return "redirect:/mb-user";
+	}*/
 
 	@GetMapping("/bookings/{id}")
 	public String viewBookingsDetails(@PathVariable Long id, Model model) {
@@ -308,7 +383,7 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	} */
 
 	@GetMapping("/booking-area/{id}")
-	public String viewBookingArea(@PathVariable Long id, Model model, HttpSession session) {
+	public String viewBookingArea(@PathVariable Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
 		// Add attributes to the model if needed for profile management
 		Area area = areaService.getAreaById(id);
 		model.addAttribute("area", area);
@@ -321,6 +396,10 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 				model.addAttribute("profilePictureBase64", base64Image);
 			}
 			model.addAttribute("user", currentUser); 
+		}
+		if(area.getAvailable() == false) {
+			redirectAttributes.addFlashAttribute("error", "Area Not Available");
+			return "redirect:/areas-user";
 		}
 		return "book_area2";
 	} 
@@ -372,6 +451,14 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 		reservService.checkStatus();
 		reservService.cancelBooking(id);
 		return "redirect:/mb-user";
+	}
+
+	@GetMapping("/cancelAdmin/{id}")
+	public String cancelBookingAdmin(@PathVariable Long id, Model model) {
+		// Add attributes to the model if needed for profile management
+		reservService.checkStatus();
+		reservService.cancelBooking(id);
+		return "redirect:/mb-admin";
 	}
 
 	
