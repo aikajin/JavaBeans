@@ -274,6 +274,12 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 		return "viewRatingsList";
 	}
 
+	@GetMapping("/rate-area/{areaName}")
+	public String viewRateArea(@PathVariable("areaName") String areaName, Model model) {
+    model.addAttribute("areaName", areaName);
+    return "ratingPageUser";
+}
+
 	@GetMapping("/bookings/{id}")
 	public String viewBookingsDetails(@PathVariable Long id, Model model) {
 		// Add attributes to the model if needed for profile management

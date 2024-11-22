@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Area</title>
+    <link rel="icon" href="/images/logoHead.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    
+    <div class="container">
+        <div class="sidebar">
+            <img class="logo" style="width: 262px; height: 56px;" src="/images/logo.png" alt="Logo" />
+            <div class="nav-items">
+                <a href="/dash_user" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <div>Dashboard</div>
+                </a>
+                
+                <a href="/areas-user" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <div>Book a Facility</div>
+                </a>
+                
+                <a href="#" class="nav-item active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <div>Manage Bookings</div>
+                </a>
+                
+                <a href="/profile" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.44" height="17.04" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <div>Manage Profile</div>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="/" class="logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <div>Log out</div>
+                </a> 
+            </div>
+            
+            <!--<div class="profile">
+                <div class="profile-pic2">
+                            
+                    <!-- Check if the profile picture exists and display it 
+                    <img th:if="${profilePictureBase64 != null}" 
+                        th:src="'data:image/jpeg;base64,' + ${profilePictureBase64}" 
+                        alt="Profile Picture" style="width: 100%; height: 100%; border-radius: 50%;" />
+                    
+                    <!-- Fallback to show the user's initials (e.g., 'JD') if no profile picture is available -
+                    <span th:if="${profilePictureBase64 == null}" th:text="${user.name != null ? user.name.substring(0, 2).toUpperCase() : 'JD'}"style="font-size: medium;">JD</span>
+                </div>
+                <div class="profile-info">
+                    <a href="/profile" style="text-decoration: none;"><div class="profile-name" th:if="${user != null}" th:text="${user.name}">John Doe</div></a>
+                    <div class="profile-name" th:unless="${user != null}">User not found</div>
+                    <div class="profile-role" th:if="${user != null}" th:text="${user.property_status}">Homeowner</div>
+                </div>
+            </div>-->
+        </div>
+        <div class="main-content">
+            <header class="header">
+                <p><a th:href="@{/mb-user}" style="text-decoration: none; font-weight:bold;">Manage Bookings</a>/ Rate Area</p>
+            </header>
+            <h1 th:text="'Rate ' + ${areaName}"></h1>
+            
+            
+                <div class="rating-card">
+                    <h2>Rate Your Experience</h2>
+                    
+                    <form th:action="@{/submit-rating}" method="post" class="rating-form">
+
+        
+                        <div class="form-group">
+                            <label>Rating</label>
+                            <div class="star-rating">
+                                <input type="radio" id="star5" name="rating" value="5" required/>
+                                <label for="star5">★</label>
+                                <input type="radio" id="star4" name="rating" value="4"/>
+                                <label for="star4">★</label>
+                                <input type="radio" id="star3" name="rating" value="3"/>
+                                <label for="star3">★</label>
+                                <input type="radio" id="star2" name="rating" value="2"/>
+                                <label for="star2">★</label>
+                                <input type="radio" id="star1" name="rating" value="1"/>
+                                <label for="star1">★</label>
+                            </div>
+                        </div>
+        
+                        <div class="form-group2">
+                            <label for="feedback">Feedback</label>
+                            <textarea id="feedback" name="feedback" rows="4" required 
+                                      placeholder="Share your experience with this facility..."></textarea>
+                        </div>
+        
+                        <div class="form-group2">
+                            <label for="ratingDate">Date of Rating</label>
+                            <input type="date" id="ratingDate" name="ratingDate" required th:max="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"/>
+                        </div>
+        
+                        <button type="submit" class="submit-btn2">Submit Rating</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+       <!-- <script>
+            document.addEventListener('DOMContentLoaded', function() {
+    const starRatings = document.querySelectorAll('.star-rating');
+    
+    starRatings.forEach(rating => {
+        const stars = rating.querySelectorAll('.star');
+        const submitButton = rating.nextElementSibling;
+        const messageDiv = submitButton.nextElementSibling;
+        let selectedRating = 0;
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', () => {
+                const ratingValue = parseInt(star.getAttribute('data-rating'));
+                highlightStars(stars, ratingValue);
+            });
+
+            star.addEventListener('mouseout', () => {
+                highlightStars(stars, selectedRating);
+            });
+
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.getAttribute('data-rating'));
+                highlightStars(stars, selectedRating);
+                submitButton.disabled = false;
+            });
+        });
+
+        submitButton.addEventListener('click', async () => {
+            if (selectedRating === 0) return;
+
+            submitButton.disabled = true;
+            messageDiv.textContent = 'Submitting...';
+
+            try {
+                // Simulating an API call
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                const success = Math.random() < 0.8; // 80% success rate for demonstration
+
+                if (success) {
+                    messageDiv.textContent = 'Thank you for your rating! Your feedback has been recorded.';
+                    messageDiv.className = 'rating-message rating-submitted';
+                    submitButton.style.display = 'none';
+                    stars.forEach(star => star.style.pointerEvents = 'none');
+                } else {
+                    throw new Error('Failed to submit rating');
+                }
+            } catch (error) {
+                messageDiv.textContent = 'Failed to submit a rating. Please try again later.';
+                messageDiv.className = 'rating-message rating-error';
+                submitButton.disabled = false;
+            }
+        });
+    });
+
+    function highlightStars(stars, rating) {
+        stars.forEach((star, index) => {
+            star.classList.toggle('active', index < rating);
+        });
+    }
+});
+        </script>-->
+        </body>
+        </html>
+        
