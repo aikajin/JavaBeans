@@ -149,6 +149,7 @@ public class UserService {
         existingUser.setPassword(passwordEncoder.encode(password));
         userRepository.save(existingUser);
     }
+
 public void updatename(Long id, String name) {
         Optional<User> existingUserOptional = userRepository.findById(id);
         User existingUser = existingUserOptional.get();
@@ -169,8 +170,6 @@ public void updateemail(Long id, String email) {
     user.setEmail(email);
     userRepository.save(user);
 }
-
-    
     public String update4(Long id, String name, String email) {
         Optional<User> existingUserOptional = userRepository.findById(id);
         User existingUser = existingUserOptional.get();
@@ -387,6 +386,4 @@ public void updateemail(Long id, String email) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
     }
-
- 
 }

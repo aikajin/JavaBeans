@@ -33,7 +33,12 @@ public class SecurityConfig {
                 .successHandler(authenticationSuccessHandler))
             .logout(logout -> logout
                 .logoutSuccessUrl("/").permitAll()
-                .deleteCookies("JSESSIONID").permitAll());
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID").permitAll())
+            .headers(headers -> headers
+                .cacheControl().disable());
+            
         return http.build();
     }
     @Bean
