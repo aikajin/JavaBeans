@@ -109,6 +109,20 @@
         <div class="stat-card">
             <div class="stat-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" fill="#fff1f0" stroke="#ff4d4f" stroke-width="2"/>
+                <line x1="3" y1="10" x2="21" y2="10" stroke="#ff4d4f" stroke-width="2"/>
+                <line x1="16" y1="2" x2="16" y2="6" stroke="#ff4d4f" stroke-width="2"/>
+                <line x1="8" y1="2" x2="8" y2="6" stroke="#ff4d4f" stroke-width="2"/>
+                <line x1="8" y1="11" x2="16" y2="22" stroke="#ff4d4f" stroke-width="2"/>
+                <line x1="16" y1="11" x2="8" y2="22" stroke="#ff4d4f" stroke-width="2"/>
+                </svg>
+            </div>
+            <h3>Cancelled Bookings</h3>
+            <p th:text="${cancelledBookings}">50</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40">
                     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" fill="#fff7e6" stroke="#fa8c16" stroke-width="2"/>
                     <rect x="8" y="2" width="8" height="4" rx="1" ry="1" fill="#fff7e6" stroke="#fa8c16" stroke-width="2"/>
                     <path d="M12 11h4" stroke="#fa8c16" stroke-width="2"/>
@@ -120,16 +134,7 @@
             <h3>Total Bookings</h3>
             <p th:text="${reservationNotStarted}">250</p>
         </div>
-        <div class="stat-card">
-            <div class="stat-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" fill="#f6ffed" stroke="#52c41a" stroke-width="2"/>
-                    <polyline points="22 4 12 14.01 9 11.01" fill="none" stroke="#52c41a" stroke-width="2"/>
-                </svg>
-            </div>
-            <h3>Total Cancelled</h3>
-            <p th:text="${cancelledBookings}">50</p>
-        </div>
+        
         <div class="stat-card">
             <div class="stat-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40">
@@ -254,7 +259,7 @@
                 <td>${user.lot_num}</td>
                 <td>
                     
-                    <button onclick="deleteUser(${user.id})" class="btn-delete">Delete</button>
+                    <button onclick="deleteUser(${user.id})" class="delete-btn3">Delete</button>
                 </td>
             `;
 

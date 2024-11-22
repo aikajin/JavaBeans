@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recreational Areas</title>
-    <link rel="icon" href="images/logoHead.png" type="image/png">
+    <link rel="icon" href="/images/logoHead.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <div class="container">
         <div class="sidebar">
-             <img class="logo" style="width: 262px; height: 56px;" src="images/logo.png" alt="Logo" />
+             <img class="logo" style="width: 262px; height: 56px;" src="/images/logo.png" alt="Logo" />
             <div class="nav-items">
                 <a href="/dash_user" class="nav-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -101,93 +101,49 @@
                         <input type="text" id="searchInput" placeholder="Search Area..." class="search-input">
                     </div>
                 </div>
-
-                <!--<div class="view-options">
-                    <button class="view-option active" data-view="grid">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="14" width="7" height="7"></rect>
-                            <rect x="3" y="14" width="7" height="7"></rect>
-                        </svg>
-                    </button>
-                    <button class="view-option" data-view="calendar">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                        </svg>
-                    </button>
-                </div> -->
             </div>
-            <div th:each="area :${areaList}">
-            <div id="view-content"></div>
-            <h1>Available</h1>
-            <div class="areas-grid">
-                
-                <div th:each="area :${areaList}">
-                <div class="area-card">
-                    <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
-                    <div class="area-details">
-                        <div class="area-name">
-                            <h3>[[${area.name}]]</h3>
-                        </div>
-                        <p class="area-guidelines">[[${area.guidelines}]]</p>
-                        <div class="area-actions">
-                            <a th:href="@{/booking-area/{id}(id=${area.id})}" class="edit-btn2">Book</a>
-                                <a th:href="@{/view-recreational-area-user/{id}(id=${area.id})}" class="view-detailsUser">View details →</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            </div>
-
-            <h1>Unavailable</h1>
-            <div class="areas-grid">
             
-            <div th:each="area :${areaListFalse}">
-                <div class="area-card">
-                    <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
-                    <div class="area-details">
-                        <div class="area-name">
-                            <h3>[[${area.name}]]</h3>
-                        </div>
-                        <p class="area-guidelines">[[${area.guidelines}]]</p>
-                        <div class="area-actions">
-                            <a th:href="@{/booking-area/{id}(id=${area.id})}" class="edit-btn2">Book</a>
-                            <a th:href="@{/view-recreational-area-user/{id}(id=${area.id})}" class="view-detailsUser">View details →</a>
-                        </div>
-                        <div th:if="${error}" class="error-message">
-                            <p th:text="${error}"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-                <!--<div th:each="area :${areaList}">
-                    <div class="area-card">
+            <!-- Available Areas Section -->
+            <div id="available-section">
+                <h1>Available</h1>
+                <div class="areas-grid">
+                    <div th:each="area : ${areaList}" class="area-card">
                         <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
                         <div class="area-details">
                             <div class="area-name">
-                                <h3>[[${area.name}]]</h3>
+                                <h3 th:text="${area.name}"></h3>
                             </div>
-                            <p class="area-guidelines">[[${area.guidelines}]]</p>
+                            <p class="area-guidelines" th:text="${area.guidelines}"></p>
                             <div class="area-actions">
                                 <a th:href="@{/booking-area/{id}(id=${area.id})}" class="edit-btn2">Book</a>
                                 <a th:href="@{/view-recreational-area-user/{id}(id=${area.id})}" class="view-detailsUser">View details →</a>
-                               
-                                
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
-        </div>
+
+            <!-- Unavailable Areas Section -->
+            <div id="unavailable-section">
+                <h1>Unavailable</h1>
+                <div class="areas-grid">
+                    <div th:each="area : ${areaListFalse}" class="area-card">
+                        <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
+                        <div class="area-details">
+                            <div class="area-name">
+                                <h3 th:text="${area.name}"></h3>
+                            </div>
+                            <p class="area-guidelines" th:text="${area.guidelines}"></p>
+                            <div class="area-actions">
+                                <a th:href="@{/booking-area/{id}(id=${area.id})}" class="edit-btn2">Book</a>
+                                <a th:href="@{/view-recreational-area-user/{id}(id=${area.id})}" class="view-detailsUser">View details →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
@@ -212,20 +168,22 @@
                 });
             });
 
-            statusFilter.addEventListener('change', function() {
-                const selectedValue = this.value;
-                const cards = document.querySelectorAll('.area-card');
-                
-                cards.forEach(card => {
-                    if (selectedValue === 'all') {
-                        card.style.display = '';
-                    } else if (selectedValue === 'available') {
-                        card.style.display = card.querySelector('.view-details') ? '' : 'none';
-                    } else if (selectedValue === 'unavailable') {
-                        card.style.display = card.querySelector('.view-details') ? 'none' : '';
-                    }
-                });
-            });
+                statusFilter.addEventListener('change', function() {
+        const selectedValue = this.value;
+        const availableSection = document.getElementById('available-section');
+        const unavailableSection = document.getElementById('unavailable-section');
+
+        if (selectedValue === 'all') {
+            availableSection.style.display = '';
+            unavailableSection.style.display = '';
+        } else if (selectedValue === 'available') {
+            availableSection.style.display = '';
+            unavailableSection.style.display = 'none';
+        } else if (selectedValue === 'unavailable') {
+            availableSection.style.display = 'none';
+            unavailableSection.style.display = '';
+        }
+});
         });
         
         function filterAreas(searchValue, originalOrder, areasGrid) {
