@@ -12,19 +12,65 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
-
+import com.accord.repository.AreaRepository;
 import com.accord.Entity.Area;
+
 import com.accord.Entity.Reservation;
 import com.accord.repository.ReservRepository;
-
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 @Service
+
 public class ReservService {
     @Autowired
     private ReservRepository reservRepository;
+    @Autowired
+    private JavaMailSender mailSender; 
+    @Autowired
+private AreaRepository areaRepository;
 
     public void bookReservation(Reservation reservation) {
         reservRepository.save(reservation);
+        sendReservationConfirmationEmail(reservation);
     }
+
+    private void sendReservationConfirmationEmail(Reservation reservation) {
+        MimeMessage message = mailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true); 
+            Area area = areaRepository.findByName(reservation.getAreaname()).orElse(null); 
+            String guidelines = area != null && area.getGuidelines() != null 
+            ? area.getGuidelines() 
+            : "No specific guidelines available.";
+            helper.setFrom("extrahamham@gmail.com"); 
+            helper.setTo(reservation.getUseremail());
+            helper.setSubject("Reservation Confirmation - " + reservation.getAreaname());
+
+ 
+            String emailContent = "Dear " + reservation.getUsername() + ",\n\n" +
+            "Your reservation has been successfully confirmed. Here are the details:\n\n" +
+            "Recreational Area: " + reservation.getAreaname() + "\n" +
+            "Date: " + reservation.getUser_start_date() + "\n" +
+            "Time: " + reservation.getUser_start_time() + " to " + reservation.getUser_end_time() + "\n" +
+    
+            "Please note the following guidelines:\n" +
+            guidelines + "\n\n" +
+            "This email serves as proof of your reservation. Please present it on the day of use.\n\n" +
+            "Thank you for using our services.\n\n" +
+            "Best regards,\n" +
+            "The Accord Team";
+
+    helper.setText(emailContent);
+            // Send the email
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+    
 
     public List<Reservation> listReservation() {
         checkStatus();
