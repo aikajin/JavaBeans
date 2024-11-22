@@ -164,9 +164,14 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	m.addAttribute("recentUsers",repo.findAll());
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
+	long cancelledBookingsCount = reservService.listReservation()
+	.stream()
+	.filter(reservation -> "CANCELLED".equalsIgnoreCase(reservation.getStatus()))
+	.count();
 	m.addAttribute("reservationActiveAndNot", reservService.countAllReservationStatusStartedAndNotStarted());
 	m.addAttribute("reservationNotStarted", reservService.countAllReservationStatusNotStarted());
 	m.addAttribute("reservationCompleted", reservService.countAllReservationStatusCompleted());
+	m.addAttribute("cancelledBookings", cancelledBookingsCount);
     if (currentUser != null) {
 		if (currentUser.getProfile_picture() != null) {
 			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());

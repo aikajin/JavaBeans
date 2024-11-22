@@ -510,8 +510,8 @@ text-decoration: none;
 
 .delete-btn3 {
   padding: 5px 20px; /* Adjusted padding to match the size */
-  background-color: #ffffff; /* Orange background */
-  color: #b50505; /* White text color */
+  background-color: #b50505; /* Orange background */
+  color: #ffffff; /* White text color */
   border-color:#b50505 ;
   border-radius: 25px; /* Rounded corners similar to the image */
   font-size: 14px; /* Adjust font size to match the image */
@@ -523,7 +523,7 @@ text-decoration: none;
   }
 
  .delete-btn3:hover {
-        background-color: #b50505; /* Red background on hover */
+        background-color: #860a06; /* Red background on hover */
         color: white; /* White text on hover */
     }
 
