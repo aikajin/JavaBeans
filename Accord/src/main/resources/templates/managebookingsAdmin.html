@@ -149,7 +149,8 @@
                             <td th:text="${reservation.user_start_time}"></td>
                             <td th:text="${reservation.user_end_time}"></td>
                             <td th:text="${reservation.status}"><span class="status-badge completed"></span></td>
-                            <td><button class="delete-btn3">Cancel</button></td>
+                            <td> <a th:href="@{/cancelAdmin/{id}(id=${reservation.id})}" class="view-button">Cancel Booking</a></td>
+                            
                         </tr>
                     </tbody>
                 </table>
@@ -249,21 +250,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelButtons = document.querySelectorAll('.delete-btn3');
     const confirmButton = document.getElementById('confirmCancel');
     const keepButton = document.getElementById('cancelDelete');
-    let selectedRow = null;
+    let selectedReservationId = null;
 
     // Show modal when cancel button is clicked
     cancelButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             modal.style.display = 'block';
             selectedRow = e.target.closest('tr');
+            selectedReservationId = e.target.getAttribute('data-reservation-id');
         });
     });
 
     // Handle confirmation
     confirmButton.addEventListener('click', () => {
-        if (selectedRow) {
-            selectedRow.remove();
-            selectedRow = null;
+        if (selectedReservationId) {
+            window.location.href = `/cancelBooking/${selectedReservationId}`;
         }
         modal.style.display = 'none';
     });

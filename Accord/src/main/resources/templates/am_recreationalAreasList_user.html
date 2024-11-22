@@ -121,10 +121,52 @@
                     </button>
                 </div> -->
             </div>
-            
+            <div th:each="area :${areaList}">
             <div id="view-content"></div>
+            <h1>Available</h1>
             <div class="areas-grid">
+                
                 <div th:each="area :${areaList}">
+                <div class="area-card">
+                    <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
+                    <div class="area-details">
+                        <div class="area-name">
+                            <h3>[[${area.name}]]</h3>
+                        </div>
+                        <p class="area-guidelines">[[${area.guidelines}]]</p>
+                        <div class="area-actions">
+                            <a th:href="@{/booking-area/{id}(id=${area.id})}" class="edit-btn2">Book</a>
+                                <a th:href="@{/view-recreational-area-user/{id}(id=${area.id})}" class="view-detailsUser">View details →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+
+            <h1>Unavailable</h1>
+            <div class="areas-grid">
+            
+            <div th:each="area :${areaListFalse}">
+                <div class="area-card">
+                    <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
+                    <div class="area-details">
+                        <div class="area-name">
+                            <h3>[[${area.name}]]</h3>
+                        </div>
+                        <p class="area-guidelines">[[${area.guidelines}]]</p>
+                        <div class="area-actions">
+                            <a th:href="@{/booking-area/{id}(id=${area.id})}" class="edit-btn2">Book</a>
+                            <a th:href="@{/view-recreational-area-user/{id}(id=${area.id})}" class="view-detailsUser">View details →</a>
+                        </div>
+                        <div th:if="${error}" class="error-message">
+                            <p th:text="${error}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+                <!--<div th:each="area :${areaList}">
                     <div class="area-card">
                         <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
                         <div class="area-details">
@@ -140,8 +182,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
+        </div>
         </main>
     </div>
 

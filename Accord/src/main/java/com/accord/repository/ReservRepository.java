@@ -20,4 +20,6 @@ public interface ReservRepository extends JpaRepository<Reservation, Long>{
     List<Reservation> findByUseremailAndStatusIn(String useremail, List<String> statuses);
 
     Long countByUseremailAndStatusIn(String useremail, List<String> statuses);
+
+    Long countByStatusIn(List<String> statuses);
 }
