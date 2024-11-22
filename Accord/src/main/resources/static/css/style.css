@@ -1908,3 +1908,113 @@ h1 {
 .form-group {
   margin-bottom: 20px;
 }
+
+.rating-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Lexend', sans-serif;
+}
+
+.rating-card {
+  flex-grow: 1;
+  background: white;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: 'Lexend', sans-serif;
+}
+
+.rating-card h2 {
+  color: #2d3748;
+  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.form-group2 {
+  margin-bottom: 24px;
+}
+
+.form-group2 label {
+  display: block;
+  margin-bottom: 8px;
+  color: #4a5568;
+  font-weight: 500;
+  font-family: 'Lexend', sans-serif;
+}
+
+select, input[type="date"], textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #2d3748;
+  transition: border-color 0.2s;
+  font-family: 'Lexend', sans-serif;
+}
+
+select:focus, input:focus, textarea:focus {
+  outline: none;
+  border-color: #FF5916;
+  box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.1);
+  font-family: 'Lexend', sans-serif;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+  font-family: 'Lexend', sans-serif;
+  
+}
+
+.star-rating {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  gap: 4px;
+}
+
+.star-rating input {
+  display: none;
+}
+
+.star-rating label {
+  cursor: pointer;
+  font-size: 24px;
+  color: #cbd5e0;
+  transition: color 0.2s;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+  color: #fbbf24;
+}
+
+.submit-btn2 {
+  background-color: #FF5916;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+  font-family: 'Lexend', sans-serif;
+}
+
+.submit-btn2:hover {
+  background-color: #ff5920;
+}
+
+@media (max-width: 640px) {
+  .rating-container {
+      padding: 10px;
+  }
+
+  .rating-card {
+      padding: 20px;
+  }
+}
