@@ -109,11 +109,11 @@ public class AreaService {
         return areaRepository.findById(id).orElse(null);
     }
 
-    public double allAvarageStars(Area area) {
+    /*public double allAvarageStars(Area area) {
         List<Rating> rating = area.getRatings();
         if(rating == null || rating.isEmpty()) {
             return 0.0;
         }
         return rating.stream().mapToInt(Rating::getStars).average().orElse(0.0);
-    }
+    }*/
 }

@@ -41,7 +41,7 @@ public class User {
 
 	private Boolean confirmation_email;
 
-	private Boolean confirmation_account;
+	private Boolean confirmationAccount;
 
 	private String tenancy_name;
 

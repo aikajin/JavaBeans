@@ -17,4 +17,5 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	Optional<User> findByContactnumber(String contactnumber);
 	List<User> findAll();
 	Optional<User> findByResetToken(String token);
+	List<User> findByConfirmationAccount(Boolean confirmationAccount);
 }

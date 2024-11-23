@@ -281,7 +281,7 @@ public void updateemail(Long id, String email) {
         user.setLot_num(lot_num);
         user.setProperty_status(property_status);
         user.setConfirmation_email(null);  // Email confirmation pending
-        user.setConfirmation_account(null);  // Admin approval pending
+        user.setConfirmationAccount(null);  // Admin approval pending
 
         try {
             user.setTenancy_name(tenancy.getOriginalFilename());
@@ -307,7 +307,7 @@ public void updateemail(Long id, String email) {
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setConfirmation_email(true);
-        user.setConfirmation_account(true);
+        user.setConfirmationAccount(true);
         user.setRole(role);
         return userRepository.save(user);
     }
@@ -385,5 +385,15 @@ public void updateemail(Long id, String email) {
     public User updateUser(Long userId, Optional<User> optionalUser, MultipartFile prof) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
+    }
+
+    public List<User> pendingAccountConfirmation() {
+        return userRepository.findByConfirmationAccount(null);
+    }
+
+    public void confirmAccount(Long id) {
+        User user = findById(id).orElse(null);
+        user.setConfirmationAccount(true);
+        userRepository.save(user);
     }
 }
