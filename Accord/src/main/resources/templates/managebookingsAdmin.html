@@ -149,7 +149,7 @@
                             <td th:text="${reservation.user_start_time}"></td>
                             <td th:text="${reservation.user_end_time}"></td>
                             <td th:text="${reservation.status}"><span class="status-badge completed"></span></td>
-                            <td> <a th:href="@{/cancelAdmin/{id}(id=${reservation.id})}" class="view-button">Cancel Booking</a></td>
+                            <td> <a th:if="${reservation.status == 'NOT STARTED'}" th:href="@{/cancelAdmin/{id}(id=${reservation.id})}" class="view-button">Cancel Booking</a></td>
                             
                         </tr>
                     </tbody>

@@ -263,6 +263,73 @@
             })
             .catch(error => console.error('Error filtering users:', error));
     }
+
+    function fetchPendingApplications() {
+    fetch('/applications/pending') // Ensure this endpoint returns pending applications in JSON format
+        .then(response => response.json())
+        .then(applications => {
+            renderPendingApplications(applications);
+        })
+        .catch(error => console.error('Error fetching pending applications:', error));
+}
+
+function renderPendingApplications(applications) {
+    const tableBody = document.querySelector('#pendingTable tbody');
+    tableBody.innerHTML = ''; // Clear existing rows
+
+    applications.forEach(application => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td>${application.name}</td>
+            <td>${application.property_status}</td>
+            <td>${application.block_num}</td>
+            <td>${application.lot_num}</td>
+            <td>
+                <a href="/confirm-account/${application.id}" class="view-button">Confirm Account</a>
+            </td>
+        `;
+
+        tableBody.appendChild(row);
+    });
+}
+
+function filterPendingApplications() {
+    const searchValue = document.getElementById('searchInputPending').value.toLowerCase();
+    const filterValue = document.getElementById('filterSelectPending').value;
+
+    fetch('/applications/pending') // Fetch the full pending applications list again
+        .then(response => response.json())
+        .then(applications => {
+            const filteredApplications = applications.filter(application => {
+                const matchesSearch = application.name.toLowerCase().includes(searchValue);
+                const matchesFilter = filterValue === '' || application.property_status === filterValue;
+                return matchesSearch && matchesFilter;
+            });
+
+            renderPendingApplications(filteredApplications); // Re-render the filtered applications
+        })
+        .catch(error => console.error('Error filtering pending applications:', error));
+        document.addEventListener('DOMContentLoaded', function () {
+    // Fetch data on page load
+    fetchPendingApplications();
+    fetchUsers();
+
+    // Event listeners for Pending Applications filtering
+    const searchInputPending = document.getElementById('searchInputPending');
+    const filterSelectPending = document.getElementById('filterSelectPending');
+
+    searchInputPending.addEventListener('input', filterPendingApplications);
+    filterSelectPending.addEventListener('change', filterPendingApplications);
+
+    // Event listeners for Users List filtering
+    const searchInput = document.getElementById('searchInputUsers');
+    const filterSelect = document.getElementById('filterSelectUsers');
+
+    searchInput.addEventListener('input', filterUsers);
+    filterSelect.addEventListener('change', filterUsers);
+});
+}
     </script>
 </body>
 </html>
