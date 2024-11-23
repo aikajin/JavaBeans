@@ -324,6 +324,10 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	public String submitRating(@PathVariable Long id, @ModelAttribute Rating rating, @ModelAttribute Area area, HttpSession session, Model model) {
 		//TODO: process POST request
 		Reservation reservation = reservService.findReservationById(id);
+		/*if(reservation == null) {
+			return "redirect:/mb-user";
+		}*/
+		//Area area = areaService.getAreaById(id);
 		Long userId = (Long) session.getAttribute("userId");
 		User currentUser = userService.findById(userId).orElse(null);
 		if (currentUser != null) {

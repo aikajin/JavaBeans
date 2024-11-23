@@ -514,7 +514,7 @@ text-decoration: none;
   color: #ffffff; /* White text color */
   border-color:#b50505 ;
   border-radius: 25px; /* Rounded corners similar to the image */
-  font-size: 14px; /* Adjust font size to match the image */
+  font-size: 16px; /* Adjust font size to match the image */
   font-weight: bold; /* Thicker font */
   text-align: center; /* Center the text */
   cursor: pointer;
@@ -1045,6 +1045,20 @@ h1 {
 }
 
 .view-detailsUser:hover {
+  text-decoration: underline;
+}
+
+
+.view-detailsUser2 {
+  color: #FF5916;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 361px;
+  margin-top: 1.3%;
+}
+
+.view-detailsUser2:hover {
   text-decoration: underline;
 }
 
@@ -1654,11 +1668,15 @@ h1 {
 }
 
 .star-rating {
-  font-size: 24px;
-  cursor: pointer;
+  color: #FFD700;
+  font-size: 1.2em;
+  letter-spacing: 2px;
 }
 .star-rating .star {
   color: #ccc;
+}
+.star-rating :not(:first-child) {
+  color: #D3D3D3;
 }
 .star-rating .star.active {
   color: #FFD700;
