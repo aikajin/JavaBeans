@@ -31,7 +31,7 @@ public class ForgotPasswordController {
         if (userOptional.isPresent()) {
             // If the user exists, send a password reset email
             User user = userOptional.get(); // Extract the User from Optional
-            userService.sendPasswordResetEmail(user);
+           // userService.sendPasswordResetEmail(user,request);
     
             // Add a success message to the model
             model.addAttribute("message", "Password reset email has been sent to " + email);
