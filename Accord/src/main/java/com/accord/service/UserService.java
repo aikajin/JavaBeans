@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.accord.Entity.User;
 import com.accord.repository.EmailNotificationRepository;
 import com.accord.repository.UserRepository;
-
+import javax.servlet.http.HttpServletRequest;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
@@ -197,7 +197,8 @@ public void updateemail(Long id, String email) {
 
     public boolean sendPasswordResetEmail(User user) {
         String token = UUID.randomUUID().toString();  // Generate unique token
-        String resetLink = "http://localhost:8086/forgotPassword_setPass?token=" + token;
+
+        String resetLink = "http://localhost:8081/forgotPassword_setPass?token=" + token;
         user.setResetToken(token);  
         userRepository.save(user);  
         MimeMessage message = mailSender.createMimeMessage();
@@ -215,13 +216,13 @@ public void updateemail(Long id, String email) {
 
             helper.setText(emailContent, true);
 
-            // Send email
+           
             mailSender.send(message);
 
-            return true;  // Return true if email is sent successfully
+            return true;  
         } catch (MessagingException e) {
             e.printStackTrace();
-            return false;  // Return false if email sending failed
+            return false;  
         }
     }
 
@@ -280,8 +281,8 @@ public void updateemail(Long id, String email) {
         user.setBlock_num(block_num);
         user.setLot_num(lot_num);
         user.setProperty_status(property_status);
-        user.setConfirmation_email(null);  // Email confirmation pending
-        user.setConfirmationAccount(null);  // Admin approval pending
+        user.setConfirmation_email(null);  
+        user.setConfirmationAccount(null);  
 
         try {
             user.setTenancy_name(tenancy.getOriginalFilename());
@@ -395,5 +396,42 @@ public void updateemail(Long id, String email) {
         User user = findById(id).orElse(null);
         user.setConfirmationAccount(true);
         userRepository.save(user);
+        sendAccountConfirmationEmail(user);
+    }
+    public void sendAccountConfirmationEmail(User user) {
+        MimeMessage message = mailSender.createMimeMessage();
+    
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+    
+            helper.setFrom("extrahamham@gmail.com"); 
+            helper.setTo(user.getEmail()); 
+            helper.setSubject("Account Confirmation - Welcome to Accord"); 
+    
+            // Construct the email body
+            String emailContent = String.format(
+                    "<p>Dear %s,</p>" +
+                    "<p>We are pleased to inform you that your account on Accord has been successfully confirmed by our superadmin. You can now log in and start using the system to manage your amenities reservations.</p>" +
+                    "<p><strong>Account Details:</strong></p>" +
+                    "<ul>" +
+                    "<li>Name: %s</li>" +
+                    "<li>Email: %s</li>" +
+                    "</ul>" +
+                    "<p>If you experience any issues or have questions, please don't hesitate to reach out to us at <a href='mailto:extrahamham@gmail.com'>extrahamham@gmail.com</a>.</p>" +
+                    "<p>Thank you for joining Accord!</p>" +
+                    "<p>Best regards,</p>" +
+                    "<p>The Accord Team</p>",
+                    user.getName().split(" ")[0], 
+                    user.getName(), 
+                    user.getEmail() 
+            );
+    
+            helper.setText(emailContent, true); 
+    
+           
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 }

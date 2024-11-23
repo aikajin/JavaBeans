@@ -590,11 +590,11 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 
 	@PostMapping("/forgotPassword_email")
 public String processForgotPassword(@ModelAttribute("resetRequest") User resetRequest, Model model) {
-	// Retrieve the User object based on the email
+	
 	User user = userService.findByEmail(resetRequest.getEmail()).orElse(null);
 	
 	if (user != null) {
-		// Now pass the User object to sendPasswordResetEmail
+		
 		boolean isEmailSent = userService.sendPasswordResetEmail(user);
 		
 		if (isEmailSent) {
