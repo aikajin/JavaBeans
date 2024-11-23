@@ -129,9 +129,13 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
         session.setAttribute("loggedInUser", currentUser);
 
         // Redirect based on user role
-        if (currentUser.getRole().contains("ROLE_USER")) {
+        if (currentUser.getRole().contains("ROLE_USER") && (currentUser.getConfirmationAccount() != null)) {
             return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/dash_user")).build();
-        } else {
+        }
+		else if (currentUser.getRole().contains("ROLE_USER") && currentUser.getConfirmationAccount() == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Account not confirmed");
+		} 
+		else {
             return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/dash_admin")).build();
         }
     } else {
@@ -507,7 +511,16 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	@GetMapping("/accounts")
 	public String UserAccountsAdmin(Model model) {
 		// Add attributes to the model if needed for profile management
+		List<User> pendingUsers = userService.pendingAccountConfirmation();
+		model.addAttribute("pendingUsers", pendingUsers);
 		return "UserAccounts_page";
+	}
+
+	@GetMapping("/confirm-account/{id}")
+	public String confirmAccount(@PathVariable Long id, Model model) {
+		//User user = userService.findById(id).orElse(null);
+		userService.confirmAccount(id);
+		return "redirect:/accounts";
 	}
 
 	@GetMapping("/add_area")

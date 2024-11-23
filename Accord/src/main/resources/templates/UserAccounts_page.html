@@ -116,6 +116,21 @@
                     </thead>
                     <tbody>
                         <!-- Pending applications data will be populated here by JavaScript -->
+                        <tr th:each="user :${pendingUsers}">
+                            <td>
+                                [[${user.name}]]
+                            </td>
+                            <td>
+                                <div class="avatar-container">
+                                    [[${user.property_status}]]
+                                </div>
+                            </td>
+                            <td>[[${user.block_num}]]</td>
+                            <td>[[${user.lot_num}]]</td>
+                            <td>
+                                <a th:href="@{/confirm-account/{id}(id=${user.id})}" class="view-button">Confirm Account</a>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
