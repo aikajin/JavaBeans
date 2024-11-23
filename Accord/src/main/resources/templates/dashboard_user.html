@@ -102,7 +102,8 @@
 							<span class="active-bookings-count">You Have <span th:text="${number}"></span><span> Upcoming Bookings</span></span>
 						</div>
 					</div>
-					<button class="view-button" onclick="navigateToManageBookings()">Check This Out</button>
+                    <a href="mb-user" class ="view-button">Check This Out</a>
+					<!--<button class="view-button" onclick="navigateToManageBookings()">Check This Out</button>-->
 				</div>
 
             <div class="upcoming-activities">
@@ -149,7 +150,9 @@
                         <tr th:each="rating :${rating}">
                             <td>[[${rating.areaname}]]</td>
                             <td>[[${rating.feedback}]]</td>
-                            <td>[[${rating.stars}]]</td>
+                            <td>
+                                <span class="star-rating" th:text="${'★'.repeat(rating.stars) + '☆'.repeat(5 - rating.stars)}"></span>
+                            </td>
                             <td>[[${rating.ratingDate}]]</td>
                         </tr>
                     </tbody>
