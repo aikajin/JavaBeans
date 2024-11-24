@@ -146,70 +146,97 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchInput');
-            const areasGrid = document.querySelector('.areas-grid');
-            const originalOrder = Array.from(document.querySelectorAll('.area-card'));
-            const statusFilter = document.getElementById('statusFilter');
-            
-            searchInput.addEventListener('input', function() {
-                filterAreas(this.value.toLowerCase(), originalOrder, areasGrid);
-            });
-        
-            document.querySelectorAll('.view-option').forEach((button) => {
-                button.addEventListener('click', function() {
-                    document.querySelectorAll('.view-option').forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                
-                    if (this.dataset.view === 'grid') {
-                        areasGrid.style.display = 'grid';
-                    } else {
-                        areasGrid.style.display = 'none';
-                    }
-                });
-            });
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const availableSection = document.getElementById('available-section');
+    const unavailableSection = document.getElementById('unavailable-section');
+    
+    // Store original items with their sections
+    const originalItems = {
+        available: Array.from(document.querySelectorAll('#available-section .area-card')),
+        unavailable: Array.from(document.querySelectorAll('#unavailable-section .area-card'))
+    };
 
-                statusFilter.addEventListener('change', function() {
-        const selectedValue = this.value;
-        const availableSection = document.getElementById('available-section');
-        const unavailableSection = document.getElementById('unavailable-section');
+    // Function to filter and display items
+    function filterAndDisplayItems() {
+        const searchValue = searchInput.value.toLowerCase();
+        const selectedStatus = statusFilter.value;
 
-        if (selectedValue === 'all') {
-            availableSection.style.display = '';
-            unavailableSection.style.display = '';
-        } else if (selectedValue === 'available') {
-            availableSection.style.display = '';
-            unavailableSection.style.display = 'none';
-        } else if (selectedValue === 'unavailable') {
-            availableSection.style.display = 'none';
-            unavailableSection.style.display = '';
-        }
-});
+        // Clear both sections
+        const availableContainer = availableSection.querySelector('.areas-grid');
+        const unavailableContainer = unavailableSection.querySelector('.areas-grid');
+        availableContainer.innerHTML = '';
+        unavailableContainer.innerHTML = '';
+
+        // Filter available items
+        const filteredAvailable = originalItems.available.filter(card => {
+            const areaName = card.querySelector('.area-name').textContent.toLowerCase();
+            return areaName.includes(searchValue);
         });
-        
-        function filterAreas(searchValue, originalOrder, areasGrid) {
-            // Clear the grid
-            areasGrid.innerHTML = '';
-        
-            const matchingCards = originalOrder.filter(card => {
-                const areaName = card.querySelector('.area-name').textContent.toLowerCase();
-                return areaName.includes(searchValue);
-            });
-        
-            if (matchingCards.length > 0) {
-                // Append matching cards back to the grid
-                matchingCards.forEach(card => {
-                    areasGrid.appendChild(card);
-                });
-            } else {
-                // Display a "No results found" message
-                const noResultsMessage = document.createElement('div');
-                noResultsMessage.textContent = 'No results found';
-                noResultsMessage.className = 'no-results-message';
-                areasGrid.appendChild(noResultsMessage);
+
+        // Filter unavailable items
+        const filteredUnavailable = originalItems.unavailable.filter(card => {
+            const areaName = card.querySelector('.area-name').textContent.toLowerCase();
+            return areaName.includes(searchValue);
+        });
+
+        // Show/hide sections based on status filter and append filtered items
+        if (selectedStatus === 'all' || selectedStatus === 'available') {
+            availableSection.style.display = '';
+            if (filteredAvailable.length > 0) {
+                filteredAvailable.forEach(card => availableContainer.appendChild(card.cloneNode(true)));
+            } else if (searchValue && selectedStatus === 'all') {
+                const noResults = document.createElement('div');
+                noResults.textContent = 'No results found';
+                noResults.className = 'no-results-message';
+                availableContainer.appendChild(noResults);
             }
-            // Update grid display
-            areasGrid.style.display = 'grid';
+        } else {
+            availableSection.style.display = 'none';
         }
+
+        if (selectedStatus === 'all' || selectedStatus === 'unavailable') {
+            unavailableSection.style.display = '';
+            if (filteredUnavailable.length > 0) {
+                filteredUnavailable.forEach(card => unavailableContainer.appendChild(card.cloneNode(true)));
+            } else if (searchValue && selectedStatus === 'all') {
+                const noResults = document.createElement('div');
+                noResults.textContent = 'No results found';
+                noResults.className = 'no-results-message';
+                unavailableContainer.appendChild(noResults);
+            }
+        } else {
+            unavailableSection.style.display = 'none';
+        }
+
+        // Handle no results for both sections
+        if (searchValue && filteredAvailable.length === 0 && filteredUnavailable.length === 0) {
+            if (selectedStatus === 'all' || selectedStatus === 'available') {
+                const noResults = document.createElement('div');
+                noResults.textContent = 'No results found';
+                noResults.className = 'no-results-message';
+                availableContainer.appendChild(noResults);
+            }
+        }
+    }
+
+    // Add event listeners
+    searchInput.addEventListener('input', filterAndDisplayItems);
+    statusFilter.addEventListener('change', filterAndDisplayItems);
+
+    // Handle view options
+    document.querySelectorAll('.view-option').forEach((button) => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.view-option').forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            const displayStyle = this.dataset.view === 'grid' ? 'grid' : 'none';
+            document.querySelectorAll('.areas-grid').forEach(grid => {
+                grid.style.display = displayStyle;
+            });
+        });
+    });
+});
     </script>
 </body>
 </html>
