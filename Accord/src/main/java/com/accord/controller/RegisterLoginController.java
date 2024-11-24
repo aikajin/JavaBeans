@@ -311,9 +311,22 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 
 
 	@GetMapping("/rate-area/{id}")
-	public String viewRateArea(@PathVariable Long id, Model model) {
+	public String viewRateArea(@PathVariable Long id, HttpSession session, Model model) {
 		Reservation reservation = reservService.findReservationById(id);
 		Area area = areaService.getByName(reservation.getAreaname());
+		Long userId = (Long) session.getAttribute("userId");
+		User currentUser = userService.findById(userId).orElse(null);
+		if (currentUser != null) {
+			if (currentUser.getProfile_picture() != null) {
+				String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
+				model.addAttribute("profilePictureBase64", base64Image);
+			}
+			model.addAttribute("user", currentUser); 
+		}
+		if(ratingService.returnRatingUseremailAndAreaname(currentUser.getEmail(), area.getName()) != null) {
+			Rating ratingCurrent = ratingService.returnRatingUseremailAndAreaname(currentUser.getEmail(), area.getName());
+			model.addAttribute("ratingCurr", ratingCurrent);
+		}
 		model.addAttribute("rating", new Rating());
 		model.addAttribute("area", area);
 		//model.addAttribute("areaName", areas.getName());
@@ -324,6 +337,10 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	public String submitRating(@PathVariable Long id, @ModelAttribute Rating rating, @ModelAttribute Area area, HttpSession session, Model model) {
 		//TODO: process POST request
 		Reservation reservation = reservService.findReservationById(id);
+		/*if(reservation == null) {
+			return "redirect:/mb-user";
+		}*/
+		//Area area = areaService.getAreaById(id);
 		Long userId = (Long) session.getAttribute("userId");
 		User currentUser = userService.findById(userId).orElse(null);
 		if (currentUser != null) {

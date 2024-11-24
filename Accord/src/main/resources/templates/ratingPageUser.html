@@ -102,7 +102,7 @@
                             <label>Rating</label>
                             <div class="star-rating">
 
-                                <input type="radio" id="star5" name="stars" value="5" required/>
+                                <input type="radio" id="star5" name="stars" value="5" th:value="${ratingCurr.stars}" required/>
                                 <label for="star5">★</label>
                                 <input type="radio" id="star4" name="stars" value="4"/>
                                 <label for="star4">★</label>
@@ -118,8 +118,8 @@
         
                         <div class="form-group2">
                             <label for="feedback">Feedback</label>
-
-                            <textarea id="feedback" name="feedback" rows="4" th:field="*{feedback}" required 
+                            <label th:text="${ratingCurr.feedback}"></label>
+                            <textarea id="feedback" name="feedback" rows="4"  th:value="${ratingCurr.feedback}" required 
 
                                       placeholder="Share your experience with this facility..."></textarea>
                         </div>

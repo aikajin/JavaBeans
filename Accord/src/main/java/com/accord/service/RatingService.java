@@ -22,8 +22,23 @@ public class RatingService {
         return ratingRepository.findFirstByUseremail(useremail);
     }
 
-    public List<Rating> findByAreaname(String areaname) {
+    public Rating findFirstByAreaname(String areaname) {
         return ratingRepository.findFirstByAreaname(areaname);
+    }
+
+    public int findByUseremailAndAreaname(String useremail, String areaname) {
+        Rating rating = ratingRepository.findByUseremailAndAreaname(useremail, areaname);
+        if(rating == null || rating.getAreaname() == null) {
+            return 1;
+        }
+        return 2;
+    }
+
+    public Rating returnRatingUseremailAndAreaname(String useremail, String areaname) {
+        return ratingRepository.findByUseremailAndAreaname(useremail, areaname);
+    }
+    public List<Rating> findByAreaname(String areaname) {
+        return ratingRepository.findByAreaname(areaname);
     }
 
     public List<Rating> findAll() {
@@ -44,7 +59,7 @@ public class RatingService {
     }
 
     public double averageStarsAreaname(String areaname) {
-        List<Rating> rating = ratingRepository.findFirstByAreaname(areaname);
+        List<Rating> rating = ratingRepository.findByAreaname(areaname);
         return rating.stream().mapToInt(Rating::getStars).average().orElse(0.0);
     }
 }
