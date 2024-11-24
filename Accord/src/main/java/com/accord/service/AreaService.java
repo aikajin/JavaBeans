@@ -34,16 +34,6 @@ public class AreaService {
         }
         return areaRepository.save(area);
     }
-    public Area createArea2(Area area, MultipartFile cover) {
-        try {
-            area.setCoverDocument(cover.getBytes());
-            area.setCoverName(cover.getOriginalFilename());
-            area.setCoverType(cover.getContentType());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return areaRepository.save(area);
-    }
 
     public void updateArea(Area area, MultipartFile cover, MultipartFile add) {
         try {
@@ -93,6 +83,14 @@ public class AreaService {
         return areaRepository.findByName(name).orElse(null);
     }
 
+    public int checkName(String name) {
+        Area area = areaRepository.findByName(name).orElse(null);
+        if(area != null) {
+            return 1;
+        }
+        return 2;
+    }
+
     public List<Area> getAllAreas() {
         return areaRepository.findAll(Sort.by("id").ascending());
     }
@@ -108,12 +106,4 @@ public class AreaService {
     public Area getAreaById(Long id) {
         return areaRepository.findById(id).orElse(null);
     }
-
-    /*public double allAvarageStars(Area area) {
-        List<Rating> rating = area.getRatings();
-        if(rating == null || rating.isEmpty()) {
-            return 0.0;
-        }
-        return rating.stream().mapToInt(Rating::getStars).average().orElse(0.0);
-    }*/
 }

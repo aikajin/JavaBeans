@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.accord.Entity.Area;
 import com.accord.Entity.Rating;
@@ -38,9 +39,13 @@ public class RatingService {
         return ratingRepository.findByUseremailAndAreaname(useremail, areaname);
     }
     public List<Rating> findByAreaname(String areaname) {
-        return ratingRepository.findByAreaname(areaname);
+        return ratingRepository.findAll().stream().filter(rating -> areaname.equalsIgnoreCase(rating.getAreaname())).collect(Collectors.toList());
     }
 
+    public void updateAllAreaname(List<Rating> rating, String areaname) {
+        rating.forEach(rA -> rA.setAreaname(areaname));
+        ratingRepository.saveAll(rating);
+    }
     public List<Rating> findAll() {
         return ratingRepository.findAll();
     }
