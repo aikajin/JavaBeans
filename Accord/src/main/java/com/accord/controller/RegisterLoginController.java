@@ -549,7 +549,11 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	}
 	
 	@PostMapping("/add-area")
-    public String addArea(Area area, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add) {
+    public String addArea(Area area, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add, RedirectAttributes redirectAttributes) {
+		if((areaService.checkName(area.getName())) == 1) {
+			redirectAttributes.addAttribute("error", "Area Name Already Exists");
+			return "redirect:/add_area";
+		}
         areaService.createArea(area, cover, add);
         return "view_recreational_area";
     }
@@ -562,21 +566,28 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	}
 	
 	@PostMapping("/modifyrec_admin/{id}")
-	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add,  @RequestParam("schedule-start-time") String startTime,    @RequestParam("schedule-end-time") String endTime,  @RequestParam(value = "available", required = false) Boolean available, Model model) throws IOException {
+	public String modifyRecreationalArea(@ModelAttribute("area") Area area, @PathVariable Long id, @RequestParam("fileCover") MultipartFile cover, @RequestParam("fileAdd") MultipartFile add,
+									@RequestParam("schedule-start-time") String startTime,    @RequestParam("schedule-end-time") String endTime,
+									@RequestParam(value = "available", required = false) Boolean available, Model model, RedirectAttributes redirectAttributes) throws IOException {
 
 		Area areaEdit = areaService.getAreaById(id);
-
+		List<Reservation> reservation = reservService.findAllByAreaname(areaEdit.getName());
+		List<Rating> rating = ratingService.listByAreaname(areaEdit.getName());
 		
+		if((areaService.checkName(area.getName())) == 1) {
+			redirectAttributes.addAttribute("error", "Area Name Already Exists");
+			return "redirect:/modifyrec_admin/" + area.getId();
+		}
 		areaEdit.setStartTime(LocalTime.parse(startTime));
 		areaEdit.setEndTime(LocalTime.parse(endTime));
 		areaEdit.setAvailable(available != null && available);
-		
+
 		areaEdit.setName(area.getName());
 		areaEdit.setGuidelines(area.getGuidelines());
 
-	
-		
-		areaService.updateArea(areaEdit, cover, add); 
+		areaService.updateArea(areaEdit, cover, add);
+		reservService.updateAllAreaname(reservation, area.getName());
+		ratingService.updateAllAreaname(rating, area.getName()); 
 
 		Area updatedArea = areaService.getAreaById(id);
 		model.addAttribute("area", updatedArea);

@@ -8,6 +8,8 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
@@ -81,6 +83,14 @@ private AreaRepository areaRepository;
         return reservRepository.findByAreaname(areaname);
     }
 
+    public List<Reservation> findAllByAreaname(String areaname) {
+        return reservRepository.findAllByAreaname(areaname);
+    }
+
+    public void updateAllAreaname(List<Reservation> reservation, String areaname) {
+        reservation.forEach(rA -> rA.setAreaname(areaname));
+        reservRepository.saveAll(reservation);
+    }
     public List<Reservation> findReservationsByUserEmail(String useremail) {
         return reservRepository.findByUseremail(useremail);
     }
