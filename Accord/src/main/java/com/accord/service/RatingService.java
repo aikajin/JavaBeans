@@ -89,4 +89,5 @@ public class RatingService {
         List<Rating> rating = ratingRepository.findByAreaname(areaname);
         return rating.stream().mapToInt(Rating::getStars).average().orElse(0.0);
     }
+    
 }

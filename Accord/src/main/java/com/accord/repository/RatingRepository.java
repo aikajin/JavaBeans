@@ -21,4 +21,5 @@ public interface RatingRepository extends JpaRepository<Rating, Long>{
     List<Rating> findByUseremail(String useremail);
 
     Long countByAreaname(String areaname);
+    
 }

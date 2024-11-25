@@ -72,6 +72,10 @@ public class Area {
                 .average()
                 .orElse(0.0);
     }
+    public String getTrend() {
+        Double averageRating = getAverageRating();
+        return averageRating > 3.0 ? "Up" : "Down";
+    }
 
 	public String generateBase64Cover() {
 		return Base64.encodeBase64String(this.coverDocument);
