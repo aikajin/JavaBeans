@@ -132,7 +132,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Table rows will be dynamically inserted here -->
+                        <tr th:each="area : ${areas}">
+                            <td th:text="${area.name}"></td>
+                            <td th:text="${#numbers.formatDecimal(area.averageRating, 1, 1)}"></td>
+                            <td th:text="${area.name}"></td> <!--ilisi lang nya ni para total number sa ratings each area -->
+                            <td th:text="${area.getTrend()}"></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -225,15 +230,7 @@
             feedbackThemesList.appendChild(li);
         });
 
-        // Populate ratings table
-        const ratingsTable = document.getElementById('ratingsTable').getElementsByTagName('tbody')[0];
-        ratingData.areas.forEach((area, index) => {
-            const row = ratingsTable.insertRow();
-            row.insertCell(0).textContent = area;
-            row.insertCell(1).textContent = ratingData.averageRatings[index].toFixed(1);
-            row.insertCell(2).textContent = ratingData.ratingDistribution[index].reduce((a, b) => a + b, 0);
-            row.insertCell(3).textContent = 'Upward'; // Replace with actual trend data
-        });
+       
 
         function applyFilters() {
             // Implement filter logic here
