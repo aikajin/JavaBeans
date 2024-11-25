@@ -79,28 +79,21 @@
                 </a> 
             </div>
             </div>
-            <div class="main-content">
-                <div class="header">
-                    <h1>Ratings by Recreational Area</h1>
-                    <p class="subtitle">View ratings for all recreational areas</p>
-                </div>
-                <div class="search-container">
-                    <input type="text" id="searchInput" class="search-bar2" placeholder="Search...">
-                </div>
-                <div id="areasGrid" class="areas-grid2">
-                    <!-- Area cards will be dynamically inserted here -->
-                     <div th:each="area : ${area}">
-                        <img th:src="@{'data:image/*;base64,'+${area.generateBase64Cover()}}" alt="area" width="300" height="300" class="area-image">
-                        <div class="area-details">
-                            <div class="area-name">
-                                <h3>[[${area.name}]]</h3>
-                            </div>
-                            <p>Rating: <span th:text="${stars[area.name]}"></span>★</p>
-                        </div>
-                     </div>
-                </div>
-            </div>
-        </div>
+            <h1>List of Areas</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Area Name</th>
+                        <th>Average Stars</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="area : ${areas}">
+                        <td th:text="${area.name}"></td>
+                        <td th:text="${#numbers.formatDecimal(area.averageRating, 1, 1)}"></td>
+                    </tr>
+                </tbody>
+            </table>
     
         <script th:inline="javascript">
             // Static data (in a real application, this would come from the server)

@@ -1,13 +1,18 @@
 package com.accord.Entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.tomcat.util.codec.binary.Base64;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -68,6 +73,9 @@ public class User {
 	private String profile_type;
 
 	private String resetToken;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings = new ArrayList<>();
 
 	
 	@Column(name = "profile_picture_url")

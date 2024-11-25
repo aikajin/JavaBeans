@@ -103,6 +103,10 @@ public class AreaService {
         return areaRepository.findByAvailableFalse();
     }
 
+    public List<AreaRepository.AreaWithRating> getAllAreasWithAverageRating() {
+        return areaRepository.findAllAreasWithAverageRating();
+    }
+
     public Area getAreaById(Long id) {
         return areaRepository.findById(id).orElse(null);
     }
