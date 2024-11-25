@@ -13,6 +13,7 @@ import java.util.Base64;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -295,17 +296,18 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	public String viewRatingsList(Model model) {
 		// Add attributes to the model if needed for profile management
 		reservService.checkStatus();
-		List<Rating> rating = ratingService.findAll();
-		List<Area> area = areaService.getAllAreas();
+		//List<Rating> rating = ratingService.findAll();
+		//List<Area> areaList = areaService.getAllAreas();
 		/*Map<String, Double> averageRating = new HashMap<>();
 
 		for(Area areas : area) {
 			double averageStars = ratingService.averageStarsAreaname(areas.getName());
 			averageRating.put(areas.getName(), averageStars);
 		}*/
-		model.addAttribute("rating", rating);
-		model.addAttribute("area", area);
+		//model.addAttribute("rating", ratingService.averageStars());
+		//model.addAttribute("areaList", areaService.getAllAreasWithAverageRating());
 		//model.addAttribute("stars", averageRating);
+		model.addAttribute("areas", areaService.getAllAreas());
 		return "viewRatingsList";
 	}
 
@@ -327,16 +329,23 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 			Rating ratingCurrent = ratingService.returnRatingUseremailAndAreaname(currentUser.getEmail(), area.getName());
 			model.addAttribute("ratingCurr", ratingCurrent);
 		}
-		model.addAttribute("rating", new Rating());
+		Rating checkRating = ratingService.findByAreaAndUser(currentUser, area);
 		model.addAttribute("area", area);
-		//model.addAttribute("areaName", areas.getName());
+		if(checkRating == null) {
+			model.addAttribute("rating", new Rating());
+		}
+		else {
+			model.addAttribute("rating", checkRating);
+		}
 		return "ratingPageUser";
 	}
 	
 	@PostMapping("/submit-rating/{id}")
-	public String submitRating(@PathVariable Long id, @ModelAttribute Rating rating, @ModelAttribute Area area, HttpSession session, Model model) {
+	public String submitRating(@PathVariable Long id, @ModelAttribute Rating rating, @RequestParam int stars, @RequestParam String feedback, HttpSession session, Model model) {
 		//TODO: process POST request
 		Reservation reservation = reservService.findReservationById(id);
+		Area area = areaService.getByName(reservation.getAreaname());
+		//Rating newrating = new Rating();
 		/*if(reservation == null) {
 			return "redirect:/mb-user";
 		}*/
@@ -350,10 +359,14 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 			}
 			model.addAttribute("user", currentUser); 
 		}
-		rating.setAreaname(reservation.getAreaname());
-		rating.setUseremail(currentUser.getEmail());
-		rating.setUsername(currentUser.getName());
-		ratingService.createRating(rating);
+		/*newrating.setAreaname(area.getName());
+		newrating.setUseremail(currentUser.getEmail());
+		newrating.setUsername(currentUser.getName());
+		newrating.setFeedback(rating.getFeedback());
+		newrating.setStars(rating.getStars());
+		newrating.setArea(area);
+		ratingService.createRating(newrating);*/
+		ratingService.saveUpdateRating(currentUser, area, feedback, stars);
 		return "redirect:/mb-user";
 	}
 	
@@ -571,10 +584,11 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 									@RequestParam(value = "available", required = false) Boolean available, Model model, RedirectAttributes redirectAttributes) throws IOException {
 
 		Area areaEdit = areaService.getAreaById(id);
+		Area check = areaService.getByName(area.getName());
 		List<Reservation> reservation = reservService.findAllByAreaname(areaEdit.getName());
 		List<Rating> rating = ratingService.listByAreaname(areaEdit.getName());
 		
-		if((areaService.checkName(area.getName())) == 1) {
+		if((areaService.checkName(area.getName())) == 1 && (areaEdit.getId() != check.getId())) {
 			redirectAttributes.addAttribute("error", "Area Name Already Exists");
 			return "redirect:/modifyrec_admin/" + area.getId();
 		}
