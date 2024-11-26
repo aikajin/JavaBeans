@@ -6,6 +6,8 @@ import java.time.LocalTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.GenerationType;
 import lombok.AllArgsConstructor;
@@ -38,4 +40,8 @@ public class Reservation {
     private LocalTime user_end_time;
 
     private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "area_id")
+    private Area area;
 }
