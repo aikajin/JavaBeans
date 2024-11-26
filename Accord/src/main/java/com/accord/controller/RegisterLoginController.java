@@ -291,6 +291,7 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 		// Add attributes to the model if needed for profile management
 		//model.addAttribute("rating", ratingService.findAll());
 		model.addAttribute("areas", areaService.getAllAreas());
+		model.addAttribute("rating", ratingService.findAll());
 		return "facilityRating";
 	}
 
