@@ -135,7 +135,7 @@
                         <tr th:each="area : ${areas}">
                             <td th:text="${area.name}"></td>
                             <td th:text="${#numbers.formatDecimal(area.averageRating, 1, 1)}"></td>
-                            <td th:text="${area.name}"></td> <!--ilisi lang nya ni para total number sa ratings each area -->
+                            <td th:text="${area.totalFeedback}"></td> <!--ilisi lang nya ni para total number sa ratings each area -->
                             <td th:text="${area.getTrend()}"></td>
                         </tr>
                     </tbody>

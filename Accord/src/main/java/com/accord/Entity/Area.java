@@ -63,6 +63,9 @@ public class Area {
 
     private String addType;
 
+    @OneToMany(mappedBy = "area", cascade = CascadeType.ALL)
+    private List<Reservation> reservations = new ArrayList<>();
+
     @OneToMany(mappedBy = "area", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rating> ratings = new ArrayList<>();
 
@@ -72,6 +75,17 @@ public class Area {
                 .average()
                 .orElse(0.0);
     }
+
+    public long getTotalReservations() {
+        return reservations.size();
+    }
+
+    public long getTotalFeedback() {
+        return ratings.stream()
+            .filter(rating -> rating.getFeedback() != null && !rating.getFeedback().isEmpty())
+            .count();
+    }
+
     public String getTrend() {
         Double averageRating = getAverageRating();
         return averageRating > 3.0 ? "Up" : "Down";

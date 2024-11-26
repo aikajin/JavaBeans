@@ -289,7 +289,7 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	@GetMapping("/analytics")
 	public String facilityRatingAdmin(Model model) {
 		// Add attributes to the model if needed for profile management
-		model.addAttribute("rating", ratingService.findAll());
+		//model.addAttribute("rating", ratingService.findAll());
 		model.addAttribute("areas", areaService.getAllAreas());
 		return "facilityRating";
 	}
