@@ -117,6 +117,9 @@
             <div class="card">
                 <h2>Common Feedback Themes</h2>
                 <ul id="feedbackThemes">
+                    <li th:each="rating : ${rating}">
+                        [[${rating.feedback}]]
+                    </li>
                     <!-- Feedback themes will be dynamically inserted here -->
                 </ul>
             </div>
@@ -149,23 +152,7 @@
     </div>
     <script th:inline="javascript">
         // Simulated data - replace with actual data fetching logic
-        const ratingData = {
-            areas: ['Area 1', 'Area 2', 'Area 3'],
-            averageRatings: [4.2, 3.8, 4.5],
-            ratingDistribution: [
-                [10, 15, 30, 35, 10],
-                [5, 20, 35, 30, 10],
-                [5, 10, 25, 40, 20]
-            ],
-            feedbackThemes: [
-                'Clean facilities',
-                'Friendly staff',
-                'Well-maintained equipment',
-                'Crowded during peak hours',
-                'Need more parking spaces'
-            ]
-        };
-
+        
         // Initialize charts
         const averageRatingsChart = new Chart(document.getElementById('averageRatingsChart'), {
             type: 'bar',
