@@ -151,93 +151,131 @@
         </div>
     </div>
     <script th:inline="javascript">
-        // Simulated data - replace with actual data fetching logic
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to create a blank chart when no data is available
+            function createBlankChart(ctx, type, message) {
+                return new Chart(ctx, {
+                    type: type,
+                    data: {
+                        labels: ['No Data'],
+                        datasets: [{
+                            data: [1],
+                            backgroundColor: 'rgba(200, 200, 200, 0.2)',
+                            borderColor: 'rgba(200, 200, 200, 0.2)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: message,
+                                font: { size: 16 }
+                            }
+                        }
+                    }
+                });
+            }
         
-        // Initialize charts
-        const averageRatingsChart = new Chart(document.getElementById('averageRatingsChart'), {
-            type: 'bar',
-            data: {
-                labels: ratingData.areas,
-                datasets: [{
-                    label: 'Average Rating',
-                    data: ratingData.averageRatings,
-                    backgroundColor: 'rgba(255, 89, 22, 0.7)',
-                    borderColor: 'rgba(255, 89, 22, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 5
+            // Get the chart contexts
+            const averageRatingsCtx = document.getElementById('averageRatingsChart').getContext('2d');
+            const ratingDistributionCtx = document.getElementById('ratingDistributionChart').getContext('2d');
+        
+            // Inject data from Thymeleaf
+            const areas = /*[[${areas}]]*/ [];
+            const ratings = /*[[${rating}]]*/ [];
+        
+            // Create Average Ratings Chart
+            if (areas && areas.length > 0) {
+                new Chart(averageRatingsCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: areas.map(area => area.name),
+                        datasets: [{
+                            label: 'Average Rating',
+                            data: areas.map(area => area.averageRating),
+                            backgroundColor: 'rgba(255, 89, 22, 0.7)',
+                            borderColor: 'rgba(255, 89, 22, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 5,
+                                title: { display: true, text: 'Rating' }
+                            },
+                            x: { title: { display: true, text: 'Areas' } }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Average Ratings by Area',
+                                font: { size: 16 }
+                            }
+                        }
                     }
-                },
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Average Ratings by Area'
+                });
+            } else {
+                createBlankChart(averageRatingsCtx, 'bar', 'No Average Ratings Data Available');
+            }
+        
+            // Create Rating Distribution Chart
+            if (ratings && ratings.length > 0) {
+                // Count the number of each star rating
+                const ratingCounts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+                ratings.forEach(rating => {
+                    if (rating.stars >= 1 && rating.stars <= 5) {
+                        ratingCounts[rating.stars]++;
                     }
-                }
+                });
+        
+                new Chart(ratingDistributionCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+                        datasets: [{
+                            data: Object.values(ratingCounts),
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(255, 159, 64, 0.7)',
+                                'rgba(255, 205, 86, 0.7)',
+                                'rgba(75, 192, 192, 0.7)',
+                                'rgba(54, 162, 235, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 205, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(54, 162, 235, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'right' },
+                            title: {
+                                display: true,
+                                text: 'Rating Distribution',
+                                font: { size: 16 }
+                            }
+                        }
+                    }
+                });
+            } else {
+                createBlankChart(ratingDistributionCtx, 'pie', 'No Rating Distribution Data Available');
             }
         });
-
-        const ratingDistributionChart = new Chart(document.getElementById('ratingDistributionChart'), {
-            type: 'pie',
-            data: {
-                labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
-                datasets: [{
-                    data: ratingData.ratingDistribution[0],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.7)',
-                        'rgba(255, 159, 64, 0.7)',
-                        'rgba(255, 205, 86, 0.7)',
-                        'rgba(75, 192, 192, 0.7)',
-                        'rgba(54, 162, 235, 0.7)'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Rating Distribution (Area 1)'
-                    }
-                }
-            }
-        });
-
-        // Populate feedback themes
-        const feedbackThemesList = document.getElementById('feedbackThemes');
-        ratingData.feedbackThemes.forEach(theme => {
-            const li = document.createElement('li');
-            li.textContent = theme;
-            feedbackThemesList.appendChild(li);
-        });
-
-       
-
-        function applyFilters() {
-            // Implement filter logic here
-            console.log('Filters applied');
-        }
-
-        function exportToPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text('Facility Rating Summary', 20, 10);
-            // Add more content to the PDF
-            doc.save('facility-rating-summary.pdf');
-        }
-
-        function exportToExcel() {
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.table_to_sheet(document.getElementById('ratingsTable'));
-            XLSX.utils.book_append_sheet(wb, ws, 'Ratings');
-            XLSX.writeFile(wb, 'facility-rating-summary.xlsx');
-        }
-    </script>
+        </script>
+              
 </body>
 </html>
