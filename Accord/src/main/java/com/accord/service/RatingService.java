@@ -41,6 +41,7 @@ public class RatingService {
         rating.setRatingDate(date);
         ratingRepository.save(rating);
     }
+
     public Rating findByUseremail(String useremail) {
         return ratingRepository.findFirstByUseremail(useremail);
     }
@@ -57,6 +58,17 @@ public class RatingService {
         rating.forEach(rA -> rA.setAreaname(areaname));
         ratingRepository.saveAll(rating);
     }
+
+    public void updateAllEmail(List<Rating> rating, String email) {
+        rating.forEach(rA -> rA.setUseremail(email));
+        ratingRepository.saveAll(rating);
+    }
+
+    public void updateAllName(List<Rating> rating, String name) {
+        rating.forEach(rA -> rA.setUsername(name));
+        ratingRepository.saveAll(rating);
+    }
+
     public List<Rating> findAll() {
         return ratingRepository.findAll();
     }
@@ -67,6 +79,10 @@ public class RatingService {
 
     public List<Rating> listByAreaname(String areaname) {
         return ratingRepository.findByAreaname(areaname);
+    }
+
+    public List<Rating> listByUsername(String username) {
+        return ratingRepository.findByUsername(username);
     }
     
 }

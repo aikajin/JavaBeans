@@ -143,7 +143,7 @@ public class UserService {
         userRepository.save(existingUser);
     }
 
-    public void update3(Long id, String password) {
+    public void updatePassword(Long id, String password) {
         Optional<User> existingUserOptional = userRepository.findById(id);
         User existingUser = existingUserOptional.get();
         existingUser.setPassword(passwordEncoder.encode(password));
