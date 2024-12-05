@@ -297,19 +297,7 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 
 	@GetMapping("/ratings")
 	public String viewRatingsList(Model model) {
-		// Add attributes to the model if needed for profile management
 		reservService.checkStatus();
-		//List<Rating> rating = ratingService.findAll();
-		//List<Area> areaList = areaService.getAllAreas();
-		/*Map<String, Double> averageRating = new HashMap<>();
-
-		for(Area areas : area) {
-			double averageStars = ratingService.averageStarsAreaname(areas.getName());
-			averageRating.put(areas.getName(), averageStars);
-		}*/
-		//model.addAttribute("rating", ratingService.averageStars());
-		//model.addAttribute("areaList", areaService.getAllAreasWithAverageRating());
-		//model.addAttribute("stars", averageRating);
 		model.addAttribute("areas", areaService.getAllAreas());
 		return "viewRatingsList";
 	}
@@ -332,47 +320,41 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 			Rating ratingCurrent = ratingService.returnRatingUseremailAndAreaname(currentUser.getEmail(), area.getName());
 			model.addAttribute("ratingCurr", ratingCurrent);
 		}
-		Rating checkRating = ratingService.findByAreaAndUser(currentUser, area);
+		Rating rating = ratingService.findByUserAndArea(currentUser, area);
+		if(rating == null) {
+			rating = new Rating();
+		}
+		model.addAttribute("reservation", reservation);
+		model.addAttribute("rating", rating);
 		model.addAttribute("area", area);
-		if(checkRating == null) {
-			model.addAttribute("rating", new Rating());
-		}
-		else {
-			model.addAttribute("rating", checkRating);
-		}
 		return "ratingPageUser";
 	}
 	
 	@PostMapping("/submit-rating/{id}")
 	public String submitRating(@PathVariable Long id, @ModelAttribute Rating rating, @RequestParam int stars, @RequestParam String feedback, HttpSession session, Model model) {
-		//TODO: process POST request
 		Reservation reservation = reservService.findReservationById(id);
+		System.out.println("Area name is: " + reservation.getAreaname());
 		Area area = areaService.getByName(reservation.getAreaname());
-		//Rating newrating = new Rating();
-		/*if(reservation == null) {
-			return "redirect:/mb-user";
-		}*/
-		//Area area = areaService.getAreaById(id);
+		System.out.println("Area name is: " + area.getName());
 		Long userId = (Long) session.getAttribute("userId");
 		User currentUser = userService.findById(userId).orElse(null);
 		if (currentUser != null) {
-			if (currentUser.getProfile_picture() != null) {
-				String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
-				model.addAttribute("profilePictureBase64", base64Image);
+			Rating checkRating = ratingService.findByUserAndArea(currentUser, area);
+			if(checkRating == null) {
+				System.out.println("Creating new rating for user: " + currentUser.getEmail());
+				ratingService.createRating(currentUser, area, feedback, stars);
 			}
-			model.addAttribute("user", currentUser); 
+			else {
+				System.out.println("Updating existing rating for user: " + currentUser.getEmail());
+				checkRating.setFeedback(feedback);
+				checkRating.setStars(stars);
+				ratingService.saveUpdateRating(checkRating);
+			}
 		}
-		/*newrating.setAreaname(area.getName());
-		newrating.setUseremail(currentUser.getEmail());
-		newrating.setUsername(currentUser.getName());
-		newrating.setFeedback(rating.getFeedback());
-		newrating.setStars(rating.getStars());
-		newrating.setArea(area);
-		ratingService.createRating(newrating);*/
-		ratingService.saveUpdateRating(currentUser, area, feedback, stars);
+
 		return "redirect:/mb-user";
 	}
-	
+
 	/*@GetMapping("/rate-area/{areaName}")
 	public String viewRateArea(@PathVariable("areaName") String areaName, Model model) {
     model.addAttribute("areaName", areaName);
@@ -460,7 +442,7 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 			redirectAttributes.addFlashAttribute("error", "Invalid Time/Date Input");
 			return "redirect:/booking-area/" + area.getId();
 		}
-		reservService.bookReservation(reservation);
+		reservService.bookReservation(reservation, area);
 		return "redirect:/areas-user";
 	}
 
