@@ -31,9 +31,13 @@ public class ReservService {
     @Autowired
     private JavaMailSender mailSender; 
     @Autowired
-private AreaRepository areaRepository;
+    private AreaRepository areaRepository;
 
-    public void bookReservation(Reservation reservation) {
+    public Reservation findByArea(Area area) {
+        return reservRepository.findByArea(area);
+    }
+    public void bookReservation(Reservation reservation, Area area) {
+        reservation.setArea(area);
         reservRepository.save(reservation);
         sendReservationConfirmationEmail(reservation);
     }
