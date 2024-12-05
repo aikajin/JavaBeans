@@ -152,8 +152,8 @@
                         <div class="filter-controls">
                             <select class="filter-select">
                                 <option value="">Filter by Status</option>
-                                <option value="completed">Completed</option>
-                                <option value="canceled">Canceled</option>
+                                <option value="COMPLETED">Completed</option>
+                                <option value="CANCELLED">Cancelled</option>
                             </select>
                             <select class="filter-select">
                                 <option value="">Sort by Date</option>
@@ -309,6 +309,90 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     // Initial count
     updateFilterCounts();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to create filter handlers for a specific table section
+    function setupTableFilters(tableContainer) {
+        const searchInput = tableContainer.querySelector('.search-bar2 input');
+        const statusFilter = tableContainer.querySelector('.filter-select:first-of-type');
+        const dateFilter = tableContainer.querySelector('.filter-select:last-of-type');
+        const table = tableContainer.querySelector('.activities-table');
+
+        if (!table) return; // Skip if table is not found in this container
+
+        // Function to filter table rows
+        function filterTable() {
+            const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+            const statusValue = statusFilter ? statusFilter.value.toLowerCase() : '';
+            const dateValue = dateFilter ? dateFilter.value : '';
+            const rows = table.querySelectorAll('tbody tr');
+
+            // Convert rows to array for sorting
+            const rowsArray = Array.from(rows);
+
+            // Sort rows if date filter is selected
+            if (dateValue) {
+                rowsArray.sort((a, b) => {
+                    const dateA = new Date(a.querySelector('td:nth-child(3)').textContent);
+                    const dateB = new Date(b.querySelector('td:nth-child(3)').textContent);
+                    return dateValue === 'newest' ? dateB - dateA : dateA - dateB;
+                });
+            }
+
+            // Reorder rows in table if sorted
+            if (dateValue) {
+                const tbody = table.querySelector('tbody');
+                rowsArray.forEach(row => tbody.appendChild(row));
+            }
+
+            // Apply filters to each row
+            rowsArray.forEach(row => {
+                const text = Array.from(row.querySelectorAll('td'))
+                    .slice(0, -1) // Exclude the last column (actions/rating)
+                    .map(cell => cell.textContent.toLowerCase())
+                    .join(' ');
+
+                const status = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
+                const matchesSearch = !searchInput || searchTerm === '' || text.includes(searchTerm);
+                const matchesStatus = !statusFilter || statusValue === '' || status === statusValue;
+
+                row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+            });
+
+            updateFilterCounts(table);
+        }
+
+        // Function to update filter counts
+        function updateFilterCounts(table) {
+            const visibleRows = table.querySelectorAll('tbody tr:not([style*="display: none"])').length;
+            const totalRows = table.querySelectorAll('tbody tr').length;
+            
+            // Optional: You can add a counter element to your HTML to display these numbers
+            const counterElement = tableContainer.querySelector('.filter-counter');
+            if (counterElement) {
+                counterElement.textContent = `Showing ${visibleRows} of ${totalRows} bookings`;
+            }
+        }
+
+        // Add event listeners
+        if (searchInput) {
+            searchInput.addEventListener('input', filterTable);
+        }
+        if (statusFilter) {
+            statusFilter.addEventListener('change', filterTable);
+        }
+        if (dateFilter) {
+            dateFilter.addEventListener('change', filterTable);
+        }
+
+        // Initial filtering
+        filterTable();
+    }
+
+    // Setup filters for both active bookings and booking history tables
+    const tableContainers = document.querySelectorAll('.table-container');
+    tableContainers.forEach(setupTableFilters);
 });
     
     

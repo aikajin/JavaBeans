@@ -79,7 +79,11 @@
                 </a> 
             </div>
             </div>
-            <h1>List of Areas</h1>
+            <div class="main-content">
+                
+            <h1>List of Area Ratings</h1>
+            <p class="subtitle">Review and manage user ratings with ease.</p>
+            <div class ="table-container3">
             <table>
                 <thead>
                     <tr>
@@ -90,82 +94,50 @@
                 <tbody>
                     <tr th:each="area : ${areas}">
                         <td th:text="${area.name}"></td>
-                        <td th:text="${#numbers.formatDecimal(area.averageRating, 1, 1)}"></td>
+                        <td id="star-rating" th:text="${#numbers.formatDecimal(area.averageRating, 1, 1)}"></td>
                     </tr>
                 </tbody>
             </table>
-    
-        <script th:inline="javascript">
-            // Static data (in a real application, this would come from the server)
-            const areas = [
-                { 
-                    id: 1, 
-                    name: "Clubhouse", 
-                    rating: 4.5, 
-                    ratingCount: 120, 
-                    image: "/images/clubhouse.jpg",
-                    ratingDistribution: [2, 3, 10, 35, 70]
-                },
-                { 
-                    id: 2, 
-                    name: "Mountain View Trail", 
-                    rating: 4.2, 
-                    ratingCount: 85, 
-                    image: "/images/clubhouse.png",
-                    ratingDistribution: [1, 5, 15, 40, 24]
-                }
-            ];
-    
-            function createStars(rating) {
-                const fullStars = Math.floor(rating);
-                const halfStar = rating % 1 >= 0.5 ? 1 : 0;
-                const emptyStars = 5 - fullStars - halfStar;
-                return '★'.repeat(fullStars) + (halfStar ? '½' : '') + '☆'.repeat(emptyStars);
-            }
-    
-            function createRatingBar(count, total, stars) {
-                const percentage = (count / total) * 100;
-                return `
-                    <div class="rating-bar">
-                        <span class="rating-label">${stars}</span>
-                        <div class="rating-progress">
-                            <div class="rating-progress-fill" style="width: ${percentage}%"></div>
-                        </div>
-                        <span class="rating-percentage">${percentage.toFixed(1)}%</span>
-                    </div>
-                `;
-            }
-    
-            function createAreaCard(area) {
-                const totalRatings = area.ratingDistribution.reduce((a, b) => a + b, 0);
-                const ratingBars = area.ratingDistribution.map((count, index) => 
-                    createRatingBar(count, totalRatings, 5 - index)
-                ).join('');
-    
-                return `
-                    <div class="area-card2">
-                        <img src="${area.image}" alt="${area.name}" class="area-image">
-                        <div class="area-details">
-                            <h3 class="area-name">${area.name}</h3>
-                            <div class="area-rating">
-                                <span class="stars">${createStars(area.rating)}</span>
-                                <span class="rating-count">${area.rating.toFixed(1)} (${area.ratingCount} reviews)</span>
-                            </div>
-                            <div class="rating-distribution">
-                                ${ratingBars}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-    
-            function renderAreas() {
-                const areasGrid = document.getElementById('areasGrid');
-                areasGrid.innerHTML = areas.map(createAreaCard).join('');
-            }
-    
-            // Initial render
-            document.addEventListener('DOMContentLoaded', renderAreas);
-        </script>
+            </div>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Function to create star rating HTML
+                    function createStarRating(rating) {
+                        const fullStars = Math.floor(rating);
+                        const hasHalfStar = rating % 1 >= 0.5;
+                        const emptyStars = 5 - Math.ceil(rating);
+                        
+                        let starsHTML = '<div class="stars">';
+                        
+                        // Add full stars
+                        for (let i = 0; i < fullStars; i++) {
+                            starsHTML += '<span class="star">★</span>';
+                        }
+                        
+                        // Add half star if needed
+                        if (hasHalfStar) {
+                            starsHTML += '<span class="star">½</span>';
+                        }
+                        
+                        // Add empty stars
+                        for (let i = 0; i < emptyStars; i++) {
+                            starsHTML += '<span class="star star-empty">★</span>';
+                        }
+                        
+                        starsHTML += '</div>';
+                        return starsHTML;
+                    }
+                
+                    // Convert all rating numbers to stars
+                    const ratingElements = document.querySelectorAll('#star-rating');
+                    ratingElements.forEach(element => {
+                        const rating = parseFloat(element.textContent);
+                        // Keep the numerical rating and add stars
+                        element.innerHTML = `${rating} ${createStarRating(rating)}`;
+                    });
+                });
+                </script>
+        
     </body>
     </html>
