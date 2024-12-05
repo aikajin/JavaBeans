@@ -93,7 +93,7 @@
                     <h2>Rate Your Experience</h2>
                     
 
-                    <form th:action="@{/submit-rating/{id}(id=${area.id})}" method="post" class="rating-form" th:object="${rating}">
+                    <form th:action="@{/submit-rating/{id}(id=${reservation.id})}" method="post" class="rating-form" th:object="${rating}">
                         <input type="hidden" id="areaname" name="areaname" th:value="${area != null} ? ${area.name} : ''"/>
                         <input type="hidden" name="areaId" th:value="${area.id}" />
 
