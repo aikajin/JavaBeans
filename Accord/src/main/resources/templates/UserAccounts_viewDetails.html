@@ -13,7 +13,7 @@
         <div class="sidebar">
             <img class="logo" style="width: 262px; height: 56px;" th:src="@{/images/logo.png}" alt="Logo" />
             <div class="nav-items">
-                <a href="/dash_admin" class="nav-item"> <!-- Dashboard -->
+                <a href="/dash_admin" class="nav-item"> 
                     <svg xmlns="http://www.w3.org/2000/svg" width="17.33" height="17.70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="7" height="7"></rect>
                         <rect x="14" y="3" width="7" height="7"></rect>
@@ -77,60 +77,6 @@
                 </a> 
             </div>
             
-            <!-- <div class="profile">
-                <div class="profile-pic">JD</div>
-                <div class="profile-info">
-                    <div class="profile-name">John Doe</div>
-                    <div class="profile-role">Super Admin</div>
-                </div>
-            </div>
-        </div>
-        <div class="main-content">
-            <div class="breadcrumb">User Accounts / View Details</div>
-            <div class="user-details">
-                <div class="user-header">
-                    <img src="https://i.pravatar.cc/200" alt="User Avatar" class="user-avatar">
-                    <div>
-                        <h1 class="user-name">User Name</h1>
-                        <p class="user-email">Email Address</p>
-                    </div>
-                </div>
-                <div class="divider"></div>
-                <div class="info-grid">
-                    <div class="info-section">
-                        <h2>Contact Information</h2>
-                        <p>09123456998</p>
-                    </div>
-                    <div class="info-section">
-                        <h2>Address</h2>
-                        <p>Block 1, Lot 9</p>
-                    </div>
-                </div>
-                <div class="divider"></div>
-                <div class="info-section">
-                    <h2>Property Status</h2>
-                    <p>Homeowner</p>
-                </div>
-                <div class="divider"></div>
-                <div class="info-section">
-                    <h2>Uploaded Documents</h2>
-                    <div class="document-list">
-                        <div class="document-item">
-                            <span>Agreement.pdf</span>
-                            <span style="color: #888; font-size: 12px;">1.2MB / 1.2MB</span>
-                        </div>
-                        <div class="document-item">
-                            <span>ValidID.png</span>
-                            <span style="color: #888; font-size: 12px;">1.2MB / 1.2MB</span>
-                        </div>
-                    </div>
-                </div>
-                <button class="delete-btn">Delete</button>
-            </div>
-        </div>
-    </div>
-</body>
-</html> -->
 <div class="profile">
     <div class="profile-pic" th:text="${user.name.substring(0, 2)}">JD</div>
     <div class="profile-info">
@@ -152,10 +98,10 @@
         
         <div class="user-header">
             <img th:if="${profilePictureBase64 != null}" 
-                    th:src="'data:image/jpeg;base64,' + ${profilePictureBase64}" 
-                    alt="Profile Picture" style="width: 100%; height: 100%; border-radius: 50%;" />
-                    <span th:if="${profilePictureBase64 == null}" th:text="${user.name != null ? user.name.substring(0, 2).toUpperCase() : 'JD'}" style="font-size: medium;">JD</span>
-            <div>
+            th:src="'data:image/' + ${user.profile_type} + ';base64,' + ${profilePictureBase64}" 
+            alt="Profile Picture" 
+            style="width: 100%; height: 100%; border-radius: 50%;" />
+
                 <h1 class="user-name" th:text="${user.name}">User Name</h1>
                 <p class="user-email" th:text="${user.email}">Email Address</p>
             </div>
@@ -186,17 +132,45 @@
         <div class="info-section">
             <h2>Uploaded Documents</h2>
             <div class="document-list">
-                <div class="document-item" th:if="${user.tenancy_name}">
-                    <span th:text="${user.tenancy_name}">Agreement.pdf</span>
-                    <span th:if="${user.tenancy_document != null}" th:text="${formattedSize}">1.2MB</span>
+   
+                <div class="document-item" th:if="${user.tenancy_document != null}">
+          
+                    <div th:if="${user.tenancy_type.startsWith('image/')}">
+                        <img th:src="'data:' + ${user.tenancy_type} + ';base64,' + ${tenancyDocumentBase64}" 
+                             alt="Tenancy Document" style="max-width: 100%; max-height: 200px;" />
+                    </div>
+              
+                    <a th:if="${!user.tenancy_type.startsWith('image/') || user.tenancy_name != null}" 
+                       th:href="'data:' + ${user.tenancy_type} + ';base64,' + ${tenancyDocumentBase64}" 
+                       download>
+                       <span th:text="${user.tenancy_name != null ? user.tenancy_name : 'TenancyDocument'}">
+                           DefaultTenancyDocument
+                       </span>
+                    </a>
+
+                    <span style="color: #888; font-size: 12px;" th:text="'(' + ${tenancyDocumentSize} + ')'">File Size</span>
                 </div>
-                
-                <div class="document-item" th:if="${user.id_name}">
-                    <span th:text="${user.id_name}">ValidID.png</span>
-                    <span style="color: #888; font-size: 12px;" th:text="${formattedSize}">1.2MB</span>
+        
+                <div class="document-item" th:if="${user.id_document != null}">
+                    <div th:if="${user.id_type.startsWith('image/')}">
+                        <img th:src="'data:' + ${user.id_type} + ';base64,' + ${idDocumentBase64}" 
+                             alt="ID Document" style="max-width: 100%; max-height: 200px;" />
+                    </div>
+                    <a th:if="${!user.id_type.startsWith('image/') || user.id_name != null}" 
+                       th:href="'data:' + ${user.id_type} + ';base64,' + ${idDocumentBase64}" 
+                       download>
+                       <span th:text="${user.id_name != null ? user.id_name : 'IDDocument'}">
+                           DefaultIDDocument
+                       </span>
+                    </a>
+                    
+                    <span style="color: #888; font-size: 12px;" th:text="'(' + ${idDocumentSize} + ')'">File Size</span>
                 </div>
             </div>
         </div>
+        
+        
+        
 
         <button class="delete-btn" th:onclick="'window.location.href=\'/users/delete/' + ${user.id} + '\''">Delete</button>
     </div>

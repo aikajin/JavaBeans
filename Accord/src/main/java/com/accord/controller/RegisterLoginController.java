@@ -162,7 +162,7 @@ public class RegisterLoginController {
         m.addAttribute("reservationCompleted", reservService.countAllReservationStatusCompleted());
         m.addAttribute("cancelledBookings", cancelledBookingsCount);
         m.addAttribute("areas", areaService.getAllAreas());
-        
+        m.addAttribute("rating", ratingService.findAll());
         List<User> users = userService.getAllUser();
         m.addAttribute("users", users);
         
@@ -599,12 +599,40 @@ public String facilityRatingAdmin(
         return "redirect:/areas-admin";
     }
 
-    @GetMapping("/details/{id}")
-    public String UserAcc_VIewDetails(@PathVariable Long id, Model model) {
-        User user = userService.findById(id).orElse(null);
-        model.addAttribute("user", user);
-        return "UserAccounts_viewDetails";
+@GetMapping("/details/{id}")
+public String viewUserDetails(@PathVariable Long id, Model model) {
+    User user = userService.findById(id).orElse(null);
+
+    if (user != null) {
+        if (user.getTenancy_document() != null) {
+            model.addAttribute("tenancyDocumentBase64", user.generateBase64Tenancy());
+            model.addAttribute("tenancyDocumentSize", formatFileSize(user.getTenancy_document().length));
+            model.addAttribute("tenancyName", user.getTenancy_name());
+        }
+        if (user.getId_document() != null) {
+            model.addAttribute("idDocumentBase64", user.generateBase64ValidId());
+            model.addAttribute("idDocumentSize", formatFileSize(user.getId_document().length));
+            model.addAttribute("idName", user.getId_name());
+        }
+        if (user.getProfile_picture() != null) {
+            model.addAttribute("profilePictureBase64", user.generateBase64Profile());
+        }
     }
+
+    model.addAttribute("user", user);
+    return "UserAccounts_viewDetails";
+}
+
+private String formatFileSize(int sizeInBytes) {
+    if (sizeInBytes >= 1024 * 1024) {
+        return String.format("%.2f MB", sizeInBytes / (1024.0 * 1024.0));
+    } else if (sizeInBytes >= 1024) {
+        return String.format("%.2f KB", sizeInBytes / 1024.0);
+    } else {
+        return sizeInBytes + " B";
+    }
+}
+
 
     @PostMapping("/forgotPassword_email")
     public String processForgotPassword(@ModelAttribute("resetRequest") User resetRequest, Model model) {
