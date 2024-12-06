@@ -44,4 +44,8 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "area_id")
     private Area area;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

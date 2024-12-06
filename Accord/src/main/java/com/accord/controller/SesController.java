@@ -75,8 +75,8 @@ public ResponseEntity<String> updateName(@RequestParam Long id, @RequestParam St
     
     try {
         User user = userService.findById(id).orElse(null);
-        List<Rating> rating = ratingService.listByUsername(user.getName());
-        List<Reservation> reservations = reservService.findAllByUsername(user.getName());
+        List<Rating> rating = ratingService.listByUser(user);
+        List<Reservation> reservations = reservService.findAllByUser(user);
         userService.updatename(id, name);
         ratingService.updateAllName(rating, name);
         reservService.updateAllName(reservations, name);
@@ -100,8 +100,8 @@ public ResponseEntity<String> updateEmail(@RequestParam Long id, @RequestParam S
     try {
         System.out.println("Updating email for user ID: " + id); // Log the id
         User user = userService.findById(id).orElse(null);
-        List<Rating> rating = ratingService.listByUseremail(user.getEmail());
-        List<Reservation> reservations = reservService.findReservationsByUserEmail(user.getEmail());
+        List<Rating> rating = ratingService.listByUser(user);
+        List<Reservation> reservations = reservService.findAllByUser(user);
         userService.updateemail(id, email);
         ratingService.updateAllEmail(rating, email);
         reservService.updateAllEmail(reservations, email);

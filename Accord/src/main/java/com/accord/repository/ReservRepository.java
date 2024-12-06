@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.accord.Entity.Reservation;
+import com.accord.Entity.User;
+
 import java.util.List;
 import java.time.LocalDate;
 
@@ -23,11 +25,13 @@ public interface ReservRepository extends JpaRepository<Reservation, Long>{
 
     List<Reservation> findAllByUsername(String username);
 
-    List<Reservation> findByUseremailAndStatusIn(String useremail, List<String> statuses);
+    List<Reservation> findAllByUser(User user);
 
-    Long countByUseremailAndStatusIn(String useremail, List<String> statuses);
+    List<Reservation> findByUserAndStatusIn(User user, List<String> statuses);
 
-    Long countByUseremailAndStatusInAndUserStartDateBetween(String useremail, List<String> status, LocalDate startDate, LocalDate endDate);
+    Long countByUserAndStatusIn(User user, List<String> statuses);
+
+    Long countByUserAndStatusInAndUserStartDateBetween(User user, List<String> status, LocalDate startDate, LocalDate endDate);
 
     Long countByStatusIn(List<String> statuses);
 }

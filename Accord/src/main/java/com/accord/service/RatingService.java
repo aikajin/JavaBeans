@@ -84,5 +84,9 @@ public class RatingService {
     public List<Rating> listByUsername(String username) {
         return ratingRepository.findByUsername(username);
     }
+
+    public List<Rating> listByUser(User user) {
+        return ratingRepository.findAllByUser(user);
+    }
     
 }

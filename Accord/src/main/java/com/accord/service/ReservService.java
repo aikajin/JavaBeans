@@ -18,6 +18,7 @@ import com.accord.repository.AreaRepository;
 import com.accord.Entity.Area;
 import com.accord.Entity.Rating;
 import com.accord.Entity.Reservation;
+import com.accord.Entity.User;
 import com.accord.repository.ReservRepository;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -33,8 +34,9 @@ public class ReservService {
     @Autowired
 private AreaRepository areaRepository;
 
-    public void bookReservation(Reservation reservation, Area area) {
+    public void bookReservation(Reservation reservation, Area area, User user) {
         reservation.setArea(area);
+        reservation.setUser(user);
         reservRepository.save(reservation);
         sendReservationConfirmationEmail(reservation);
     }
@@ -96,6 +98,10 @@ private AreaRepository areaRepository;
         return reservRepository.findAllByUsername(username);
     }
 
+    public List<Reservation> findAllByUser(User user) {
+        return reservRepository.findAllByUser(user);
+    }
+
     public void updateAllAreaname(List<Reservation> reservation, String areaname) {
         reservation.forEach(rA -> rA.setAreaname(areaname));
         reservRepository.saveAll(reservation);
@@ -104,27 +110,27 @@ private AreaRepository areaRepository;
         return reservRepository.findAllByUseremail(useremail);
     }
 
-    public List<Reservation> findReservationsByUserEmailStatusCompletedAndCancelled(String useremail) {
+    public List<Reservation> findReservationsByUserEmailStatusCompletedAndCancelled(User user) {
         List<String> statuses = Arrays.asList("COMPLETED", "CANCELLED");
-        return reservRepository.findByUseremailAndStatusIn(useremail, statuses);
+        return reservRepository.findByUserAndStatusIn(user, statuses);
     }
 
-    public List<Reservation> findReservationsByUserEmailStatusStartedAndNotStarted(String useremail) {
+    public List<Reservation> findReservationsByUserEmailStatusStartedAndNotStarted(User user) {
         List<String> statuses = Arrays.asList("STARTED", "NOT STARTED");
-        return reservRepository.findByUseremailAndStatusIn(useremail, statuses);
+        return reservRepository.findByUserAndStatusIn(user, statuses);
     }
 
-    public List<Reservation> findReservationsByUserEmailStatusAndNotStarted(String useremail) {
+    public List<Reservation> findReservationsByUserEmailStatusAndNotStarted(User user) {
         List<String> statuses = Arrays.asList("NOT STARTED");
-        return reservRepository.findByUseremailAndStatusIn(useremail, statuses);
+        return reservRepository.findByUserAndStatusIn(user, statuses);
     }
 
-    public Long countReservationsStatusNotStartedAndCurrentMonth(String useremail) {
+    public Long countReservationsStatusNotStartedAndCurrentMonth(User user) {
         List<String> statuses = Arrays.asList("NOT STARTED");
         LocalDate now = LocalDate.now();
         LocalDate startMonth = now.withDayOfMonth(1);
         LocalDate endMonth = startMonth.plusMonths(1);
-        return reservRepository.countByUseremailAndStatusInAndUserStartDateBetween(useremail, statuses, startMonth, endMonth);
+        return reservRepository.countByUserAndStatusInAndUserStartDateBetween(user, statuses, startMonth, endMonth);
     }
 
     public Long countAllReservationStatusStartedAndNotStarted() {

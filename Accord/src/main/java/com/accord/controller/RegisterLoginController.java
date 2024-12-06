@@ -153,10 +153,9 @@ public String showDashboard(Model m, HttpSession session) {
 	reservService.checkStatus();
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
-	Long num = reservService.countReservationsStatusNotStartedAndCurrentMonth(currentUser.getEmail());
-	m.addAttribute("reservation", reservService.findReservationsByUserEmailStatusAndNotStarted(currentUser.getEmail()));
-	m.addAttribute("number", reservService.countReservationsStatusNotStartedAndCurrentMonth(currentUser.getEmail()));
-	m.addAttribute("rating", ratingService.listByUseremail(currentUser.getEmail()));
+	m.addAttribute("reservation", reservService.findReservationsByUserEmailStatusAndNotStarted(currentUser));
+	m.addAttribute("number", reservService.countReservationsStatusNotStartedAndCurrentMonth(currentUser));
+	m.addAttribute("rating", ratingService.listByUser(currentUser));
     if (currentUser != null) {
 		if (currentUser.getProfile_picture() != null) {
 			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
@@ -164,7 +163,6 @@ public String showDashboard(Model m, HttpSession session) {
 		}
         m.addAttribute("user", currentUser); 
     }
-	System.out.println("Current active bookings: " +num);
     return "dashboard_user";
 }
 	@GetMapping("/dash_admin")
@@ -268,8 +266,8 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	reservService.checkStatus();
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
-	m.addAttribute("reservation", reservService.findReservationsByUserEmailStatusStartedAndNotStarted(currentUser.getEmail()));
-	m.addAttribute("reservationHistory", reservService.findReservationsByUserEmailStatusCompletedAndCancelled(currentUser.getEmail()));
+	m.addAttribute("reservation", reservService.findReservationsByUserEmailStatusStartedAndNotStarted(currentUser));
+	m.addAttribute("reservationHistory", reservService.findReservationsByUserEmailStatusCompletedAndCancelled(currentUser));
     if (currentUser != null) {
 		if (currentUser.getProfile_picture() != null) {
 			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
@@ -312,7 +310,7 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	public String viewRateArea(@PathVariable Long id, HttpSession session, Model model) {
 		reservService.checkStatus();
 		Reservation reservation = reservService.findReservationById(id);
-		Area area = areaService.getByName(reservation.getAreaname());
+		Area area = areaService.getAreaById(reservation.getArea().getId());
 		Long userId = (Long) session.getAttribute("userId");
 		User currentUser = userService.findById(userId).orElse(null);
 		if (currentUser != null) {
@@ -339,7 +337,7 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	@PostMapping("/submit-rating/{id}")
 	public String submitRating(@PathVariable Long id, @ModelAttribute Rating rating, @RequestParam int stars, @RequestParam String feedback, HttpSession session, Model model) {
 		Reservation reservation = reservService.findReservationById(id);
-		Area area = areaService.getByName(reservation.getAreaname());
+		Area area = areaService.getAreaById(reservation.getArea().getId());
 		Long userId = (Long) session.getAttribute("userId");
 		User currentUser = userService.findById(userId).orElse(null);
 		if (currentUser != null) {
@@ -432,8 +430,10 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 
 	
 	@GetMapping("/submit_book")
-	public String addBooking(@ModelAttribute Reservation reservation, RedirectAttributes redirectAttributes) {
+	public String addBooking(@ModelAttribute Reservation reservation, HttpSession session, RedirectAttributes redirectAttributes) {
 		Area area = areaService.getByName(reservation.getAreaname());
+		Long userId = (Long) session.getAttribute("userId");
+		User currentUser = userService.findById(userId).orElse(null);
 		LocalDate startDate = LocalDate.now();
 		if ((reservation.getUser_start_time().isBefore(area.getStartTime())) || 
 			(reservation.getUser_end_time().isAfter(area.getEndTime())) || 
@@ -442,7 +442,7 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 			redirectAttributes.addFlashAttribute("error", "Invalid Time/Date Input");
 			return "redirect:/booking-area/" + area.getId();
 		}
-		reservService.bookReservation(reservation, area);
+		reservService.bookReservation(reservation, area, currentUser);
 		return "redirect:/areas-user";
 	}
 
