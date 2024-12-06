@@ -234,6 +234,8 @@ public void updateemail(Long id, String email) {
         return userRepository.findFirstByEmail(email);
     }
 
+    
+    
     public boolean resetPassword(String token, String newPassword) {
         Optional<User> userOptional = userRepository.findByResetToken(token);
         if (userOptional.isPresent()) {

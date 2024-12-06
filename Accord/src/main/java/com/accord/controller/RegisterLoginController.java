@@ -189,6 +189,7 @@ public class RegisterLoginController {
         return "forgotPassword_page";
     }
 
+
     @GetMapping("/profile")
     public String manageProfile(Model model, HttpSession session, MultipartFile prof) throws IOException {
         reservService.checkStatus();

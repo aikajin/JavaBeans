@@ -190,22 +190,20 @@
         <table>
             <thead>
                 <tr>
-                    <th>Name</th>
+                    
                     <th>Name of Recreational Area</th>
+                    <th>Feedback</th>
                     <th>Rating</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="rating : ${recentRatings}">
-                    <td th:text="${rating.name}">John Doe</td>
-                    <td th:text="${rating.areaName}">Central Park</td>
+                <tr th:each="rating :${rating}">
+                    <td>[[${rating.areaname}]]</td>
+                    <td>[[${rating.feedback}]]</td>
                     <td>
-                        <div class="stars">
-                            <i class="bi bi-star-fill" th:each="star : ${#numbers.sequence(1, rating.rating)}"></i>
-                            <i class="bi bi-star" th:each="star : ${#numbers.sequence(1, 5 - rating.rating)}"></i>
-                        </div>
+                        <span class="star-rating" th:text="${'★'.repeat(rating.stars) + '☆'.repeat(5 - rating.stars)}"></span>
                     </td>
-                </tr>
+                </tr>  
             </tbody>
         </table>
     </div>
