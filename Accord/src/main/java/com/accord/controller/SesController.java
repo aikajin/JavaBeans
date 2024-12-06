@@ -2,6 +2,7 @@ package com.accord.controller;
 
 import java.util.Base64;
 import java.util.NoSuchElementException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,8 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.accord.Entity.Rating;
+import com.accord.Entity.Reservation;
 import com.accord.Entity.User;
 import com.accord.repository.UserRepository;
+import com.accord.service.RatingService;
+import com.accord.service.ReservService;
 import com.accord.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -30,6 +35,10 @@ public class SesController {
 	private UserService userService;
     @Autowired
     UserRepository repo;
+    @Autowired
+    RatingService ratingService;
+    @Autowired
+    ReservService reservService;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -65,7 +74,12 @@ public ResponseEntity<String> updateName(@RequestParam Long id, @RequestParam St
     }
     
     try {
+        User user = userService.findById(id).orElse(null);
+        List<Rating> rating = ratingService.listByUser(user);
+        List<Reservation> reservations = reservService.findAllByUser(user);
         userService.updatename(id, name);
+        ratingService.updateAllName(rating, name);
+        reservService.updateAllName(reservations, name);
         return ResponseEntity.ok("Name updated successfully.");
     } catch (NoSuchElementException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
@@ -85,7 +99,12 @@ public ResponseEntity<String> updateEmail(@RequestParam Long id, @RequestParam S
 
     try {
         System.out.println("Updating email for user ID: " + id); // Log the id
+        User user = userService.findById(id).orElse(null);
+        List<Rating> rating = ratingService.listByUser(user);
+        List<Reservation> reservations = reservService.findAllByUser(user);
         userService.updateemail(id, email);
+        ratingService.updateAllEmail(rating, email);
+        reservService.updateAllEmail(reservations, email);
         return ResponseEntity.ok("Email updated successfully.");
     } catch (NoSuchElementException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
@@ -105,7 +124,7 @@ public ResponseEntity<String> updatePassword(@RequestParam Long id, @RequestPara
 
     try {
         System.out.println("Updating password for user ID: " + id); // Log the id
-        userService.update3(id, password);
+        userService.updatePassword(id, password);
         return ResponseEntity.ok("Password updated successfully.");
     } catch (NoSuchElementException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");

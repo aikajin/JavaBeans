@@ -33,7 +33,7 @@ public class Reservation {
 
     private String useremail;
 
-    private LocalDate user_start_date;
+    private LocalDate userStartDate;
 
     private LocalTime user_start_time;
 
@@ -44,4 +44,8 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "area_id")
     private Area area;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

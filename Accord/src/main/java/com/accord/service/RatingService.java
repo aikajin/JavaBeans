@@ -18,46 +18,36 @@ public class RatingService {
     @Autowired
     private RatingRepository ratingRepository;
 
-    public void createRating(Rating rating) {
+    public void createRating(User user, Area area, String feedback, int stars) {
+        Rating rating = new Rating();
+        LocalDate date = LocalDate.now();
+        rating.setUseremail(user.getEmail());
+        rating.setUsername(user.getName());
+        rating.setAreaname(area.getName());
+        rating.setFeedback(feedback);
+        rating.setStars(stars);
+        rating.setRatingDate(date);
+        rating.setUser(user);
+        rating.setArea(area);
+        ratingRepository.save(rating);
+    }
+
+    public Rating findByUserAndArea(User user, Area area) {
+        return ratingRepository.findByUserAndArea(user, area);
+    }
+
+    public void saveUpdateRating(Rating rating) {
         LocalDate date = LocalDate.now();
         rating.setRatingDate(date);
         ratingRepository.save(rating);
     }
 
-    public Rating findByAreaAndUser(User user, Area area) {
-        return ratingRepository.findByUserAndArea(user, area);
-    }
-
-    public void saveUpdateRating(User user, Area area, String feedback, int stars) {
-        LocalDate date = LocalDate.now();
-        Rating checkRating = findByAreaAndUser(user, area);
-        if(checkRating == null) {
-            checkRating = new Rating();
-            checkRating.setUser(user);
-            checkRating.setArea(area);
-        }
-        checkRating.setAreaname(area.getName());
-        checkRating.setUsername(user.getName());
-        checkRating.setUseremail(user.getEmail());
-        checkRating.setFeedback(feedback);
-        checkRating.setStars(stars);
-        checkRating.setRatingDate(date);
-        ratingRepository.save(checkRating);
-    }
     public Rating findByUseremail(String useremail) {
         return ratingRepository.findFirstByUseremail(useremail);
     }
 
     public Rating findFirstByAreaname(String areaname) {
         return ratingRepository.findFirstByAreaname(areaname);
-    }
-
-    public int findByUseremailAndAreaname(String useremail, String areaname) {
-        Rating rating = ratingRepository.findByUseremailAndAreaname(useremail, areaname);
-        if(rating == null || rating.getAreaname() == null) {
-            return 1;
-        }
-        return 2;
     }
 
     public Rating returnRatingUseremailAndAreaname(String useremail, String areaname) {
@@ -68,6 +58,17 @@ public class RatingService {
         rating.forEach(rA -> rA.setAreaname(areaname));
         ratingRepository.saveAll(rating);
     }
+
+    public void updateAllEmail(List<Rating> rating, String email) {
+        rating.forEach(rA -> rA.setUseremail(email));
+        ratingRepository.saveAll(rating);
+    }
+
+    public void updateAllName(List<Rating> rating, String name) {
+        rating.forEach(rA -> rA.setUsername(name));
+        ratingRepository.saveAll(rating);
+    }
+
     public List<Rating> findAll() {
         return ratingRepository.findAll();
     }
@@ -80,14 +81,12 @@ public class RatingService {
         return ratingRepository.findByAreaname(areaname);
     }
 
-    public double averageStars() {
-        List<Rating> rating = ratingRepository.findAll();
-        return rating.stream().mapToInt(Rating::getStars).average().orElse(0.0);
+    public List<Rating> listByUsername(String username) {
+        return ratingRepository.findByUsername(username);
     }
 
-    public double averageStarsAreaname(String areaname) {
-        List<Rating> rating = ratingRepository.findByAreaname(areaname);
-        return rating.stream().mapToInt(Rating::getStars).average().orElse(0.0);
+    public List<Rating> listByUser(User user) {
+        return ratingRepository.findAllByUser(user);
     }
     
 }

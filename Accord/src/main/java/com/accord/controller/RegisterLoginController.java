@@ -150,11 +150,12 @@ public ResponseEntity<?> login(@RequestParam String email, @RequestParam String 
 
 @GetMapping("/dash_user")
 public String showDashboard(Model m, HttpSession session) {
+	reservService.checkStatus();
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
-	m.addAttribute("reservation", reservService.findReservationsByUserEmailStatusAndNotStarted(currentUser.getEmail()));
-	m.addAttribute("number", reservService.countReservationsStatusNotStarted(currentUser.getEmail()));
-	m.addAttribute("rating", ratingService.listByUseremail(currentUser.getEmail()));
+	m.addAttribute("reservation", reservService.findReservationsByUserEmailStatusAndNotStarted(currentUser));
+	m.addAttribute("number", reservService.countReservationsStatusNotStartedAndCurrentMonth(currentUser));
+	m.addAttribute("rating", ratingService.listByUser(currentUser));
     if (currentUser != null) {
 		if (currentUser.getProfile_picture() != null) {
 			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
@@ -165,7 +166,12 @@ public String showDashboard(Model m, HttpSession session) {
     return "dashboard_user";
 }
 	@GetMapping("/dash_admin")
+
 	public String showDashboardAdmin(Model m, HttpSession session) {
+
+public String showDashboardAdmin(Model m, HttpSession session) {
+	reservService.checkStatus();
+
 	m.addAttribute("recentUsers",repo.findAll());
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
@@ -240,7 +246,7 @@ public String showDashboard(Model m, HttpSession session) {
     Long userId = (Long) session.getAttribute("userId");
     // Call the service to update user profile data
 	if(user.getPassword() != null) {
-		userService.update3(userId, user.getPassword());
+		userService.updatePassword(userId, user.getPassword());
 		if(user.getName() != null && user.getEmail() != null) {
 			String s = userService.update4(userId, user.getName(), user.getEmail());
 			if(s == "1") {
@@ -269,8 +275,8 @@ public String showDashboard(Model m, HttpSession session) {
 	reservService.checkStatus();
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
-	m.addAttribute("reservation", reservService.findReservationsByUserEmailStatusStartedAndNotStarted(currentUser.getEmail()));
-	m.addAttribute("reservationHistory", reservService.findReservationsByUserEmailStatusCompletedAndCancelled(currentUser.getEmail()));
+	m.addAttribute("reservation", reservService.findReservationsByUserEmailStatusStartedAndNotStarted(currentUser));
+	m.addAttribute("reservationHistory", reservService.findReservationsByUserEmailStatusCompletedAndCancelled(currentUser));
     if (currentUser != null) {
 		if (currentUser.getProfile_picture() != null) {
 			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
@@ -295,6 +301,7 @@ public String showDashboard(Model m, HttpSession session) {
 	public String facilityRatingAdmin(Model model) {
 		// Add attributes to the model if needed for profile management
 		//model.addAttribute("rating", ratingService.findAll());
+		reservService.checkStatus();
 		model.addAttribute("areas", areaService.getAllAreas());
 		model.addAttribute("rating", ratingService.findAll());
 		return "facilityRating";
@@ -302,19 +309,7 @@ public String showDashboard(Model m, HttpSession session) {
 
 	@GetMapping("/ratings")
 	public String viewRatingsList(Model model) {
-		// Add attributes to the model if needed for profile management
 		reservService.checkStatus();
-		//List<Rating> rating = ratingService.findAll();
-		//List<Area> areaList = areaService.getAllAreas();
-		/*Map<String, Double> averageRating = new HashMap<>();
-
-		for(Area areas : area) {
-			double averageStars = ratingService.averageStarsAreaname(areas.getName());
-			averageRating.put(areas.getName(), averageStars);
-		}*/
-		//model.addAttribute("rating", ratingService.averageStars());
-		//model.addAttribute("areaList", areaService.getAllAreasWithAverageRating());
-		//model.addAttribute("stars", averageRating);
 		model.addAttribute("areas", areaService.getAllAreas());
 		return "viewRatingsList";
 	}
@@ -322,8 +317,9 @@ public String showDashboard(Model m, HttpSession session) {
 
 	@GetMapping("/rate-area/{id}")
 	public String viewRateArea(@PathVariable Long id, HttpSession session, Model model) {
+		reservService.checkStatus();
 		Reservation reservation = reservService.findReservationById(id);
-		Area area = areaService.getByName(reservation.getAreaname());
+		Area area = areaService.getAreaById(reservation.getArea().getId());
 		Long userId = (Long) session.getAttribute("userId");
 		User currentUser = userService.findById(userId).orElse(null);
 		if (currentUser != null) {
@@ -337,47 +333,37 @@ public String showDashboard(Model m, HttpSession session) {
 			Rating ratingCurrent = ratingService.returnRatingUseremailAndAreaname(currentUser.getEmail(), area.getName());
 			model.addAttribute("ratingCurr", ratingCurrent);
 		}
-		Rating checkRating = ratingService.findByAreaAndUser(currentUser, area);
+		Rating rating = ratingService.findByUserAndArea(currentUser, area);
+		if(rating == null) {
+			rating = new Rating();
+		}
+		model.addAttribute("reservation", reservation);
+		model.addAttribute("rating", rating);
 		model.addAttribute("area", area);
-		if(checkRating == null) {
-			model.addAttribute("rating", new Rating());
-		}
-		else {
-			model.addAttribute("rating", checkRating);
-		}
 		return "ratingPageUser";
 	}
 	
 	@PostMapping("/submit-rating/{id}")
 	public String submitRating(@PathVariable Long id, @ModelAttribute Rating rating, @RequestParam int stars, @RequestParam String feedback, HttpSession session, Model model) {
-		//TODO: process POST request
 		Reservation reservation = reservService.findReservationById(id);
-		Area area = areaService.getByName(reservation.getAreaname());
-		//Rating newrating = new Rating();
-		/*if(reservation == null) {
-			return "redirect:/mb-user";
-		}*/
-		//Area area = areaService.getAreaById(id);
+		Area area = areaService.getAreaById(reservation.getArea().getId());
 		Long userId = (Long) session.getAttribute("userId");
 		User currentUser = userService.findById(userId).orElse(null);
 		if (currentUser != null) {
-			if (currentUser.getProfile_picture() != null) {
-				String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
-				model.addAttribute("profilePictureBase64", base64Image);
+			Rating checkRating = ratingService.findByUserAndArea(currentUser, area);
+			if(checkRating == null) {
+				ratingService.createRating(currentUser, area, feedback, stars);
 			}
-			model.addAttribute("user", currentUser); 
+			else {
+				checkRating.setFeedback(feedback);
+				checkRating.setStars(stars);
+				ratingService.saveUpdateRating(checkRating);
+			}
 		}
-		/*newrating.setAreaname(area.getName());
-		newrating.setUseremail(currentUser.getEmail());
-		newrating.setUsername(currentUser.getName());
-		newrating.setFeedback(rating.getFeedback());
-		newrating.setStars(rating.getStars());
-		newrating.setArea(area);
-		ratingService.createRating(newrating);*/
-		ratingService.saveUpdateRating(currentUser, area, feedback, stars);
+
 		return "redirect:/mb-user";
 	}
-	
+
 	/*@GetMapping("/rate-area/{areaName}")
 	public String viewRateArea(@PathVariable("areaName") String areaName, Model model) {
     model.addAttribute("areaName", areaName);
@@ -405,11 +391,9 @@ public String showDashboard(Model m, HttpSession session) {
 
 	@GetMapping("/bookings/{id}")
 	public String viewBookingsDetails(@PathVariable Long id, Model model) {
-		// Add attributes to the model if needed for profile management
+		reservService.checkStatus();
 		Area area = areaService.getAreaById(id);
-		//Reservation reservation = reservService.findReservationById(id);
 		model.addAttribute("area", area);
-		//model.addAttribute("reservation", reservation);
 		return "view_recreational_area";
 	}
 
@@ -433,7 +417,7 @@ public String showDashboard(Model m, HttpSession session) {
 
 	@GetMapping("/booking-area/{id}")
 	public String viewBookingArea(@PathVariable Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-		// Add attributes to the model if needed for profile management
+		reservService.checkStatus();
 		Area area = areaService.getAreaById(id);
 		model.addAttribute("area", area);
 		model.addAttribute("reservation", new Reservation());
@@ -455,23 +439,25 @@ public String showDashboard(Model m, HttpSession session) {
 
 	
 	@GetMapping("/submit_book")
-	public String addBooking(@ModelAttribute Reservation reservation, RedirectAttributes redirectAttributes) {
+	public String addBooking(@ModelAttribute Reservation reservation, HttpSession session, RedirectAttributes redirectAttributes) {
 		Area area = areaService.getByName(reservation.getAreaname());
+		Long userId = (Long) session.getAttribute("userId");
+		User currentUser = userService.findById(userId).orElse(null);
 		LocalDate startDate = LocalDate.now();
 		if ((reservation.getUser_start_time().isBefore(area.getStartTime())) || 
 			(reservation.getUser_end_time().isAfter(area.getEndTime())) || 
-			(reservation.getUser_start_date().isBefore(startDate)) ||
-			(reservation.getUser_start_date().isEqual(startDate))) {
+			(reservation.getUserStartDate().isBefore(startDate)) ||
+			(reservation.getUserStartDate().isEqual(startDate))) {
 			redirectAttributes.addFlashAttribute("error", "Invalid Time/Date Input");
 			return "redirect:/booking-area/" + area.getId();
 		}
-		reservService.bookReservation(reservation);
+		reservService.bookReservation(reservation, area, currentUser);
 		return "redirect:/areas-user";
 	}
 
 	@GetMapping("/areas-admin")
 	public String recreationalAreasList(Model model) {
-		// Add attributes to the model if needed for profile management
+		reservService.checkStatus();
 		List<Area> areaList = areaService.getAllAreas();
 		model.addAttribute("areaList", areaList);
 		return "am_recreationalAreasList";
@@ -480,6 +466,7 @@ public String showDashboard(Model m, HttpSession session) {
 	
 	@GetMapping("/areas-user")
 	public String showAreas(Model m, HttpSession session) {
+		reservService.checkStatus();
 	m.addAttribute("areaList", areaService.getAllAvailableAreas());
 	m.addAttribute("areaListFalse", areaService.getAllUnavailableAreas());
     Long userId = (Long) session.getAttribute("userId");
@@ -521,6 +508,7 @@ public String showDashboard(Model m, HttpSession session) {
 	// }
 	@GetMapping("/view-recreational-area-user/{id}")
 	public String viewRecreationalAreasUser(@PathVariable("id") Long id, Model m, HttpSession session) {
+		reservService.checkStatus();
 	Area area = areaService.getAreaById(id);
 	m.addAttribute("area", area);
     Long userId = (Long) session.getAttribute("userId");
@@ -538,7 +526,7 @@ public String showDashboard(Model m, HttpSession session) {
 
 	@GetMapping("/view-recreational-area/{id}")
 	public String viewRecreationalArea(@PathVariable Long id, Model model) {
-		// Add attributes to the model if needed for profile management
+		reservService.checkStatus();
 		Area area = areaService.getAreaById(id);
 		model.addAttribute("area", area);
 		return "view_recreational_area";
