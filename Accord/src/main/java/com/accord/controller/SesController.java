@@ -113,26 +113,38 @@ public ResponseEntity<String> updateEmail(@RequestParam Long id, @RequestParam S
     }
 }
 @PostMapping("/updatePassword")
-public ResponseEntity<String> updatePassword(@RequestParam Long id, @RequestParam String password) {
+public ResponseEntity<String> updatePassword(
+    @RequestParam Long id, 
+    @RequestParam String currentPassword, 
+    @RequestParam String newPassword) {
+
     if (id == null || id <= 0) {
         return ResponseEntity.badRequest().body("Invalid user ID.");
-    }    
+    }
 
-    if (password == null || password.trim().isEmpty()) {
-        return ResponseEntity.badRequest().body("Password cannot be empty.");
+    if (currentPassword == null || currentPassword.trim().isEmpty()) {
+        return ResponseEntity.badRequest().body("Current password cannot be empty.");
+    }
+
+    if (newPassword == null || newPassword.trim().isEmpty()) {
+        return ResponseEntity.badRequest().body("New password cannot be empty.");
     }
 
     try {
-        System.out.println("Updating password for user ID: " + id); // Log the id
-        userService.updatePassword(id, password);
+        User user = userService.findById(id).orElse(null);
+        if (!userService.checkPassword(user, currentPassword)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Current password is incorrect.");
+        }
+
+        userService.updatePassword(id, newPassword);
         return ResponseEntity.ok("Password updated successfully.");
     } catch (NoSuchElementException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
     } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
-    }       
-    
+    }
 }
+
 
 
 

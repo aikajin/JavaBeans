@@ -209,10 +209,12 @@
         </div>
         <div class="modal-body">
           <form>
+           
             <div class="mb-3">
-              <label for="recipient-name" class="col-form-label">Password</label>
-              <input type="text" class="form-control" id="recipient-name" th:value="${user != null ? user.password : ''}" disabled>
-            </div>
+                <label for="current-password" class="col-form-label">Current Password</label>
+                <input type="password" class="form-control" id="current-password" />
+              </div>
+              
             <div class="mb-3">
               <label for="message-text" class="col-form-label">New Password</label>
               <textarea class="form-control" id="ForNewpass"></textarea>
@@ -333,46 +335,56 @@
     </script>
     
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const savePassBtn = document.getElementById("savePassBtn");
-        const modal = new bootstrap.Modal(document.getElementById("exampleModal3")); 
+        document.addEventListener("DOMContentLoaded", function () {
+  const savePassBtn = document.getElementById("savePassBtn");
+  const modal = new bootstrap.Modal(document.getElementById("exampleModal3"));
+
+  savePassBtn.addEventListener("click", function () {
+    const currentPassword = document.getElementById("current-password").value;
+    const newPassword = document.getElementById("ForNewpass").value;
+    const userId = document.getElementById("user-id").value;
+
+    if (!currentPassword.trim()) {
+      alert("Please enter your current password.");
+      return;
+    }
+
+    if (!newPassword.trim()) {
+      alert("Please enter a valid new password.");
+      return;
+    }
+
+    if (!userId || isNaN(userId) || userId <= 0) {
+      alert("Invalid user ID.");
+      return;
+    }
+
+    fetch("/updatePassword", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        id: userId,
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert("Password updated successfully!");
+          window.location.reload();
+        } else {
+          response.text().then((text) => alert("Error: " + text));
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating password:", error);
+        alert("An error occurred. Please try again.");
+      });
+  });
+});
+
         
-        savePassBtn.addEventListener("click", function () {
-        const newPassword = document.getElementById("ForNewpass").value;
-        const userId = document.getElementById("user-id").value; 
-
-        console.log("New Password: ", newPassword);                     
-        console.log("User ID: ", userId);                                                   
-            if (!newPassword.trim()) {
-                alert("Please enter a valid password.");
-                return;
-             }    
-
-            if (!userId || isNaN(userId) || userId <= 0) {            
-                alert("Invalid user ID.");
-                return;
-            }    
-
-            fetch("/updatePassword", {
-                method: "POST",
-                headers: {    
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: new URLSearchParams({ id: userId, password: newPassword }),
-            })            
-            .then(response => {
-                if (response.ok) {
-                    alert("Password updated successfully!");
-                    window.location.reload();
-                } else {
-                    response.text().then(text => alert("Error: " + text));    
-                }
-            })            
-            .catch(error => {
-                console.error("Error updating password:", error);
-                alert("An error occurred. Please try again.");
-            });
-        });
-        });
     </script>
 </html>

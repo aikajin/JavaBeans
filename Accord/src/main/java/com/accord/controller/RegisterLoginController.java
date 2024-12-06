@@ -167,9 +167,8 @@ public String showDashboard(Model m, HttpSession session) {
 	
 }
 	
+
 	@GetMapping("/dash_admin")
-
-
 public String showDashboardAdmin(Model m, HttpSession session) {
 	reservService.checkStatus();
 
@@ -186,6 +185,7 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	m.addAttribute("cancelledBookings", cancelledBookingsCount);
 	m.addAttribute("areas", areaService.getAllAreas());
 	
+	m.addAttribute("rating", ratingService.findAll());
 	List<User> users = userService.getAllUser();
 	m.addAttribute("users", users);
 	
@@ -265,7 +265,7 @@ public String showDashboardAdmin(Model m, HttpSession session) {
     // Add the updated user to the model to reflect changes
 //     model.addAttribute("user", updatedUser);
 
-    return "redirect:/profile"; // Return the same view to reflect updated data
+    return "redirect:/profile"; 
 }
 
 	
