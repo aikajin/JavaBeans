@@ -179,15 +179,102 @@
     <script>
         // Fetch and display users once the DOM is fully loaded
         document.addEventListener('DOMContentLoaded', function() {
-            fetchUsers();
+    // Status mappings
+    const statusMappings = {
+        'owner': 'Homeowner',
+        'owner-assumed': 'Homeowner - Assumed',
+        'rental': 'Renter'
+    };
 
-            // Search and filter functionality
-            const searchInput = document.getElementById('searchInputUsers');
-            const filterSelect = document.getElementById('filterSelectUsers');
+    // Table configurations
+    const tables = {
+        users: {
+            searchInput: document.getElementById('searchInputUsers'),
+            filterSelect: document.getElementById('filterSelectUsers'),
+            tableId: 'usersTable',
+        },
+        pending: {
+            searchInput: document.getElementById('searchInputPending'),
+            filterSelect: document.getElementById('filterSelectPending'),
+            tableId: 'pendingTable',
+        }
+    };
 
-            searchInput.addEventListener('input', filterUsers);
-            filterSelect.addEventListener('change', filterUsers);
+    Object.values(tables).forEach(config => {
+        const table = document.getElementById(config.tableId);
+        if (table) {
+            initializeTable(table, config.searchInput, config.filterSelect);
+        }
+    });
+
+    function initializeTable(table, searchInput, filterSelect) {
+        const tableBody = table.querySelector('tbody');
+        const originalRows = Array.from(tableBody.rows);
+
+        // Convert initial status values
+        originalRows.forEach(row => {
+            let status = row.cells[1].textContent.trim().toLowerCase();
+            Object.entries(statusMappings).forEach(([dbStatus, displayStatus]) => {
+                if (status === dbStatus) {
+                    row.cells[1].textContent = displayStatus;
+                }
+            });
         });
+
+        // Add event listeners for filtering
+        searchInput.addEventListener('input', () => filterTable(table, searchInput, filterSelect, originalRows));
+        filterSelect.addEventListener('change', () => filterTable(table, searchInput, filterSelect, originalRows));
+    }
+
+    function filterTable(table, searchInput, filterSelect, originalRows) {
+        const tableBody = table.querySelector('tbody');
+        const searchTerm = searchInput.value.toLowerCase();
+        const filterValue = filterSelect.value;
+
+        // Clear the current table
+        tableBody.innerHTML = '';
+
+        // Filter and add matching rows
+        originalRows.forEach(row => {
+            const name = row.cells[0].textContent.toLowerCase();
+            const status = row.cells[1].textContent.trim();
+
+            const matchesSearch = name.includes(searchTerm);
+            const matchesFilter = filterValue === '' || status === filterValue;
+
+            if (matchesSearch && matchesFilter) {
+                const newRow = row.cloneNode(true);
+                tableBody.appendChild(newRow);
+            }
+        });
+
+        // Show "No results" message if no matches
+        if (tableBody.rows.length === 0) {
+            const noResultsRow = document.createElement('tr');
+            noResultsRow.innerHTML = `<td colspan="5" style="text-align: center;">No matching results found</td>`;
+            tableBody.appendChild(noResultsRow);
+        }
+    }
+
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('view-button')) {
+            const userId = e.target.getAttribute('href')?.split('/').pop();
+            if (userId) {
+                e.preventDefault();
+                window.location.href = `/details/${userId}`;
+            }
+        }
+        
+        if (e.target.classList.contains('edit-btn')) {
+            const row = e.target.closest('tr');
+            const userId = row.querySelector('.view-button').getAttribute('href')?.split('/').pop();
+            if (userId) {
+                e.preventDefault();
+                window.location.href = `/details/${userId}`;
+            }
+        }
+    });
+});
 
         // Fetch users from the back-end and render them in the table
         function fetchUsers() {

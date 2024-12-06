@@ -211,16 +211,103 @@
 
 <script>
     // Fetch and display users once the DOM is fully loaded
-    document.addEventListener('DOMContentLoaded', function() {
-        fetchUsers();
+    // Wait for DOM to be fully loaded
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Get references to the search input and filter select
+    const searchInput = document.getElementById('searchInputUsers');
+    const filterSelect = document.getElementById('filterSelectUsers');
+    const usersTable = document.getElementById('usersTable');
+    const tableBody = usersTable.querySelector('tbody');
 
-        // Search and filter functionality
-        const searchInput = document.getElementById('searchInputUsers');
-        const filterSelect = document.getElementById('filterSelectUsers');
+    // Define status mappings
+    const statusMappings = {
+        'owner': 'Homeowner',
+        'owner-assumed': 'Homeowner - Assumed',
+        'rental': 'Renter'
+    };
 
-        searchInput.addEventListener('input', filterUsers);
-        filterSelect.addEventListener('change', filterUsers);
+    // Update filter select options to match the mappings
+    filterSelect.innerHTML = `
+        <option value="">Filter</option>
+        <option value="Homeowner">Homeowner</option>
+        <option value="Homeowner - Assumed">Homeowner - Assumed</option>
+        <option value="Renter">Renter</option>
+    `;
+
+    // Store the original table rows for filtering
+    const originalRows = Array.from(tableBody.rows);
+
+    // Add event listeners for search and filter
+    searchInput.addEventListener('input', filterTable);
+    filterSelect.addEventListener('change', filterTable);
+
+    function filterTable() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const filterValue = filterSelect.value;
+
+        // Clear the current table
+        tableBody.innerHTML = '';
+
+        // Filter and add matching rows
+        originalRows.forEach(row => {
+            const name = row.cells[0].textContent.toLowerCase();
+            let propertyStatus = row.cells[1].textContent;
+
+            // Convert database status to display status if needed
+            Object.entries(statusMappings).forEach(([dbStatus, displayStatus]) => {
+                if (propertyStatus.toLowerCase() === dbStatus.toLowerCase()) {
+                    propertyStatus = displayStatus;
+                }
+            });
+
+            const matchesSearch = name.includes(searchTerm);
+            const matchesFilter = filterValue === '' || propertyStatus === filterValue;
+
+            if (matchesSearch && matchesFilter) {
+                // Clone the row to avoid modifying the original
+                const newRow = row.cloneNode(true);
+                // Update the displayed status in the new row
+                newRow.cells[1].textContent = propertyStatus;
+                tableBody.appendChild(newRow);
+            }
+        });
+
+        // Show a message if no results found
+        if (tableBody.rows.length === 0) {
+            const noResultsRow = document.createElement('tr');
+            noResultsRow.innerHTML = '<td colspan="5" class="text-center">No matching users found</td>';
+            tableBody.appendChild(noResultsRow);
+        }
+    }
+
+    // Initial conversion of status values in the table
+    originalRows.forEach(row => {
+        let propertyStatus = row.cells[1].textContent;
+        Object.entries(statusMappings).forEach(([dbStatus, displayStatus]) => {
+            if (propertyStatus.toLowerCase() === dbStatus.toLowerCase()) {
+                row.cells[1].textContent = displayStatus;
+            }
+        });
     });
+
+    // Add click event listeners for action buttons
+    tableBody.addEventListener('click', function(e) {
+        const target = e.target;
+        
+        if (target.classList.contains('view-button')) {
+            const userId = target.getAttribute('data-user-id');
+            if (userId) {
+                window.location.href = `/details/${userId}`;
+            }
+        } else if (target.classList.contains('delete-button')) {
+            const userId = target.getAttribute('data-user-id');
+            if (userId && confirm('Are you sure you want to delete this user?')) {
+                window.location.href = `/deleteUser/${userId}`;
+            }
+        }
+    });
+});
 
     // Fetch users from the back-end and render them in the table
     function fetchUsers() {
@@ -233,27 +320,27 @@
     }
 
     // Render the users in the HTML table
-    function renderUsers(users) {
-        const tableBody = document.querySelector('#usersTable tbody');
-        tableBody.innerHTML = '';  // Clear existing table rows
+    function renderUsers(users, tableId) {
+    const tableBody = document.querySelector(`#${tableId} tbody`);
+    tableBody.innerHTML = '';  // Clear existing table rows
 
-        users.forEach(user => {
-            const row = document.createElement('tr');
+    users.forEach(user => {
+        const row = document.createElement('tr');
 
-            row.innerHTML = `
-                <td>${user.name}</td>
-                <td>${user.property_status}</td>
-                <td>${user.block_num}</td>
-                <td>${user.lot_num}</td>
-                <td>
-                    
-                    <button onclick="deleteUser(${user.id})" class="delete-btn3">Delete</button>
-                </td>
-            `;
+        row.innerHTML = `
+            <td>${user.name}</td>
+            <td>${user.property_status}</td>
+            <td>${user.block_num}</td>
+            <td>${user.lot_num}</td>
+            <td>
+                <button onclick="viewUser(${user.id})" class="view-button">View</button>
+                <button onclick="deleteUser(${user.id})" class="delete-btn3">Delete</button>
+            </td>
+        `;
 
-            tableBody.appendChild(row);
-        });
-    }
+        tableBody.appendChild(row);
+    });
+}
 
     // Filter users based on search input and property status filter
     function filterUsers() {
@@ -310,17 +397,29 @@
     <script>
       
 
-        function applyFilters(inputId, selectId, tableId) {
-            const searchTerm = document.getElementById(inputId).value.toLowerCase();
-            const filterValue = document.getElementById(selectId).value;
-            
-            const filteredUsers = users.filter(user => 
-                (user.name.toLowerCase().includes(searchTerm) || user.email.toLowerCase().includes(searchTerm)) &&
-                (filterValue === '' || user.propertyStatus === filterValue)
-            );
-            
-            renderUsers(filteredUsers, tableId);
+      function applyFilters(inputId, selectId, tableId) {
+    const searchValue = document.getElementById(inputId).value.toLowerCase();
+    const filterValue = document.getElementById(selectId).value;
+
+    const filteredUsers = users.filter(user => {
+        const matchesSearch = user.name.toLowerCase().includes(searchValue) || user.email.toLowerCase().includes(searchValue);
+        let matchesFilter = true;
+
+        if (filterValue !== '') {
+            if (filterValue === 'Renter') {
+                matchesFilter = user.property_status === 'Renter';
+            } else if (filterValue === 'Homeowner') {
+                matchesFilter = user.property_status === 'Homeowner';
+            } else if (filterValue === 'Homeowner - Assumed') {
+                matchesFilter = user.property_status === 'Homeowner - Assumed';
+            }
         }
+
+        return matchesSearch && matchesFilter;
+    });
+
+    renderUsers(filteredUsers, tableId);
+}
 
         function viewUser(userId) {
             // Implement view user functionality
@@ -334,8 +433,9 @@
         // Add event listeners for real-time filtering
         document.getElementById('searchInputPending').addEventListener('input', () => applyFilters('searchInputPending', 'filterSelectPending', 'pendingTable'));
         document.getElementById('filterSelectPending').addEventListener('change', () => applyFilters('searchInputPending', 'filterSelectPending', 'pendingTable'));
-        document.getElementById('searchInputUsers').addEventListener('input', () => applyFilters('searchInputUsers', 'filterSelectUsers', 'usersTable'));
-        document.getElementById('filterSelectUsers').addEventListener('change', () => applyFilters('searchInputUsers', 'filterSelectUsers', 'usersTable'));
+        // Add event listeners for real-time filtering
+document.getElementById('searchInputUsers').addEventListener('input', () => applyFilters('searchInputUsers', 'filterSelectUsers', 'usersTable'));
+document.getElementById('filterSelectUsers').addEventListener('change', () => applyFilters('searchInputUsers', 'filterSelectUsers', 'usersTable'));
 
         // Add event listeners for sidebar navigation
         document.querySelectorAll('.nav-item, .logout').forEach(item => {
