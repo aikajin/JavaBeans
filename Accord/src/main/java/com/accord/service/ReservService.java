@@ -16,8 +16,9 @@ import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import com.accord.repository.AreaRepository;
 import com.accord.Entity.Area;
-
+import com.accord.Entity.Rating;
 import com.accord.Entity.Reservation;
+import com.accord.Entity.User;
 import com.accord.repository.ReservRepository;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -31,13 +32,11 @@ public class ReservService {
     @Autowired
     private JavaMailSender mailSender; 
     @Autowired
-    private AreaRepository areaRepository;
+private AreaRepository areaRepository;
 
-    public Reservation findByArea(Area area) {
-        return reservRepository.findByArea(area);
-    }
-    public void bookReservation(Reservation reservation, Area area) {
+    public void bookReservation(Reservation reservation, Area area, User user) {
         reservation.setArea(area);
+        reservation.setUser(user);
         reservRepository.save(reservation);
         sendReservationConfirmationEmail(reservation);
     }
@@ -59,7 +58,7 @@ public class ReservService {
             String emailContent = "Dear " + reservation.getUsername() + ",\n\n" +
             "Your reservation has been successfully confirmed. Here are the details:\n\n" +
             "Recreational Area: " + reservation.getAreaname() + "\n" +
-            "Date: " + reservation.getUser_start_date() + "\n" +
+            "Date: " + reservation.getUserStartDate()+ "\n" +
             "Time: " + reservation.getUser_start_time() + " to " + reservation.getUser_end_time() + "\n" +
     
             "Please note the following guidelines:\n" +
@@ -83,6 +82,10 @@ public class ReservService {
         return reservRepository.findAll();
     }
 
+    public Reservation findByUseremail(String email) {
+        return reservRepository.findByUseremail(email);
+    }
+
     public Reservation findReservationsByAreaName(String areaname) {
         return reservRepository.findByAreaname(areaname);
     }
@@ -91,32 +94,43 @@ public class ReservService {
         return reservRepository.findAllByAreaname(areaname);
     }
 
+    public List<Reservation> findAllByUsername(String username) {
+        return reservRepository.findAllByUsername(username);
+    }
+
+    public List<Reservation> findAllByUser(User user) {
+        return reservRepository.findAllByUser(user);
+    }
+
     public void updateAllAreaname(List<Reservation> reservation, String areaname) {
         reservation.forEach(rA -> rA.setAreaname(areaname));
         reservRepository.saveAll(reservation);
     }
     public List<Reservation> findReservationsByUserEmail(String useremail) {
-        return reservRepository.findByUseremail(useremail);
+        return reservRepository.findAllByUseremail(useremail);
     }
 
-    public List<Reservation> findReservationsByUserEmailStatusCompletedAndCancelled(String useremail) {
+    public List<Reservation> findReservationsByUserEmailStatusCompletedAndCancelled(User user) {
         List<String> statuses = Arrays.asList("COMPLETED", "CANCELLED");
-        return reservRepository.findByUseremailAndStatusIn(useremail, statuses);
+        return reservRepository.findByUserAndStatusIn(user, statuses);
     }
 
-    public List<Reservation> findReservationsByUserEmailStatusStartedAndNotStarted(String useremail) {
+    public List<Reservation> findReservationsByUserEmailStatusStartedAndNotStarted(User user) {
         List<String> statuses = Arrays.asList("STARTED", "NOT STARTED");
-        return reservRepository.findByUseremailAndStatusIn(useremail, statuses);
+        return reservRepository.findByUserAndStatusIn(user, statuses);
     }
 
-    public List<Reservation> findReservationsByUserEmailStatusAndNotStarted(String useremail) {
+    public List<Reservation> findReservationsByUserEmailStatusAndNotStarted(User user) {
         List<String> statuses = Arrays.asList("NOT STARTED");
-        return reservRepository.findByUseremailAndStatusIn(useremail, statuses);
+        return reservRepository.findByUserAndStatusIn(user, statuses);
     }
 
-    public Long countReservationsStatusNotStarted(String useremail) {
+    public Long countReservationsStatusNotStartedAndCurrentMonth(User user) {
         List<String> statuses = Arrays.asList("NOT STARTED");
-        return reservRepository.countByUseremailAndStatusIn(useremail, statuses);
+        LocalDate now = LocalDate.now();
+        LocalDate startMonth = now.withDayOfMonth(1);
+        LocalDate endMonth = startMonth.plusMonths(1);
+        return reservRepository.countByUserAndStatusInAndUserStartDateBetween(user, statuses, startMonth, endMonth);
     }
 
     public Long countAllReservationStatusStartedAndNotStarted() {
@@ -162,11 +176,11 @@ public class ReservService {
             if("COMPLETED".equals(rA.getStatus())) {
                 return;
             }
-            else if(dateTime.isAfter(LocalDateTime.of(rA.getUser_start_date(), rA.getUser_end_time()))) {
+            else if(dateTime.isAfter(LocalDateTime.of(rA.getUserStartDate(), rA.getUser_end_time()))) {
                 rA.setStatus("COMPLETED");
             }
-            else if((dateTime.isBefore(LocalDateTime.of(rA.getUser_start_date(), rA.getUser_end_time()))) &&
-                    dateTime.isAfter(LocalDateTime.of(rA.getUser_start_date(), rA.getUser_start_time()))) {
+            else if((dateTime.isBefore(LocalDateTime.of(rA.getUserStartDate(), rA.getUser_end_time()))) &&
+                    dateTime.isAfter(LocalDateTime.of(rA.getUserStartDate(), rA.getUser_start_time()))) {
                 rA.setStatus("STARTED");
             }
             else {
@@ -174,6 +188,16 @@ public class ReservService {
             }
         });
         reservRepository.saveAll(r);
+    }
+
+    public void updateAllEmail(List<Reservation> reservations, String email) {
+        reservations.forEach(rA -> rA.setUseremail(email));
+        reservRepository.saveAll(reservations);
+    }
+
+    public void updateAllName(List<Reservation> reservations, String name) {
+        reservations.forEach(rA -> rA.setUsername(name));
+        reservRepository.saveAll(reservations);
     }
 
 }
