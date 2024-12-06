@@ -140,7 +140,7 @@
                         <td>[[${reservation.status}]]</td>
                         <td>
                             <a th:href="@{/cancelBooking/{id}(id=${reservation.id})}" class="delete-btn3">Cancel</a>
-                            <a th:href="@{/booking-area/{id}(id=${reservation.area.id})}" class="delete-btn3">View</a>
+                            <a th:href="@{/booking-area/{id}(id=${reservation.area.id})}" class="edit-btn">View</a>
                         </td>
                     </tr>
                 </tbody>

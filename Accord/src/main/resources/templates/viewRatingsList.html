@@ -101,43 +101,36 @@
             </div>
             </div>
             <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    // Function to create star rating HTML
-                    function createStarRating(rating) {
-                        const fullStars = Math.floor(rating);
-                        const hasHalfStar = rating % 1 >= 0.5;
-                        const emptyStars = 5 - Math.ceil(rating);
-                        
-                        let starsHTML = '<div class="stars">';
-                        
-                        // Add full stars
-                        for (let i = 0; i < fullStars; i++) {
-                            starsHTML += '<span class="star">★</span>';
-                        }
-                        
-                        // Add half star if needed
-                        if (hasHalfStar) {
-                            starsHTML += '<span class="star">½</span>';
-                        }
-                        
-                        // Add empty stars
-                        for (let i = 0; i < emptyStars; i++) {
-                            starsHTML += '<span class="star star-empty">★</span>';
-                        }
-                        
-                        starsHTML += '</div>';
-                        return starsHTML;
-                    }
-                
-                    // Convert all rating numbers to stars
-                    const ratingElements = document.querySelectorAll('#star-rating');
-                    ratingElements.forEach(element => {
-                        const rating = parseFloat(element.textContent);
-                        // Keep the numerical rating and add stars
-                        element.innerHTML = `${rating} ${createStarRating(rating)}`;
-                    });
-                });
-                </script>
+document.addEventListener('DOMContentLoaded', function() {
+    function createStarRating(rating) {
+        rating = Math.min(Math.max(rating, 0), 5);
+        
+        let starsHTML = '<div class="stars">';
+        
+        for (let i = 0; i < Math.floor(rating); i++) {
+            starsHTML += '<span class="star">★</span>';
+        }
+        
+        if (rating % 1 >= 0.5) {
+            starsHTML += '<span class="star half">★</span>';
+        }
+        
+        const remainingStars = 5 - Math.ceil(rating);
+        for (let i = 0; i < remainingStars; i++) {
+            starsHTML += '<span class="star empty">☆</span>';
+        }
+        
+        starsHTML += '</div>';
+        return starsHTML;
+    }
+
+    const ratingElements = document.querySelectorAll('#star-rating');
+    ratingElements.forEach(element => {
+        const rating = parseFloat(element.textContent);
+        element.innerHTML = createStarRating(rating);
+    });
+});
+</script>
         
     </body>
     </html>
