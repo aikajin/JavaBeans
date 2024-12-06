@@ -87,6 +87,7 @@ public ResponseEntity<String> updateName(@RequestParam Long id, @RequestParam St
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
     }
 }
+
 @PostMapping("/updateEmail")
 public ResponseEntity<String> updateEmail(@RequestParam Long id, @RequestParam String email) {
     if (id == null || id <= 0) {
@@ -98,13 +99,21 @@ public ResponseEntity<String> updateEmail(@RequestParam Long id, @RequestParam S
     }
 
     try {
-        System.out.println("Updating email for user ID: " + id); // Log the id
-        User user = userService.findById(id).orElse(null);
+        System.out.println("Updating email for user ID: " + id); 
+
+       
+        if (!userService.checkEmail(email)) {
+            return ResponseEntity.badRequest().body("The provided email already exists.");
+        }
+
+        User user = userService.findById(id).orElseThrow(() -> new NoSuchElementException("User not found."));
         List<Rating> rating = ratingService.listByUser(user);
         List<Reservation> reservations = reservService.findAllByUser(user);
+
         userService.updateemail(id, email);
         ratingService.updateAllEmail(rating, email);
         reservService.updateAllEmail(reservations, email);
+
         return ResponseEntity.ok("Email updated successfully.");
     } catch (NoSuchElementException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
@@ -112,6 +121,7 @@ public ResponseEntity<String> updateEmail(@RequestParam Long id, @RequestParam S
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
     }
 }
+
 @PostMapping("/updatePassword")
 public ResponseEntity<String> updatePassword(
     @RequestParam Long id, 
