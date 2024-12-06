@@ -266,6 +266,7 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	reservService.checkStatus();
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
+	m.addAttribute("area", areaService.getAllAreas());
 	m.addAttribute("reservation", reservService.findReservationsByUserEmailStatusStartedAndNotStarted(currentUser));
 	m.addAttribute("reservationHistory", reservService.findReservationsByUserEmailStatusCompletedAndCancelled(currentUser));
     if (currentUser != null) {
@@ -275,7 +276,6 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 		}
         m.addAttribute("user", currentUser); // Single user
     }
-	
     return "managebookingsUser";
 }
 
@@ -440,6 +440,10 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 			(reservation.getUserStartDate().isBefore(startDate)) ||
 			(reservation.getUserStartDate().isEqual(startDate))) {
 			redirectAttributes.addFlashAttribute("error", "Invalid Time/Date Input");
+			return "redirect:/booking-area/" + area.getId();
+		}
+		else if((reservService.checkReservation(reservation, area)) == 1) {
+			redirectAttributes.addFlashAttribute("error", "Another User Has Booked The Same Time");
 			return "redirect:/booking-area/" + area.getId();
 		}
 		reservService.bookReservation(reservation, area, currentUser);

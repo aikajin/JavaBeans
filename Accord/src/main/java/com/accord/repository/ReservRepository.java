@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.accord.Entity.Area;
 import com.accord.Entity.Reservation;
 import com.accord.Entity.User;
 
@@ -17,6 +18,8 @@ public interface ReservRepository extends JpaRepository<Reservation, Long>{
 
     Reservation findByAreaname(String areaname);
 
+    Reservation findByArea(Area area);
+
     List<Reservation> findByStatusIn(List<String> statuses);
     
     List<Reservation> findAllByUseremail(String useremail);
@@ -26,6 +29,8 @@ public interface ReservRepository extends JpaRepository<Reservation, Long>{
     List<Reservation> findAllByUsername(String username);
 
     List<Reservation> findAllByUser(User user);
+
+    List<Reservation> findAllByAreaAndStatusIn(Area area, List<String> statuses);
 
     List<Reservation> findByUserAndStatusIn(User user, List<String> statuses);
 
