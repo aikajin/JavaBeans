@@ -159,25 +159,6 @@
                 <option value="Homeowner - Assumed">Homeowner - Assumed</option>
             </select>
         </div>
-        <!-- <table id="usersTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Property Status</th>
-                    <th>Block No.</th>
-                    <th>Lot No.</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each ="user : ${recentUsers}">
-                    <td th:text="${user.name}">John Doe</td>
-                    <td th:text="${user.propertyStatus}">Vacant</td>
-                    <td th:text="${user.blockNo}">A</td>
-                    <td th:text="${user.lotNo}">1</td>
-                    
-            </tbody>
-        </table> -->
         <table id="usersTable">
             <thead>
                 <tr>
@@ -189,13 +170,22 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Users list data will be populated here by JavaScript -->
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.name}">John Doe</td>
+                    <td th:text="${user.property_status}">Central Park</td>
+                    <td th:text="${user.block_num}">Central Park</td>
+                    <td th:text="${user.lot_num}">Central Park</td>
+                    <td>
+                        <a th:href="@{/deleteUser/{id}(id=${user.id})}" class="view-button">Delete</a>
+                    </td>
+           
+                </tr>
             </tbody>
         </table>
     </div>
 
     <!-- Recent Ratings Table -->
-    <!-- <div class="table-container">
+    <div class="table-container">
         <h2>Recent Ratings</h2>
         <table>
             <thead>
@@ -218,7 +208,7 @@
                 </tr>
             </tbody>
         </table>
-    </div> -->
+    </div>
 </div>
 
 <script>

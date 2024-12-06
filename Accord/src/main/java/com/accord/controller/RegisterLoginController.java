@@ -165,7 +165,7 @@ public String showDashboard(Model m, HttpSession session) {
     return "dashboard_user";
 }
 	@GetMapping("/dash_admin")
-public String showDashboardAdmin(Model m, HttpSession session) {
+	public String showDashboardAdmin(Model m, HttpSession session) {
 	m.addAttribute("recentUsers",repo.findAll());
     Long userId = (Long) session.getAttribute("userId");
     User currentUser = userService.findById(userId).orElse(null);
@@ -177,6 +177,11 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 	m.addAttribute("reservationNotStarted", reservService.countAllReservationStatusNotStarted());
 	m.addAttribute("reservationCompleted", reservService.countAllReservationStatusCompleted());
 	m.addAttribute("cancelledBookings", cancelledBookingsCount);
+	m.addAttribute("areas", areaService.getAllAreas());
+	
+	List<User> users = userService.getAllUser();
+	m.addAttribute("users", users);
+	
     if (currentUser != null) {
 		if (currentUser.getProfile_picture() != null) {
 			String base64Image = Base64.getEncoder().encodeToString(currentUser.getProfile_picture());
@@ -546,6 +551,8 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 		// Add attributes to the model if needed for profile management
 		List<User> pendingUsers = userService.pendingAccountConfirmation();
 		model.addAttribute("pendingUsers", pendingUsers);
+		List<User> users = userService.getAllUser();
+		model.addAttribute("users", users);
 		return "UserAccounts_page";
 	}
 
@@ -612,6 +619,13 @@ public String showDashboardAdmin(Model m, HttpSession session) {
 		return "redirect:/areas-admin"; 
  	}
 	
+	@GetMapping("/deleteUser/{id}")
+	public String deleteUser(@PathVariable Long id, Model model) {
+		model.addAttribute("delete", "Are you sure you would like to delete this user?");
+		userService.deleteUser(id);
+
+		return "redirect:/dash_admin";
+	}
 	@GetMapping("/deleteArea/{id}")
 	public String deleteArea(@PathVariable Long id, Model model) {
 		model.addAttribute("delete", "Are you sure you would like to delete this area?");
@@ -627,10 +641,13 @@ public String showDashboardAdmin(Model m, HttpSession session) {
         return new RedirectView("/recreational-areas-list", true);
     }*/
 	
-	// @GetMapping("/details")
-	// public String UserAcc_VIewDetails(Model model) {
-	// 	return "UserAccounts_viewDetails";
-	// }
+	@GetMapping("/details/{id}")
+	public String UserAcc_VIewDetails(@PathVariable Long id, Model model) {
+		User user = userService.findById(id).orElse(null);
+		model.addAttribute("user", user);
+		return "UserAccounts_viewDetails";
+	}
+	
 
 
 	@PostMapping("/forgotPassword_email")
