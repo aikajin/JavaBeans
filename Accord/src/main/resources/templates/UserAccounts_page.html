@@ -160,7 +160,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Users list data will be populated here by JavaScript -->
+                        <tr th:each="user : ${users}">
+                            <td th:text="${user.name}">John Doe</td>
+                            <td th:text="${user.property_status}">Central Park</td>
+                            <td th:text="${user.block_num}">Central Park</td>
+                            <td th:text="${user.lot_num}">Central Park</td>
+                            <td>
+                                <a th:href="@{/details/{id}(id=${user.id})}" class="view-button">View</a>
+                            </td>
+                   
+                        </tr>
                     </tbody>
                 </table>
             </div>
