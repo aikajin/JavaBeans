@@ -41,6 +41,19 @@ private AreaRepository areaRepository;
         sendReservationConfirmationEmail(reservation);
     }
 
+    public int checkReservation(Reservation reservation, Area area) {
+        List<Reservation> allReservations = findReservationsByAreaAndStatusNotStarted(area);
+        for(Reservation existReservation : allReservations) {
+            if(reservation.getUserStartDate().equals(existReservation.getUserStartDate())) {
+                if((reservation.getUser_end_time().isAfter(existReservation.getUser_start_time())) &&
+                    (reservation.getUser_start_time().isBefore(existReservation.getUser_end_time()))) {
+                        return 1;
+                    }
+            }
+        }
+        return 2;
+    }
+
     private void sendReservationConfirmationEmail(Reservation reservation) {
         MimeMessage message = mailSender.createMimeMessage();
 
@@ -90,6 +103,10 @@ private AreaRepository areaRepository;
         return reservRepository.findByAreaname(areaname);
     }
 
+    public Reservation findByArea(Area area) {
+        return reservRepository.findByArea(area);
+    }
+
     public List<Reservation> findAllByAreaname(String areaname) {
         return reservRepository.findAllByAreaname(areaname);
     }
@@ -123,6 +140,11 @@ private AreaRepository areaRepository;
     public List<Reservation> findReservationsByUserEmailStatusAndNotStarted(User user) {
         List<String> statuses = Arrays.asList("NOT STARTED");
         return reservRepository.findByUserAndStatusIn(user, statuses);
+    }
+
+    public List<Reservation> findReservationsByAreaAndStatusNotStarted(Area area) {
+        List<String> statuses = Arrays.asList("NOT STARTED");
+        return reservRepository.findAllByAreaAndStatusIn(area, statuses);
     }
 
     public Long countReservationsStatusNotStartedAndCurrentMonth(User user) {
