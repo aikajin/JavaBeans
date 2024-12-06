@@ -164,10 +164,11 @@ public String showDashboard(Model m, HttpSession session) {
         m.addAttribute("user", currentUser); 
     }
     return "dashboard_user";
+	
 }
+	
 	@GetMapping("/dash_admin")
 
-	public String showDashboardAdmin(Model m, HttpSession session) {
 
 public String showDashboardAdmin(Model m, HttpSession session) {
 	reservService.checkStatus();
