@@ -38,14 +38,10 @@ public class UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    private JavaMailSender mailSender;  // Injecting JavaMailSender for sending email
+    private JavaMailSender mailSender;
     
     public interface UserDetailsService {
-        // ...
-    
         void save(User user);
-    
-        // ...
     }
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
@@ -54,64 +50,24 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    
 
-    // ================== CRUD METHODS ==================
-
-    /**
-     * Create a new user and save to the database
-     * @param user - User entity to be created
-     * @return - The saved user entity
-     */
     public User createUser(User user) {
-        return userRepository.save(user);  // Save the user object to the repository
+        return userRepository.save(user);
     }
 
-    /**
-     * Read/Get a user by their ID
-     * @param id - User ID
-     * @return - Optional User entity (returns empty if not found)
-     */
    public Optional<User> getUserById(Long id) {
-       return findById(id);  // Call the existing findById method
+       return findById(id);
    }
 
    public User save(User user) {
        return userRepository.save(user);
    }
 
-    /**
-     * Get all users from the database
-     * @return - List of all users
-     */
     public List<User> getAllUsers() {
-        return userRepository.findAll();  // Retrieve all users from the repository
+        return userRepository.findAll();
     }
 
-
-    /**
-     * Update an existing user by their ID
-     * @param id - User ID
-     * @param updatedUser - User object with updated fields
-     * @return - The updated user entity or null if not found
-     */
     public User updateUser(Long id, User updatedUser, MultipartFile photo) {
-        /*Optional<User> existingUserOptional = userRepository.findById(id);
-        if (existingUserOptional.isPresent()) {
-            User existingUser = existingUserOptional.get();
-            // Update the fields of the existing user with new values
-            existingUser.setName(updatedUser.getName());
-            existingUser.setEmail(updatedUser.getEmail());
-            existingUser.setContactnumber(updatedUser.getContactnumber());
-            existingUser.setPassword(updatedUser.getPassword()); // If you're updating the password
-            existingUser.setProfile_picture(updatedUser.getProfile_picture());
-            existingUser.setProfile_name(updatedUser.getProfile_name());
-            existingUser.setProfilePictureUrl(updatedUser.getProfilePictureUrl()); 
-            // Add other fields that need to be updated...
-            return userRepository.save(existingUser);  // Save updated user to the repository
-        } else {
-            return null;  // Return null if user not found
-        }*/
         try {
             updatedUser.setProfile_name(photo.getOriginalFilename());
             updatedUser.setProfile_type(photo.getContentType());
@@ -150,26 +106,26 @@ public class UserService {
         userRepository.save(existingUser);
     }
 
-public void updatename(Long id, String name) {
+    public void updatename(Long id, String name) {
         Optional<User> existingUserOptional = userRepository.findById(id);
         User existingUser = existingUserOptional.get();
         existingUser.setName(name);
         userRepository.save(existingUser);
-}
-public void updateemail(Long id, String email) {
-    if (id == null || id <= 0) {
-        throw new IllegalArgumentException("Invalid user ID");
     }
-    
-    Optional<User> userOptional = userRepository.findById(id);
-    if (!userOptional.isPresent()) {
-        throw new NoSuchElementException("User not found");
+    public void updateemail(Long id, String email) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Invalid user ID");
+        }
+        
+        Optional<User> userOptional = userRepository.findById(id);
+        if (!userOptional.isPresent()) {
+            throw new NoSuchElementException("User not found");
+        }
+        
+        User user = userOptional.get();
+        user.setEmail(email);
+        userRepository.save(user);
     }
-    
-    User user = userOptional.get();
-    user.setEmail(email);
-    userRepository.save(user);
-}
     public String update4(Long id, String name, String email) {
         Optional<User> existingUserOptional = userRepository.findById(id);
         User existingUser = existingUserOptional.get();
@@ -183,10 +139,6 @@ public void updateemail(Long id, String email) {
         return "2";
     }
 
-    /**
-     * Delete a user by their ID
-     * @param id - User ID
-     */
     public void deleteUser(Long id) {
         userRepository.deleteById(id);  
     }
@@ -216,7 +168,7 @@ public void updateemail(Long id, String email) {
 
             helper.setText(emailContent, true);
 
-           
+            
             mailSender.send(message);
 
             return true;  
@@ -234,13 +186,11 @@ public void updateemail(Long id, String email) {
         return userRepository.findFirstByEmail(email);
     }
 
-    
-    
     public boolean resetPassword(String token, String newPassword) {
         Optional<User> userOptional = userRepository.findByResetToken(token);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-        
+
             user.setPassword(passwordEncoder.encode(newPassword));
             user.setResetToken(null); // Clear the reset token after use
             userRepository.save(user); 

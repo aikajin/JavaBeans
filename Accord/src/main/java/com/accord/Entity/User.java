@@ -79,7 +79,7 @@ public class User {
 
 	
 	@Column(name = "profile_picture_url")
-	private String profilePictureUrl; // Add getter and setter
+	private String profilePictureUrl;
 
 
     public String getProfilePictureUrl() {
