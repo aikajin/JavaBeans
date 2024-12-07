@@ -39,7 +39,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/")
-public class RegisterLoginController {
+public class MainController {
     
     @Autowired
     private UserService userService;
@@ -176,19 +176,11 @@ public class RegisterLoginController {
         return "dashboard_admin";
     }
 
-    @GetMapping("/dashboard_admin")
-    public String allUsers(@ModelAttribute("form") User form, Model model) {
-        List<User> users = userService.getAllUser();
-        model.addAttribute("result", users);
-        return "viewusers_page";
-    }
-
     @GetMapping("/forgotPassword_page")
     public String showForgotPasswordPage(Model model) {
         model.addAttribute("resetRequest", new User());
         return "forgotPassword_page";
     }
-
 
     @GetMapping("/profile")
     public String manageProfile(Model model, HttpSession session, MultipartFile prof) throws IOException {
@@ -249,100 +241,81 @@ public class RegisterLoginController {
     }
 
     @GetMapping("/analytics")
-public String facilityRatingAdmin(
+    public String facilityRatingAdmin(
     @RequestParam(required = false) String area,
     @RequestParam(required = false) String timeFrame,
     @RequestParam(required = false) String startDate,
     @RequestParam(required = false) String endDate,
     Model model) {
    
-    try {
-        // Get all areas for the dropdown
-        List<Area> allAreas = areaService.getAllAreas();
-        final List<Rating> allRatings = ratingService.findAll();
-        
-        // Apply area and date filters
-        List<Rating> finalFilteredRatings = allRatings;
-        List<Area> filteredAreas;
-
-        // Apply area filter
-        if (area != null && !area.isEmpty()) {
-            filteredAreas = allAreas.stream()
-                .filter(a -> a.getId().toString().equals(area))
-                .collect(Collectors.toList());
-            
-            finalFilteredRatings = finalFilteredRatings.stream()
-                .filter(r -> r.getArea().getId().toString().equals(area))
-                .collect(Collectors.toList());
-        } else {
-            filteredAreas = allAreas;
-        }
-
-        // Apply date filters
-        if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
-            LocalDate start = LocalDate.parse(startDate);
-            LocalDate end = LocalDate.parse(endDate);
-            
-            finalFilteredRatings = finalFilteredRatings.stream()
-                .filter(r -> !r.getRatingDate().isBefore(start) && !r.getRatingDate().isAfter(end))
-                .collect(Collectors.toList());
-        }
-
-        // Create chart data
-        Map<String, Object> chartData = new HashMap<>();
-        
-        // Prepare area names and average ratings
-        List<String> areaNames = filteredAreas.stream()
-            .map(Area::getName)
-            .collect(Collectors.toList());
-        
-        // Calculate average ratings using the final filtered ratings
-        final List<Rating> finalRatings = finalFilteredRatings;
-        List<Double> averageRatings = filteredAreas.stream()
-            .map(a -> {
-                List<Rating> areaRatings = finalRatings.stream()
-                    .filter(r -> r.getArea().getId().equals(a.getId()))
+        try {
+            List<Area> allAreas = areaService.getAllAreas();
+            final List<Rating> allRatings = ratingService.findAll();
+            List<Rating> finalFilteredRatings = allRatings;
+            List<Area> filteredAreas;
+            if (area != null && !area.isEmpty()) {
+                filteredAreas = allAreas.stream()
+                    .filter(a -> a.getId().toString().equals(area))
                     .collect(Collectors.toList());
                 
-                return areaRatings.isEmpty() ? 0.0 : 
-                    areaRatings.stream()
-                        .mapToInt(Rating::getStars)
-                        .average()
-                        .orElse(0.0);
-            })
-            .collect(Collectors.toList());
-
-        // Calculate rating distribution
-        Map<Integer, Long> ratingDistribution = new HashMap<>();
-        for (int i = 1; i <= 5; i++) {
-            final int stars = i;
-            long count = finalFilteredRatings.stream()
-                .filter(r -> r.getStars() == stars)
-                .count();
-            ratingDistribution.put(i, count);
-        }
-
-        // Add data to chart data map
-        chartData.put("areaNames", areaNames);
-        chartData.put("averageRatings", averageRatings);
-        chartData.put("ratingDistribution", ratingDistribution);
-
-        // Add everything to model
-        model.addAttribute("areas", allAreas);
-        model.addAttribute("filteredAreas", filteredAreas);
-        model.addAttribute("ratings", finalFilteredRatings);
-        model.addAttribute("chartData", chartData);
-        model.addAttribute("selectedArea", area);
-        model.addAttribute("selectedTimeFrame", timeFrame);
-        model.addAttribute("selectedStartDate", startDate);
-        model.addAttribute("selectedEndDate", endDate);
+                finalFilteredRatings = finalFilteredRatings.stream()
+                    .filter(r -> r.getArea().getId().toString().equals(area))
+                    .collect(Collectors.toList());
+            } else {
+                filteredAreas = allAreas;
+            }
+            if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
+                LocalDate start = LocalDate.parse(startDate);
+                LocalDate end = LocalDate.parse(endDate);
+                
+                finalFilteredRatings = finalFilteredRatings.stream()
+                    .filter(r -> !r.getRatingDate().isBefore(start) && !r.getRatingDate().isAfter(end))
+                    .collect(Collectors.toList());
+            }
+            Map<String, Object> chartData = new HashMap<>();
+            List<String> areaNames = filteredAreas.stream()
+                .map(Area::getName)
+                .collect(Collectors.toList());
+            final List<Rating> finalRatings = finalFilteredRatings;
+            List<Double> averageRatings = filteredAreas.stream()
+                .map(a -> {
+                    List<Rating> areaRatings = finalRatings.stream()
+                        .filter(r -> r.getArea().getId().equals(a.getId()))
+                        .collect(Collectors.toList());
+                    
+                    return areaRatings.isEmpty() ? 0.0 : 
+                        areaRatings.stream()
+                            .mapToInt(Rating::getStars)
+                            .average()
+                            .orElse(0.0);
+                })
+                .collect(Collectors.toList());
+            Map<Integer, Long> ratingDistribution = new HashMap<>();
+            for (int i = 1; i <= 5; i++) {
+                final int stars = i;
+                long count = finalFilteredRatings.stream()
+                    .filter(r -> r.getStars() == stars)
+                    .count();
+                ratingDistribution.put(i, count);
+            }
+            chartData.put("areaNames", areaNames);
+            chartData.put("averageRatings", averageRatings);
+            chartData.put("ratingDistribution", ratingDistribution);
+            model.addAttribute("areas", allAreas);
+            model.addAttribute("filteredAreas", filteredAreas);
+            model.addAttribute("ratings", finalFilteredRatings);
+            model.addAttribute("chartData", chartData);
+            model.addAttribute("selectedArea", area);
+            model.addAttribute("selectedTimeFrame", timeFrame);
+            model.addAttribute("selectedStartDate", startDate);
+            model.addAttribute("selectedEndDate", endDate);
        
-    } catch (Exception e) {
-        System.err.println("Error in facilityRatingAdmin: " + e.getMessage());
-        e.printStackTrace();
-    }
-   
-    return "facilityRating";
+        } catch (Exception e) {
+            System.err.println("Error in facilityRatingAdmin: " + e.getMessage());
+            e.printStackTrace();
+        }
+    
+        return "facilityRating";
 }
 
     @GetMapping("/ratings")
@@ -599,38 +572,38 @@ public String facilityRatingAdmin(
         return "redirect:/areas-admin";
     }
 
-@GetMapping("/details/{id}")
-public String viewUserDetails(@PathVariable Long id, Model model) {
-    User user = userService.findById(id).orElse(null);
+    @GetMapping("/details/{id}")
+    public String viewUserDetails(@PathVariable Long id, Model model) {
+        User user = userService.findById(id).orElse(null);
 
-    if (user != null) {
-        if (user.getTenancy_document() != null) {
-            model.addAttribute("tenancyDocumentBase64", user.generateBase64Tenancy());
-            model.addAttribute("tenancyDocumentSize", formatFileSize(user.getTenancy_document().length));
-            model.addAttribute("tenancyName", user.getTenancy_name());
+        if (user != null) {
+            if (user.getTenancy_document() != null) {
+                model.addAttribute("tenancyDocumentBase64", user.generateBase64Tenancy());
+                model.addAttribute("tenancyDocumentSize", formatFileSize(user.getTenancy_document().length));
+                model.addAttribute("tenancyName", user.getTenancy_name());
+            }
+            if (user.getId_document() != null) {
+                model.addAttribute("idDocumentBase64", user.generateBase64ValidId());
+                model.addAttribute("idDocumentSize", formatFileSize(user.getId_document().length));
+                model.addAttribute("idName", user.getId_name());
+            }
+            if (user.getProfile_picture() != null) {
+                model.addAttribute("profilePictureBase64", user.generateBase64Profile());
+            }
         }
-        if (user.getId_document() != null) {
-            model.addAttribute("idDocumentBase64", user.generateBase64ValidId());
-            model.addAttribute("idDocumentSize", formatFileSize(user.getId_document().length));
-            model.addAttribute("idName", user.getId_name());
-        }
-        if (user.getProfile_picture() != null) {
-            model.addAttribute("profilePictureBase64", user.generateBase64Profile());
-        }
+
+        model.addAttribute("user", user);
+        return "UserAccounts_viewDetails";
     }
 
-    model.addAttribute("user", user);
-    return "UserAccounts_viewDetails";
-}
-
-private String formatFileSize(int sizeInBytes) {
-    if (sizeInBytes >= 1024 * 1024) {
-        return String.format("%.2f MB", sizeInBytes / (1024.0 * 1024.0));
-    } else if (sizeInBytes >= 1024) {
-        return String.format("%.2f KB", sizeInBytes / 1024.0);
-    } else {
-        return sizeInBytes + " B";
-    }
+    private String formatFileSize(int sizeInBytes) {
+        if (sizeInBytes >= 1024 * 1024) {
+            return String.format("%.2f MB", sizeInBytes / (1024.0 * 1024.0));
+        } else if (sizeInBytes >= 1024) {
+            return String.format("%.2f KB", sizeInBytes / 1024.0);
+        } else {
+            return sizeInBytes + " B";
+        }
 }
 
 
